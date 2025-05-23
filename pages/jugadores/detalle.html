@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Jugador - Sistema de Gestión de Torneos de Fútbol</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="../../index.html" class="logo">TorneosFútbol</a>
+            </div>
+            <nav class="navbar-menu">
+                <ul>
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="../torneos/index.html">Torneos</a></li>
+                    <li><a href="../equipos/index.html">Equipos</a></li>
+                    <li><a href="../jugadores/index.html" class="active">Jugadores</a></li>
+                    <li><a href="../partidos/index.html">Partidos</a></li>
+                    <li><a href="../posiciones/index.html">Posiciones</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container" id="jugador-detalle">
+        <div class="page-header">
+            <div class="back-link">
+                <a href="index.html"><i class="fas fa-arrow-left"></i> Volver a jugadores</a>
+            </div>
+            <div class="header-content">
+                <img id="jugador-foto" class="jugador-foto" src="../../assets/img/default-shield.png" alt="Foto del jugador" style="display: none;">
+                <div>
+                    <h1 id="jugador-nombre">Cargando...</h1>
+                    <div class="jugador-meta">
+                        <span class="meta-item"><i class="fas fa-tshirt"></i> <span id="jugador-equipo">-</span></span>
+                        <span class="meta-item"><i class="fas fa-running"></i> <span id="jugador-posicion">-</span></span>
+                        <span class="meta-item"><i class="fas fa-hashtag"></i> <span id="jugador-dorsal">-</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="#" id="editar-jugador" class="btn btn-outline">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-target="info-tab">Información</div>
+            <div class="tab" data-target="estadisticas-tab">Estadísticas</div>
+        </div>
+
+        <div id="info-tab" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Información del Jugador</h2>
+                </div>
+                <div class="card-content">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Nombre Completo</div>
+                            <div class="info-value" id="info-nombre-completo">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Fecha de Nacimiento</div>
+                            <div class="info-value" id="info-fecha-nacimiento">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Edad</div>
+                            <div class="info-value" id="info-edad">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Documento de Identidad</div>
+                            <div class="info-value" id="info-documento-identidad">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Equipo</div>
+                            <div class="info-value" id="info-equipo">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Posición</div>
+                            <div class="info-value" id="info-posicion">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Dorsal</div>
+                            <div class="info-value" id="info-dorsal">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Foto Doc. Identidad (Frontal)</div>
+                            <div class="info-value">
+                                <img id="info-foto-doc-frontal" src="" alt="Frontal" style="max-width:120px;display:none;">
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Foto Doc. Identidad (Reverso)</div>
+                            <div class="info-value">
+                                <img id="info-foto-doc-reverso" src="" alt="Reverso" style="max-width:120px;display:none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="estadisticas-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Estadísticas del Jugador</h2>
+                </div>
+                <div class="card-content" id="jugador-estadisticas">
+                    <!-- Aquí se cargarán dinámicamente las estadísticas -->
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        No hay estadísticas disponibles para este jugador.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
+        </div>
+    </footer>
+
+    <!-- Scripts de Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../js/firebase-config.js"></script>
+    <script src="../../js/firebase-data.js"></script>
+    <!-- Tu app y módulos -->
+    <script src="../../js/app.js"></script>
+    
+    <script src="../../js/modules/jugadores.js"></script>
+    <script>
+        // Establecer el año actual en el footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Configurar el enlace de edición
+        const urlParams = new URLSearchParams(window.location.search);
+        const jugadorId = urlParams.get('id');
+        if (jugadorId) {
+            document.getElementById('editar-jugador').href = `crear.html?id=${jugadorId}`;
+        }
+    </script>
+</body>
+</html>

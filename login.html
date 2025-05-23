@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Torneos de Fútbol</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Firebase App (la base) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    
+    <!-- Añade los productos que usarás -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+    
+    <!-- Tu script de inicialización -->
+    <script src="js/firebase-config.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-futbol"></i>
+                <h1>Torneos de Fútbol</h1>
+            </div>
+            <button id="themeToggle" class="btn btn-icon">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="auth-section">
+            <div class="card auth-card">
+                <div class="card-header">
+                    <h2 class="card-title">Iniciar Sesión</h2>
+                </div>
+                <div class="card-content">
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="login-email">
+                                <i class="fas fa-envelope"></i> Correo Electrónico
+                            </label>
+                            <input type="email" id="login-email" name="email" required 
+                                   placeholder="tu@email.com" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-password">
+                                <i class="fas fa-lock"></i> Contraseña
+                            </label>
+                            <div class="password-input-container">
+                                <input type="password" id="login-password" name="password" required 
+                                       placeholder="Contraseña" class="form-control">
+                                <button type="button" class="toggle-password" tabindex="-1">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-options">
+                            <div class="remember-me">
+                                <input type="checkbox" id="remember-me" name="remember">
+                                <label for="remember-me">Recordarme</label>
+                            </div>
+                            <a href="reset-password.html" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                        </div>
+                        
+                        <div id="login-error" class="auth-error"></div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="auth-divider">
+                        <span>O</span>
+                    </div>
+                    
+                    <div class="social-login">
+                        <button id="google-login" class="btn btn-social btn-google">
+                            <i class="fab fa-google"></i> Continuar con Google
+                        </button>
+                    </div>
+                    
+                    <div class="auth-footer">
+                        ¿No tienes una cuenta? <a href="register.html">Regístrate</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2023 Torneos de Fútbol. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <!-- Scripts de la aplicación -->
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si el usuario ya está autenticado
+            if (typeof firebase !== 'undefined') {
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        // Usuario ya autenticado, redirigir a la página principal
+                        window.location.href = 'index.html';
+                    }
+                });
+            }
+            
+            // Inicializar botones de mostrar/ocultar contraseña
+            const toggleButtons = document.querySelectorAll('.toggle-password');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+            
+            // Inicializar login con Google
+            const googleLoginButton = document.getElementById('google-login');
+            if (googleLoginButton && typeof firebase !== 'undefined') {
+                googleLoginButton.addEventListener('click', function() {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    
+                    firebase.auth().signInWithPopup(provider)
+                        .then(result => {
+                            // Login exitoso
+                            console.log('Usuario autenticado con Google:', result.user);
+                            window.location.href = 'index.html';
+                        })
+                        .catch(error => {
+                            // Error en login
+                            console.error('Error en login con Google:', error);
+                            const errorMessage = document.getElementById('login-error');
+                            if (errorMessage) {
+                                errorMessage.textContent = 'Error al iniciar sesión con Google: ' + error.message;
+                            }
+                        });
+                });
+            }
+
+            // Validación del formulario de login
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    const email = document.getElementById('login-email').value.trim();
+                    const password = document.getElementById('login-password').value.trim();
+                    const errorDiv = document.getElementById('login-error');
+                    let errorMsg = '';
+
+                    // Validar email
+                    if (!email) {
+                        errorMsg = 'El correo es obligatorio.';
+                    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                        errorMsg = 'El correo no es válido.';
+                    } else if (!password) {
+                        errorMsg = 'La contraseña es obligatoria.';
+                    }
+
+                    if (errorMsg) {
+                        e.preventDefault();
+                        if (errorDiv) errorDiv.textContent = errorMsg;
+                        return false;
+                    } else {
+                        if (errorDiv) errorDiv.textContent = '';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

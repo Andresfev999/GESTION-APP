@@ -1,0 +1,117 @@
+.main-header {
+    background: var(--header-bg);
+    color: var(--header-text);
+}
+.main-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo {
+    display: flex;
+    align-items: center;
+}
+.logo i {
+    font-size: 2rem;
+    margin-right: 0.5rem;
+}
+.logo h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--primary-color);
+}
+.main-nav .nav-list {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+}
+.main-nav .nav-list li a {
+    color: var(--header-text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+.main-nav .nav-list li a:hover {
+    color: var(--primary-color);
+}
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.auth-buttons .btn {
+    margin-left: 0.5rem;
+}
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.user-dropdown {
+    position: relative;
+}
+.user-dropdown-toggle {
+    background: none;
+    border: none;
+    color: var(--header-text);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 0.5rem;
+}
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user-initials {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+.user-dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 120%;
+    background: var(--card-bg);
+    color: var(--text-color);
+    min-width: 180px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 100;
+    padding: 0.5rem 0;
+}
+.user-dropdown:hover .user-dropdown-menu {
+    display: block;
+}
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.dropdown-item:hover {
+    background: var(--hover-bg);
+}
+.dropdown-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0.5rem 0;
+}
+.btn.btn-icon {
+    background: none;
+    border: none;
+    color: var(--header-text);
+    font-size: 1.2rem;
+    cursor: pointer;
+}

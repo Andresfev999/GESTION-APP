@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partidos - Sistema de Gestión de Torneos de Fútbol</title>
+    <link rel="stylesheet" href="../../css/styles.css"> <!-- AGREGA ESTA LÍNEA -->
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="../../index.html" class="logo">TorneosFútbol</a>
+            </div>
+            <nav class="navbar-menu">
+                <ul>
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="../torneos/index.html">Torneos</a></li>
+                    <li><a href="../equipos/index.html">Equipos</a></li>
+                    <li><a href="../jugadores/index.html">Jugadores</a></li>
+                    <li><a href="../partidos/index.html" class="active">Partidos</a></li>
+                    <li><a href="../posiciones/index.html">Posiciones</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1>Partidos</h1>
+            <a href="generar.html" class="btn btn-primary">
+                <i class="fas fa-calendar"></i> Generar Calendario
+            </a>
+        </div>
+
+        <div class="filters-container">
+            <div class="filter-select">
+                <select id="filtro-torneo" class="form-control">
+                    <option value="">Todos los torneos</option>
+                    <!-- Opciones de torneos se cargarán dinámicamente -->
+                </select>
+            </div>
+            <div class="filter-select">
+                <select id="filtro-estado" class="form-control">
+                    <option value="">Todos los estados</option>
+                    <option value="Próximo">Próximos</option>
+                    <option value="Finalizado">Finalizados</option>
+                </select>
+            </div>
+            <div class="filter-date">
+                <input type="date" id="filtro-fecha" class="form-control" placeholder="Filtrar por fecha">
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-target="proximos-tab">Próximos Partidos</div>
+            <div class="tab" data-target="finalizados-tab">Partidos Finalizados</div>
+        </div>
+
+        <div id="proximos-tab" class="tab-content active">
+            <div id="partidos-proximos">
+                <!-- Aquí se cargarán dinámicamente los partidos próximos -->
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Cargando partidos...
+                </div>
+            </div>
+        </div>
+
+        <div id="finalizados-tab" class="tab-content">
+            <div id="partidos-finalizados">
+                <!-- Aquí se cargarán dinámicamente los partidos finalizados -->
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Cargando partidos...
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para editar fecha -->
+    <div id="modal-editar-fecha" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal-fecha">&times;</span>
+            <h3>Editar fecha del partido</h3>
+            <form id="form-editar-fecha">
+                <input type="hidden" id="modal-partido-id">
+                <div class="form-group">
+                    <label for="modal-nueva-fecha">Nueva fecha</label>
+                    <input type="date" id="modal-nueva-fecha" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../js/firebase-config.js"></script>
+    <script src="../../js/firebase-data.js"></script>
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/partidos.js"></script>
+    <script>
+        // Establecer el año current en el footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Cambiar de pestaña entre Próximos y Finalizados
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Quitar clase activa de todas las tabs y contenidos
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+
+                // Activar la tab y el contenido correspondiente
+                this.classList.add('active');
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

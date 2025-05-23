@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar Resultado - Sistema de Gestión de Torneos de Fútbol</title>
+    <link rel="stylesheet" href="../../css/styles.css"> <!-- AGREGA ESTA LÍNEA -->
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/forms.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="../../index.html" class="logo">TorneosFútbol</a>
+            </div>
+            <nav class="navbar-menu">
+                <ul>
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="../torneos/index.html">Torneos</a></li>
+                    <li><a href="../equipos/index.html">Equipos</a></li>
+                    <li><a href="../jugadores/index.html">Jugadores</a></li>
+                    <li><a href="../partidos/index.html" class="active">Partidos</a></li>
+                    <li><a href="../posiciones/index.html">Posiciones</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <div class="back-link">
+                <a href="index.html"><i class="fas fa-arrow-left"></i> Volver a partidos</a>
+            </div>
+            <h1>Ingresar Resultado</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-futbol"></i> Detalles del Partido
+                </div>
+            </div>
+            <div class="card-content">
+                <div id="partido-info" class="partido-detalle">
+                    <!-- Aquí se cargarán dinámicamente los detalles del partido -->
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Cargando detalles del partido...
+                    </div>
+                </div>
+
+                <form id="resultado-form" style="display: none;">
+                    <div class="resultado-horizontal">
+                        <div class="equipo-resultado">
+                            <img id="escudo-local" src="../../assets/img/default-shield.png" alt="Escudo local" class="escudo-lista">
+                            <span id="nombre-local" class="nombre-equipo"></span>
+                        </div>
+                        <input type="number" id="goles-local" class="goles-input" min="0" required>
+                        <span class="vs-horizontal">-</span>
+                        <input type="number" id="goles-visitante" class="goles-input" min="0" required>
+                        <div class="equipo-resultado">
+                            <img id="escudo-visitante" src="../../assets/img/default-shield.png" alt="Escudo visitante" class="escudo-lista">
+                            <span id="nombre-visitante" class="nombre-equipo"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="observaciones">Observaciones</label>
+                        <textarea id="observaciones" class="form-control" rows="3" placeholder="Observaciones del partido..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="index.html" class="btn btn-outline">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Guardar Resultado</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../js/firebase-config.js"></script>
+    <script src="../../js/firebase-data.js"></script>
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/partidos.js"></script>
+    <script>
+        // Establecer el año actual en el footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

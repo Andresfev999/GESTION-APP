@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Jugador - Sistema de Gestión de Torneos de Fútbol</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/forms.css">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="../../index.html" class="logo">TorneosFútbol</a>
+            </div>
+            <nav class="navbar-menu">
+                <ul>
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="../torneos/index.html">Torneos</a></li>
+                    <li><a href="../equipos/index.html">Equipos</a></li>
+                    <li><a href="../jugadores/index.html" class="active">Jugadores</a></li>
+                    <li><a href="../partidos/index.html">Partidos</a></li>
+                    <li><a href="../posiciones/index.html">Posiciones</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1 id="jugador-title">Añadir Nuevo Jugador</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <!-- Solo los campos necesarios -->
+                <form id="jugador-form">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <input type="text" id="nombre" class="form-control" placeholder="Nombre" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <input type="text" id="apellidos" class="form-control" placeholder="Apellidos" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <input type="date" id="fechaNacimiento" class="form-control" placeholder="Fecha de nacimiento" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <select id="equipo" class="form-control" required>
+                                    <option value="">Selecciona un equipo</option>
+                                    <!-- Opciones dinámicas -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <input type="text" id="posicion" class="form-control" placeholder="Posición">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <input type="number" id="dorsal" class="form-control" placeholder="Dorsal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <input type="text" id="documentoIdentidad" class="form-control" placeholder="Documento de Identidad" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group file-input-container">
+                                <label for="foto">Foto</label>
+                                <input type="file" id="foto" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group file-input-container">
+                                <label for="fotoDocFrontal">Foto Documento Identidad (Frontal)</label>
+                                <input type="file" id="fotoDocFrontal" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group file-input-container">
+                                <label for="fotoDocReverso">Foto Documento Identidad (Reverso)</label>
+                                <input type="file" id="fotoDocReverso" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <a href="index.html" class="btn btn-outline">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Guardar Jugador</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
+        </div>
+    </footer>
+
+    <!-- Scripts de Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../js/firebase-config.js"></script>
+    <script src="../../js/firebase-data.js"></script>
+    <!-- Tu app y módulos -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/data.js"></script>
+    <script src="../../js/modules/jugadores.js"></script>
+    <script>
+        // Establecer el año actual en el footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+    <script>
+        document.getElementById('foto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                let preview = document.getElementById('foto-preview');
+                if (!preview) {
+                    preview = document.createElement('img');
+                    preview.id = 'foto-preview';
+                    preview.style.maxWidth = '120px';
+                    preview.style.marginTop = '10px';
+                    e.target.parentNode.appendChild(preview);
+                }
+                preview.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>

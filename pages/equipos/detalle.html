@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Equipo - Sistema de Gestión de Torneos de Fútbol</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="../../index.html" class="logo">TorneosFútbol</a>
+            </div>
+            <nav class="navbar-menu">
+                <ul>
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="../torneos/index.html">Torneos</a></li>
+                    <li><a href="../equipos/index.html" class="active">Equipos</a></li>
+                    <li><a href="../jugadores/index.html">Jugadores</a></li>
+                    <li><a href="../partidos/index.html">Partidos</a></li>
+                    <li><a href="../posiciones/index.html">Posiciones</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container" id="equipo-detalle">
+        <div class="equipo-detalle-header" style="text-align:center; margin-bottom:2rem;">
+            <img id="equipo-escudo" class="escudo-detalle" alt="Escudo del equipo" />
+            <h1 id="equipo-nombre"></h1>
+            <p><strong>Ciudad:</strong> <span id="equipo-ciudad"></span></p>
+            <p><strong>Año de Fundación:</strong> <span id="equipo-fundacion"></span></p>
+        </div>
+
+        <div class="tabs" style="margin-bottom: 2rem;">
+            <button class="tab-button active" data-tab="info-equipo">Información</button>
+            <button class="tab-button" data-tab="jugadores-equipo">Jugadores</button>
+        </div>
+
+        <div id="tab-content-info-equipo" class="tab-pane active">
+            <!-- Aquí va la información general del equipo (ya la tienes arriba) -->
+        </div>
+
+        <div id="tab-content-jugadores-equipo" class="tab-pane" style="display:none;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+                <a href="../jugadores/crear.html?equipoId=<span id='equipo-id-link'></span>" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Crear Jugador
+                </a>
+            </div>
+            <div id="jugadores-lista">
+                <!-- Aquí se cargará la lista de jugadores del equipo -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
+        </div>
+    </footer>
+
+    <!-- Scripts de Firebase (deben ir antes de tus scripts de app y módulos) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../js/firebase-config.js"></script>
+    <script src="../../js/firebase-data.js"></script>
+    <script src="../../js/app.js"></script>
+   
+    <script src="../../js/modules/equipos.js"></script>
+    <script>
+        // Establecer el año actual en el footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Configurar el enlace de edición
+        const urlParams = new URLSearchParams(window.location.search);
+        const equipoId = urlParams.get('id');
+        if (equipoId) {
+            document.getElementById('editar-equipo').href = `crear.html?id=${equipoId}`;
+        }
+
+        // Inicializar módulo de equipos
+        document.addEventListener('DOMContentLoaded', function() {
+            EquiposModule.cargarDetalleEquipo(equipoId);
+        });
+    </script>
+</body>
+</html>

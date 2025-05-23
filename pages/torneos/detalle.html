@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Torneo - Sistema de Gestión de Torneos de Fútbol</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="../../index.html" class="logo">TorneosFútbol</a>
+            </div>
+            <nav class="navbar-menu">
+                <ul>
+                    <li><a href="../../index.html">Inicio</a></li>
+                    <li><a href="../torneos/index.html" class="active">Torneos</a></li>
+                    <li><a href="../equipos/index.html">Equipos</a></li>
+                    <li><a href="../jugadores/index.html">Jugadores</a></li>
+                    <li><a href="../partidos/index.html">Partidos</a></li>
+                    <li><a href="../posiciones/index.html">Posiciones</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container" id="torneo-detalle">
+        <div class="page-header">
+            <div class="back-link">
+                <a href="index.html"><i class="fas fa-arrow-left"></i> Volver a torneos</a>
+            </div>
+            <div class="header-content">
+                <img id="torneo-escudo" class="torneo-escudo" src="../../assets/img/default-shield.png" alt="Escudo del torneo" style="display: none;">
+                <div>
+                    <h1 id="torneo-nombre">Cargando...</h1>
+                    <div class="torneo-meta">
+                        <span class="meta-item"><i class="fas fa-trophy"></i> <span id="torneo-tipo">-</span></span>
+                        <span class="meta-item"><i class="fas fa-calendar"></i> <span id="torneo-fecha-inicio">-</span> a <span id="torneo-fecha-fin">-</span></span>
+                        <span class="meta-item"><i class="fas fa-flag"></i> <span id="torneo-estado">-</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="#" id="editar-torneo" class="btn btn-outline">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-target="info-tab">Información</div>
+            <div class="tab" data-target="equipos-tab">Equipos</div>
+            <div class="tab" data-target="partidos-tab">Partidos</div>
+            <div class="tab" data-target="posiciones-tab">Posiciones</div>
+        </div>
+
+        <div id="info-tab" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Información del Torneo</h2>
+                </div>
+                <div class="card-content">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Nombre</div>
+                            <div class="info-value" id="info-nombre">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Tipo</div>
+                            <div class="info-value" id="info-tipo">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Estado</div>
+                            <div class="info-value" id="info-estado">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Fecha de Inicio</div>
+                            <div class="info-value" id="info-fecha-inicio">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Fecha de Finalización</div>
+                            <div class="info-value" id="info-fecha-fin">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Equipos Participantes</div>
+                            <div class="info-value" id="info-equipos">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="equipos-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Equipos Participantes</h2>
+                </div>
+                <div class="card-content" id="torneo-equipos">
+                    <!-- Aquí se cargarán dinámicamente los equipos -->
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Cargando equipos...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="partidos-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Calendario de Partidos</h2>
+                </div>
+                <div class="card-content" id="torneo-partidos">
+                    <!-- Aquí se cargarán dinámicamente los partidos -->
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Cargando partidos...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="posiciones-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Tabla de Posiciones</h2>
+                </div>
+                <div class="card-content" id="torneo-posiciones">
+                    <!-- Aquí se cargará dinámicamente la tabla de posiciones -->
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Cargando posiciones...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
+        </div>
+    </footer>
+
+    <!-- Scripts de Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../js/firebase-config.js"></script>
+    <script src="../../js/firebase-data.js"></script>
+    <!-- Tu app y módulos -->
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/torneos.js"></script>
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        if (window.TorneosModule && TorneosModule.init) {
+            TorneosModule.init();
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const torneoId = urlParams.get('id');
+            const editarBtn = document.getElementById('editar-torneo');
+            if (editarBtn && torneoId) {
+                editarBtn.href = `crear.html?id=${torneoId}`;
+            }
+        });
+    </script>
+    
+</body>
+</html>

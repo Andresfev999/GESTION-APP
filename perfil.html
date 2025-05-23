@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Torneos de Fútbol</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="css/user-panel.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- Incluir la barra de navegación -->
+    <div id="navbar-container"></div>
+
+    <main class="container">
+        <section class="profile-section protected-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Mi Perfil</h2>
+                </div>
+                <div class="card-content">
+                    <div class="profile-header">
+                        <div class="profile-avatar-container">
+                            <div class="profile-avatar">
+                                <img id="profile-avatar" src="/placeholder.svg" alt="Avatar" style="display: none;">
+                                <div id="profile-initials" class="profile-initials">?</div>
+                            </div>
+                            <button id="change-avatar-btn" class="btn btn-sm btn-outline">
+                                <i class="fas fa-camera"></i> Cambiar
+                            </button>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="profile-name">Nombre de Usuario</h3>
+                            <p id="profile-email">usuario@email.com</p>
+                            <p class="profile-meta">
+                                <span>Miembro desde: <span id="profile-date">01/01/2023</span></span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-tabs">
+                        <button class="tab-button active" data-tab="personal-info">
+                            <i class="fas fa-user"></i> Información Personal
+                        </button>
+                        <button class="tab-button" data-tab="security">
+                            <i class="fas fa-lock"></i> Seguridad
+                        </button>
+                        <button class="tab-button" data-tab="preferences">
+                            <i class="fas fa-cog"></i> Preferencias
+                        </button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <!-- Pestaña de Información Personal -->
+                        <div id="personal-info" class="tab-pane active">
+                            <form id="profile-form" class="profile-form">
+                                <div class="form-group">
+                                    <label for="profile-name-input">
+                                        <i class="fas fa-user"></i> Nombre Completo
+                                    </label>
+                                    <input type="text" id="profile-name-input" name="name" 
+                                           class="form-control" placeholder="Tu nombre">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-phone">
+                                        <i class="fas fa-phone"></i> Teléfono
+                                    </label>
+                                    <input type="tel" id="profile-phone" name="phone" 
+                                           class="form-control" placeholder="Tu teléfono">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-bio">
+                                        <i class="fas fa-info-circle"></i> Biografía
+                                    </label>
+                                    <textarea id="profile-bio" name="bio" class="form-control" 
+                                              placeholder="Cuéntanos sobre ti" rows="4"></textarea>
+                                </div>
+                                
+                                <div id="profile-error" class="auth-error"></div>
+                                <div id="profile-success" class="auth-success" style="display: none;"></div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Guardar Cambios
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Pestaña de Seguridad -->
+                        <div id="security" class="tab-pane">
+                            <form id="password-form" class="profile-form">
+                                <div class="form-group">
+                                    <label for="current-password">
+                                        <i class="fas fa-lock"></i> Contraseña Actual
+                                    </label>
+                                    <div class="password-input-container">
+                                        <input type="password" id="current-password" name="current-password" 
+                                               class="form-control" placeholder="Contraseña actual">
+                                        <button type="button" class="toggle-password" tabindex="-1">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="new-password">
+                                        <i class="fas fa-lock"></i> Nueva Contraseña
+                                    </label>
+                                    <div class="password-input-container">
+                                        <input type="password" id="new-password" name="new-password" 
+                                               class="form-control" placeholder="Nueva contraseña">
+                                        <button type="button" class="toggle-password" tabindex="-1">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="password-strength">
+                                        <div class="strength-meter">
+                                            <div class="strength-meter-fill" data-strength="0"></div>
+                                        </div>
+                                        <div class="strength-text">Fuerza de la contraseña: <span>Débil</span></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="confirm-new-password">
+                                        <i class="fas fa-lock"></i> Confirmar Nueva Contraseña
+                                    </label>
+                                    <div class="password-input-container">
+                                        <input type="password" id="confirm-new-password" name="confirm-new-password" 
+                                               class="form-control" placeholder="Confirmar nueva contraseña">
+                                        <button type="button" class="toggle-password" tabindex="-1">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div id="password-error" class="auth-error"></div>
+                                <div id="password-success" class="auth-success" style="display: none;"></div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Cambiar Contraseña
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div class="security-options">
+                                <h4>Opciones Adicionales de Seguridad</h4>
+                                
+                                <div class="security-option">
+                                    <div class="security-option-info">
+                                        <h5>Verificación de Email</h5>
+                                        <p id="email-verification-status">Tu email no está verificado.</p>
+                                    </div>
+                                    <button id="verify-email-btn" class="btn btn-sm btn-outline">
+                                        Verificar Email
+                                    </button>
+                                </div>
+                                
+                                <div class="security-option">
+                                    <div class="security-option-info">
+                                        <h5>Sesiones Activas</h5>
+                                        <p>Cierra todas las sesiones activas en otros dispositivos.</p>
+                                    </div>
+                                    <button id="logout-all-btn" class="btn btn-sm btn-outline">
+                                        Cerrar Sesiones
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pestaña de Preferencias -->
+                        <div id="preferences" class="tab-pane">
+                            <form id="preferences-form" class="profile-form">
+                                <div class="form-group">
+                                    <label>Tema</label>
+                                    <div class="theme-options">
+                                        <div class="theme-option">
+                                            <input type="radio" id="theme-light" name="theme" value="light">
+                                            <label for="theme-light">
+                                                <div class="theme-preview theme-light"></div>
+                                                <span>Claro</span>
+                                            </label>
+                                        </div>
+                                        <div class="theme-option">
+                                            <input type="radio" id="theme-dark" name="theme" value="dark">
+                                            <label for="theme-dark">
+                                                <div class="theme-preview theme-dark"></div>
+                                                <span>Oscuro</span>
+                                            </label>
+                                        </div>
+                                        <div class="theme-option">
+                                            <input type="radio" id="theme-system" name="theme" value="system" checked>
+                                            <label for="theme-system">
+                                                <div class="theme-preview theme-system"></div>
+                                                <span>Sistema</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Notificaciones</label>
+                                    <div class="notification-options">
+                                        <div class="notification-option">
+                                            <input type="checkbox" id="notify-torneos" name="notify-torneos" checked>
+                                            <label for="notify-torneos">Actualizaciones de torneos</label>
+                                        </div>
+                                        <div class="notification-option">
+                                            <input type="checkbox" id="notify-partidos" name="notify-partidos" checked>
+                                            <label for="notify-partidos">Recordatorios de partidos</label>
+                                        </div>
+                                        <div class="notification-option">
+                                            <input type="checkbox" id="notify-resultados" name="notify-resultados" checked>
+                                            <label for="notify-resultados">Resultados de partidos</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="preferences-error" class="auth-error"></div>
+                                <div id="preferences-success" class="auth-success" style="display: none;"></div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Guardar Preferencias
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="auth-required" class="auth-required" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Acceso Restringido</h2>
+                </div>
+                <div class="card-content">
+                    <div class="auth-required-message">
+                        <i class="fas fa-lock auth-required-icon"></i>
+                        <h3>Debes iniciar sesión para acceder a esta página</h3>
+                        <p>Por favor, inicia sesión o regístrate para acceder a tu perfil.</p>
+                        <div class="auth-required-actions">
+                            <a href="login.html" class="btn btn-primary">Iniciar Sesión</a>
+                            <a href="register.html" class="btn btn-outline">Registrarse</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2023 Torneos de Fútbol. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modal para cambiar avatar -->
+    <div id="avatar-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cambiar Avatar</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="avatar-options">
+                    <div class="avatar-option">
+                        <h4>Subir Imagen</h4>
+                        <div class="avatar-upload">
+                            <input type="file" id="avatar-upload" accept="image/*">
+                            <label for="avatar-upload" class="avatar-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Seleccionar Imagen</span>
+                            </label>
+                        </div>
+                        <div id="avatar-preview" class="avatar-preview" style="display: none;">
+                            <img src="../../assets/img/default-shield.png" alt="Vista previa">
+                            <button id="remove-preview" class="btn btn-sm btn-outline">
+                                <i class="fas fa-times"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-avatar" class="btn btn-primary">Guardar</button>
+                <button class="btn btn-outline modal-close">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase App (la base) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    
+    <!-- Añade los productos que usarás -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- Tu script de inicialización -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Scripts de la aplicación -->
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar la barra de navegación
+            fetch('navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('navbar-container').innerHTML = html;
+
+                    // Inicializar el módulo de autenticación después de cargar la navbar
+                    if (typeof AuthModule !== 'undefined') {
+                        AuthModule.init();
+                    }
+
+                    // --- INICIO: Script para alternar tema ---
+                    const themeToggle = document.getElementById('themeToggle');
+                    if (themeToggle) {
+                        themeToggle.addEventListener('click', function() {
+                            document.body.classList.toggle('dark-mode');
+                            // Guardar preferencia en localStorage
+                            if(document.body.classList.contains('dark-mode')) {
+                                localStorage.setItem('theme', 'dark');
+                            } else {
+                                localStorage.setItem('theme', 'light');
+                            }
+                        });
+                    }
+                    // Al cargar la página, aplicar preferencia guardada
+                    if(localStorage.getItem('theme') === 'dark') {
+                        document.body.classList.add('dark-mode');
+                    } else if(localStorage.getItem('theme') === 'light') {
+                        document.body.classList.remove('dark-mode');
+                    }
+                    // --- FIN: Script para alternar tema ---
+                })
+                .catch(error => {
+                    console.error('Error al cargar la barra de navegación:', error);
+                });
+            
+            // Verificar si el usuario está autenticado
+            firebase.auth().onAuthStateChanged(function(user) {
+                const protectedContent = document.querySelector('.protected-content');
+                const authRequired = document.getElementById('auth-required');
+                
+                if (user) {
+                    // Usuario autenticado, mostrar contenido protegido
+                    if (protectedContent) protectedContent.style.display = 'block';
+                    if (authRequired) authRequired.style.display = 'none';
+                    
+                    // Cargar datos del perfil
+                    loadProfileData(user);
+                } else {
+                    // Usuario no autenticado, mostrar mensaje
+                    if (protectedContent) protectedContent.style.display = 'none';
+                    if (authRequired) authRequired.style.display = 'block';
+                }
+            });
+            
+            // Inicializar pestañas
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Desactivar todas las pestañas
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanes.forEach(pane => pane.classList.remove('active'));
+                    
+                    // Activar la pestaña seleccionada
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Inicializar botones de mostrar/ocultar contraseña
+            const toggleButtons = document.querySelectorAll('.toggle-password');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+            
+            // Verificar fuerza de la contraseña
+            const passwordInput = document.getElementById('new-password');
+            const strengthMeter = document.querySelector('.strength-meter-fill');
+            const strengthText = document.querySelector('.strength-text span');
+            
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function() {
+                    const password = this.value;
+                    let strength = 0;
+                    
+                    // Criterios de fuerza
+                    if (password.length >= 8) strength += 1;
+                    if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 1;
+                    if (password.match(/\d/)) strength += 1;
+                    if (password.match(/[^a-zA-Z\d]/)) strength += 1;
+                    
+                    // Actualizar indicador visual
+                    strengthMeter.setAttribute('data-strength', strength);
+                    
+                    // Actualizar texto
+                    switch (strength) {
+                        case 0:
+                            strengthText.textContent = 'Débil';
+                            break;
+                        case 1:
+                            strengthText.textContent = 'Débil';
+                            break;
+                        case 2:
+                            strengthText.textContent = 'Media';
+                            break;
+                        case 3:
+                            strengthText.textContent = 'Buena';
+                            break;
+                        case 4:
+                            strengthText.textContent = 'Fuerte';
+                            break;
+                    }
+                });
+            }
+            
+            // Inicializar formulario de perfil
+            const profileForm = document.getElementById('profile-form');
+            if (profileForm) {
+                profileForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const user = firebase.auth().currentUser;
+                    if (!user) return;
+                    
+                    const name = document.getElementById('profile-name-input').value;
+                    const phone = document.getElementById('profile-phone').value;
+                    const bio = document.getElementById('profile-bio').value;
+                    
+                    const errorMessage = document.getElementById('profile-error');
+                    const successMessage = document.getElementById('profile-success');
+                    
+                    // Limpiar mensajes
+                    errorMessage.textContent = '';
+                    successMessage.style.display = 'none';
+                    
+                    // Actualizar perfil en Firestore
+                    const db = firebase.firestore();
+                    db.collection('usuarios').doc(user.uid).update({
+                        nombre: name,
+                        telefono: phone,
+                        bio: bio,
+                        fechaActualizacion: new Date()
+                    })
+                    .then(() => {
+                        // Actualizar nombre en Auth
+                        return user.updateProfile({
+                            displayName: name
+                        });
+                    })
+                    .then(() => {
+                        // Actualizar UI
+                        document.getElementById('profile-name').textContent = name;
+                        
+                        // Mostrar mensaje de éxito
+                        successMessage.textContent = 'Perfil actualizado correctamente';
+                        successMessage.style.display = 'block';
+                    })
+                    .catch(error => {
+                        console.error('Error al actualizar perfil:', error);
+                        errorMessage.textContent = 'Error al actualizar perfil: ' + error.message;
+                    });
+                });
+            }
+            
+            // Inicializar formulario de cambio de contraseña
+            const passwordForm = document.getElementById('password-form');
+            if (passwordForm) {
+                passwordForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const user = firebase.auth().currentUser;
+                    if (!user) return;
+                    
+                    const currentPassword = document.getElementById('current-password').value;
+                    const newPassword = document.getElementById('new-password').value;
+                    const confirmPassword = document.getElementById('confirm-new-password').value;
+                    
+                    const errorMessage = document.getElementById('password-error');
+                    const successMessage = document.getElementById('password-success');
+                    
+                    // Limpiar mensajes
+                    errorMessage.textContent = '';
+                    successMessage.style.display = 'none';
+                    
+                    // Verificar que las contraseñas coincidan
+                    if (newPassword !== confirmPassword) {
+                        errorMessage.textContent = 'Las contraseñas no coinciden';
+                        return;
+                    }
+                    
+                    // Verificar fuerza de la contraseña
+                    if (newPassword.length < 8) {
+                        errorMessage.textContent = 'La contraseña debe tener al menos 8 caracteres';
+                        return;
+                    }
+                    
+                    // Reautenticar al usuario
+                    const credential = firebase.auth.EmailAuthProvider.credential(
+                        user.email,
+                        currentPassword
+                    );
+                    
+                    user.reauthenticateWithCredential(credential)
+                        .then(() => {
+                            // Cambiar contraseña
+                            return user.updatePassword(newPassword);
+                        })
+                        .then(() => {
+                            // Mostrar mensaje de éxito
+                            successMessage.textContent = 'Contraseña actualizada correctamente';
+                            successMessage.style.display = 'block';
+                            
+                            // Limpiar formulario
+                            passwordForm.reset();
+                        })
+                        .catch(error => {
+                            console.error('Error al cambiar contraseña:', error);
+                            
+                            switch (error.code) {
+                                case 'auth/wrong-password':
+                                    errorMessage.textContent = 'La contraseña actual es incorrecta';
+                                    break;
+                                case 'auth/weak-password':
+                                    errorMessage.textContent = 'La nueva contraseña es demasiado débil';
+                                    break;
+                                default:
+                                    errorMessage.textContent = error.message;
+                            }
+                        });
+                });
+            }
+            
+            // Inicializar botón de verificación de email
+            const verifyEmailBtn = document.getElementById('verify-email-btn');
+            if (verifyEmailBtn) {
+                verifyEmailBtn.addEventListener('click', function() {
+                    const user = firebase.auth().currentUser;
+                    if (!user) return;
+                    
+                    user.sendEmailVerification()
+                        .then(() => {
+                            alert('Se ha enviado un correo de verificación a tu email');
+                        })
+                        .catch(error => {
+                            console.error('Error al enviar email de verificación:', error);
+                            alert('Error al enviar email de verificación: ' + error.message);
+                        });
+                });
+            }
+            
+            // Inicializar botón de cierre de sesiones
+            const logoutAllBtn = document.getElementById('logout-all-btn');
+            if (logoutAllBtn) {
+                logoutAllBtn.addEventListener('click', function() {
+                    if (confirm('¿Estás seguro de que quieres cerrar todas las sesiones activas?')) {
+                        const user = firebase.auth().currentUser;
+                        if (!user) return;
+                        
+                        // Cambiar contraseña y luego volver a la original
+                        // Esto fuerza el cierre de sesión en todos los dispositivos
+                        const tempPassword = Math.random().toString(36).slice(-10);
+                        
+                        // Reautenticar al usuario primero
+                        const credential = firebase.auth.EmailAuthProvider.credential(
+                            user.email,
+                            document.getElementById('current-password').value
+                        );
+                        
+                        user.reauthenticateWithCredential(credential)
+                            .then(() => {
+                                // Cambiar a contraseña temporal
+                                return user.updatePassword(tempPassword);
+                            })
+                            .then(() => {
+                                // Volver a la contraseña original
+                                return user.updatePassword(document.getElementById('current-password').value);
+                            })
+                            .then(() => {
+                                alert('Se han cerrado todas las sesiones activas');
+                            })
+                            .catch(error => {
+                                console.error('Error al cerrar sesiones:', error);
+                                alert('Error al cerrar sesiones: ' + error.message);
+                            });
+                    }
+                });
+            }
+            
+            // Inicializar formulario de preferencias
+            const preferencesForm = document.getElementById('preferences-form');
+            if (preferencesForm) {
+                preferencesForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const user = firebase.auth().currentUser;
+                    if (!user) return;
+                    
+                    const theme = document.querySelector('input[name="theme"]:checked').value;
+                    const notifyTorneos = document.getElementById('notify-torneos').checked;
+                    const notifyPartidos = document.getElementById('notify-partidos').checked;
+                    const notifyResultados = document.getElementById('notify-resultados').checked;
+                    
+                    const errorMessage = document.getElementById('preferences-error');
+                    const successMessage = document.getElementById('preferences-success');
+                    
+                    // Limpiar mensajes
+                    errorMessage.textContent = '';
+                    successMessage.style.display = 'none';
+                    
+                    // Guardar preferencias en Firestore
+                    const db = firebase.firestore();
+                    db.collection('usuarios').doc(user.uid).update({
+                        preferencias: {
+                            tema: theme,
+                            notificaciones: {
+                                torneos: notifyTorneos,
+                                partidos: notifyPartidos,
+                                resultados: notifyResultados
+                            }
+                        },
+                        fechaActualizacion: new Date()
+                    })
+                    .then(() => {
+                        // Aplicar tema
+                        applyTheme(theme);
+                        
+                        // Guardar preferencia de tema en localStorage
+                        localStorage.setItem('theme-preference', theme);
+                        
+                        // Mostrar mensaje de éxito
+                        successMessage.textContent = 'Preferencias guardadas correctamente';
+                        successMessage.style.display = 'block';
+                    })
+                    .catch(error => {
+                        console.error('Error al guardar preferencias:', error);
+                        errorMessage.textContent = 'Error al guardar preferencias: ' + error.message;
+                    });
+                });
+            }
+            
+            // Inicializar modal de avatar
+            const avatarModal = document.getElementById('avatar-modal');
+            const changeAvatarBtn = document.getElementById('change-avatar-btn');
+            const modalCloseButtons = document.querySelectorAll('.modal-close');
+            
+            if (changeAvatarBtn) {
+                changeAvatarBtn.addEventListener('click', function() {
+                    avatarModal.style.display = 'flex';
+                });
+            }
+            
+            modalCloseButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    avatarModal.style.display = 'none';
+                });
+            });
+            
+            // Cerrar modal al hacer clic fuera del contenido
+            window.addEventListener('click', function(event) {
+                if (event.target === avatarModal) {
+                    avatarModal.style.display = 'none';
+                }
+            });
+            
+            // Inicializar carga de avatar
+            const avatarUpload = document.getElementById('avatar-upload');
+            const avatarPreview = document.getElementById('avatar-preview');
+            const avatarPreviewImg = avatarPreview.querySelector('img');
+            const removePreviewBtn = document.getElementById('remove-preview');
+            
+            if (avatarUpload) {
+                avatarUpload.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    // Verificar tipo de archivo
+                    if (!file.type.match('image.*')) {
+                        alert('Por favor, selecciona una imagen');
+                        return;
+                    }
+                    
+                    // Verificar tamaño (máximo 2MB)
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('La imagen es demasiado grande. El tamaño máximo es 2MB');
+                        return;
+                    }
+                    
+                    // Mostrar vista previa
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        avatarPreviewImg.src = e.target.result;
+                        avatarPreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+            
+            if (removePreviewBtn) {
+                removePreviewBtn.addEventListener('click', function() {
+                    avatarUpload.value = '';
+                    avatarPreview.style.display = 'none';
+                });
+            }
+            
+            // Inicializar guardado de avatar
+            const saveAvatarBtn = document.getElementById('save-avatar');
+            if (saveAvatarBtn) {
+                saveAvatarBtn.addEventListener('click', function() {
+                    const user = firebase.auth().currentUser;
+                    if (!user) return;
+                    
+                    const file = avatarUpload.files[0];
+                    if (!file) {
+                        alert('Por favor, selecciona una imagen');
+                        return;
+                    }
+                    
+                    // Mostrar indicador de carga
+                    saveAvatarBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                    saveAvatarBtn.disabled = true;
+                    
+                    // Subir imagen a Firebase Storage
+                    const storage = firebase.storage();
+                    const storageRef = storage.ref();
+                    const avatarRef = storageRef.child(`avatars/${user.uid}`);
+                    
+                    avatarRef.put(file)
+                        .then(snapshot => {
+                            // Obtener URL de descarga
+                            return snapshot.ref.getDownloadURL();
+                        })
+                        .then(downloadURL => {
+                            // Actualizar perfil del usuario
+                            return user.updateProfile({
+                                photoURL: downloadURL
+                            });
+                        })
+                        .then(() => {
+                            // Actualizar perfil en Firestore
+                            const db = firebase.firestore();
+                            return db.collection('usuarios').doc(user.uid).update({
+                                photoURL: user.photoURL,
+                                fechaActualizacion: new Date()
+                            });
+                        })
+                        .then(() => {
+                            // Actualizar UI
+                            const profileAvatar = document.getElementById('profile-avatar');
+                            const profileInitials = document.getElementById('profile-initials');
+                            
+                            profileAvatar.src = user.photoURL;
+                            profileAvatar.style.display = 'block';
+                            profileInitials.style.display = 'none';
+                            
+                            // Cerrar modal
+                            avatarModal.style.display = 'none';
+                            
+                            // Limpiar formulario
+                            avatarUpload.value = '';
+                            avatarPreview.style.display = 'none';
+                            
+                            // Restaurar botón
+                            saveAvatarBtn.innerHTML = 'Guardar';
+                            saveAvatarBtn.disabled = false;
+                            
+                            // Recargar página para actualizar avatar en navbar
+                            window.location.reload();
+                        })
+                        .catch(error => {
+                            console.error('Error al guardar avatar:', error);
+                            alert('Error al guardar avatar: ' + error.message);
+                            
+                            // Restaurar botón
+                            saveAvatarBtn.innerHTML = 'Guardar';
+                            saveAvatarBtn.disabled = false;
+                        });
+                });
+            }
+            
+            // Función para cargar datos del perfil
+            function loadProfileData(user) {
+                const db = firebase.firestore();
+                
+                db.collection('usuarios').doc(user.uid).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            
+                            // Actualizar información básica
+                            document.getElementById('profile-name').textContent = userData.nombre || user.displayName || 'Usuario';
+                            document.getElementById('profile-email').textContent = user.email;
+                            
+                            // Formatear fecha de registro
+                            if (userData.fechaRegistro) {
+                                const fecha = userData.fechaRegistro.toDate();
+                                const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                                document.getElementById('profile-date').textContent = fecha.toLocaleDateString('es-ES', options);
+                            }
+                            
+                            // Actualizar avatar
+                            const profileAvatar = document.getElementById('profile-avatar');
+                            const profileInitials = document.getElementById('profile-initials');
+                            
+                            if (userData.photoURL) {
+                                profileAvatar.src = userData.photoURL;
+                                profileAvatar.style.display = 'block';
+                                profileInitials.style.display = 'none';
+                            } else {
+                                // Usar iniciales como avatar
+                                const initials = getInitials(userData.nombre || user.email);
+                                profileInitials.textContent = initials;
+                                profileAvatar.style.display = 'none';
+                                profileInitials.style.display = 'flex';
+                            }
+                            
+                            // Llenar formulario de perfil
+                            document.getElementById('profile-name-input').value = userData.nombre || user.displayName || '';
+                            document.getElementById('profile-phone').value = userData.telefono || '';
+                            document.getElementById('profile-bio').value = userData.bio || '';
+                            
+                            // Verificación de email
+                            const emailVerificationStatus = document.getElementById('email-verification-status');
+                            const verifyEmailBtn = document.getElementById('verify-email-btn');
+                            
+                            if (user.emailVerified) {
+                                emailVerificationStatus.textContent = 'Tu email está verificado';
+                                emailVerificationStatus.classList.add('verified');
+                                verifyEmailBtn.style.display = 'none';
+                            } else {
+                                emailVerificationStatus.textContent = 'Tu email no está verificado';
+                                emailVerificationStatus.classList.remove('verified');
+                                verifyEmailBtn.style.display = 'inline-block';
+                            }
+                            
+                            // Cargar preferencias
+                            if (userData.preferencias) {
+                                const theme = userData.preferencias.tema || 'system';
+                                document.querySelector(`input[name="theme"][value="${theme}"]`).checked = true;
+                                
+                                if (userData.preferencias.notificaciones) {
+                                    document.getElementById('notify-torneos').checked = userData.preferencias.notificaciones.torneos !== false;
+                                    document.getElementById('notify-partidos').checked = userData.preferencias.notificaciones.partidos !== false;
+                                    document.getElementById('notify-resultados').checked = userData.preferencias.notificaciones.resultados !== false;
+                                }
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar datos del perfil:', error);
+                    });
+            }
+            
+            // Función para obtener iniciales del nombre
+            function getInitials(name) {
+                if (!name) return '?';
+                
+                const parts = name.split(' ');
+                if (parts.length === 1) {
+                    return name.charAt(0).toUpperCase();
+                }
+                
+                return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+            }
+            
+            // Función para aplicar tema
+            function applyTheme(theme) {
+                const body = document.body;
+                
+                if (theme === 'dark') {
+                    body.classList.add('dark-mode');
+                } else if (theme === 'light') {
+                    body.classList.remove('dark-mode');
+                } else if (theme === 'system') {
+                    // Detectar preferencia del sistema
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (prefersDark) {
+                        body.classList.add('dark-mode');
+                    } else {
+                        body.classList.remove('dark-mode');
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

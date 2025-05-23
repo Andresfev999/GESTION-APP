@@ -1,0 +1,92 @@
+<!-- Barra de navegación con opciones de autenticación -->
+<header class="main-header">
+    <div class="container">
+        <div class="logo">
+            <a href="index.html">
+                <i class="fas fa-futbol"></i>
+                <h1>LEGION DEPORTIVA</h1>
+            </a>
+        </div>
+        
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li><a href="pages/torneos/index.html">Torneos</a></li>
+                <li><a href="pages/equipos/index.html">Equipos</a></li>
+                <li><a href="pages/jugadores/index.html">Jugadores</a></li>
+                <li><a href="pages/partidos/index.html">Partidos</a></li>
+                
+            </ul>
+            
+        </nav>
+        
+        <div class="header-actions">
+            <!-- Botones de autenticación (para usuarios no autenticados) -->
+            <div id="navbar-auth-buttons" class="auth-buttons">
+                <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="register.html" class="btn btn-primary">Registrarse</a>
+            </div>
+              <button id="themeToggle" class="theme-toggle" title="Cambiar tema">
+                <i class="fas fa-moon"></i>
+            </button>
+            <!-- Sección de usuario (para usuarios autenticados) -->
+            <div id="navbar-user-section" class="user-section" style="display: none;">
+                <div class="user-dropdown">
+                    <button class="user-dropdown-toggle">
+                        <div class="user-avatar">
+                            <img id="user-avatar" src="../../assets/img/default-shield.png" alt="Avatar" style="display: none;">
+                            <div id="user-initials" class="user-initials">?</div>
+                        </div>
+                        <span id="user-name">Usuario</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    
+                    <div class="user-dropdown-menu">
+                        <div class="dropdown-header">
+                            <strong id="user-email">usuario@email.com</strong>
+                        </div>
+                        <a href="perfil.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Mi Perfil
+                        </a>
+                        <a href="mis-torneos.html" class="dropdown-item">
+                            <i class="fas fa-trophy"></i> Mis Torneos
+                        </a>
+                        <div class="admin-content" style="display: none;">
+                            <a href="admin/index.html" class="dropdown-item">
+                                <i class="fas fa-cog"></i> Administración
+                            </a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout-button">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+                
+                
+                </button>
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+
+  
+</nav>
+
+<script>
+document.getElementById('themeToggle').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    // Guardar preferencia en localStorage
+    if(document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+});
+
+// Al cargar la página, aplicar preferencia guardada
+if(localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+}
+</script>
