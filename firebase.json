@@ -1,13 +1,10 @@
 {
   "hosting": {
-    "public": "./",
+    "public": "y",
     "ignore": [
       "firebase.json",
-      "**/node_modules/**",
-      "**/.git/**"
-    ],
-    "rewrites": [
-      { "source": "**", "destination": "/login.html" }
+      "**/.*",
+      "**/node_modules/**"
     ]
   }
 }
