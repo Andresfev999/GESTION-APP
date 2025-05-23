@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneos de Fútbol</title>
+    
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/auth.css">
+    
+</head>
+<body>
+    <!-- Contenedor para la barra de navegación dinámica -->
+    <div id="navbar-container"></div>
+
+    <main class="container">
+        <section class="welcome-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Bienvenido a la Gestión de Torneos de Fútbol</h2>
+                </div>
+                <div class="card-content">
+                    <p>Esta aplicación te permite gestionar torneos de fútbol, equipos, jugadores y partidos de manera sencilla.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-trophy"></i>
+                            <h3>Torneos</h3>
+                            <p>Crea y gestiona torneos con diferentes formatos.</p>
+                            <a href="pages/torneos/index.html" class="btn btn-primary">Gestionar Torneos</a>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-users"></i>
+                            <h3>Equipos</h3>
+                            <p>Administra los equipos participantes en tus torneos.</p>
+                            <a href="pages/equipos/index.html" class="btn btn-primary">Gestionar Equipos</a>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-user"></i>
+                            <h3>Jugadores</h3>
+                            <p>Registra y gestiona los jugadores de cada equipo.</p>
+                            <a href="pages/jugadores/index.html" class="btn btn-primary">Gestionar Jugadores</a>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-futbol"></i>
+                            <h3>Partidos</h3>
+                            <p>Programa partidos y registra resultados.</p>
+                            <a href="pages/partidos/index.html" class="btn btn-primary">Gestionar Partidos</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenido para usuarios no autenticados -->
+                    <div id="guest-content" class="guest-content">
+                        <div class="auth-cta">
+                            <h3>¿Quieres crear tus propios torneos?</h3>
+                            <p>Regístrate o inicia sesión para crear y gestionar tus propios torneos de fútbol.</p>
+                            <div class="auth-cta-buttons">
+                                <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+                                <a href="register.html" class="btn btn-primary">Registrarse</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenido para usuarios autenticados -->
+                    <div class="protected-content" style="display: none;">
+                        <div class="user-dashboard">
+                            <h3>Tu Panel de Control</h3>
+                            <div class="dashboard-stats">
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="user-torneos-count">0</span>
+                                        <span class="stat-label">Torneos</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="user-equipos-count">0</span>
+                                        <span class="stat-label">Equipos</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-futbol"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="user-partidos-count">0</span>
+                                        <span class="stat-label">Partidos</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dashboard-actions">
+                                <a href="torneos/crear.html" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Crear Nuevo Torneo
+                                </a>
+                                <a href="mis-torneos.html" class="btn btn-outline">
+                                    <i class="fas fa-list"></i> Ver Mis Torneos
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenido para administradores -->
+                    <div class="admin-content" style="display: none;">
+                        <div class="admin-dashboard">
+                            <h3>Panel de Administración</h3>
+                            <p>Como administrador, tienes acceso a funciones adicionales para gestionar la plataforma.</p>
+                            <div class="admin-actions">
+                                <a href="admin/index.html" class="btn btn-primary">
+                                    <i class="fas fa-cog"></i> Ir al Panel de Administración
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="loading-section" class="loading-section" style="display: none;">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <p>Cargando datos desde Firebase...</p>
+        </section>
+        
+        <section id="firebase-error" class="alert alert-error" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>Error al conectar con Firebase. Por favor, verifica tu conexión a internet.</p>
+            <button id="retry-connection" class="btn btn-primary">Reintentar</button>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2023 Torneos de Fútbol. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase App (la base) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    
+    <!-- Añade los productos que usarás -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Tu script de inicialización -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Scripts de la aplicación -->
+    <script src="js/firebase-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar la barra de navegación
+            fetch('navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('navbar-container').innerHTML = html;
+
+                    // Inicializar el módulo de autenticación después de cargar la navbar
+                    if (typeof AuthModule !== 'undefined') {
+                        AuthModule.init();
+                    }
+
+                    // --- INICIO: Script para alternar tema ---
+                    const themeToggle = document.getElementById('themeToggle');
+                    if (themeToggle) {
+                        const icon = themeToggle.querySelector('i');
+                        function updateThemeIcon() {
+                            if(document.body.classList.contains('dark-mode')) {
+                                icon.classList.remove('fa-moon');
+                                icon.classList.add('fa-sun');
+                            } else {
+                                icon.classList.remove('fa-sun');
+                                icon.classList.add('fa-moon');
+                            }
+                        }
+
+                        themeToggle.addEventListener('click', function() {
+                            document.body.classList.toggle('dark-mode');
+                            // Guardar preferencia en localStorage
+                            if(document.body.classList.contains('dark-mode')) {
+                                localStorage.setItem('theme', 'dark');
+                            } else {
+                                localStorage.setItem('theme', 'light');
+                            }
+                            updateThemeIcon();
+                        });
+
+                        // Al cargar la página, aplicar preferencia guardada y actualizar icono
+                        if(localStorage.getItem('theme') === 'dark') {
+                            document.body.classList.add('dark-mode');
+                        } else if(localStorage.getItem('theme') === 'light') {
+                            document.body.classList.remove('dark-mode');
+                        }
+                        updateThemeIcon();
+                    }
+                    // --- FIN: Script para alternar tema ---
+                })
+                .catch(error => {
+                    console.error('Error al cargar la barra de navegación:', error);
+                });
+
+            // Verificar si es la primera vez que se usa Firebase
+            const firebaseInitialized = localStorage.getItem('firebase-initialized');
+            if (!firebaseInitialized) {
+                window.location.href = 'migrar.html';
+                return;
+            }
+
+            const loadingSection = document.getElementById('loading-section');
+            const firebaseError = document.getElementById('firebase-error');
+            const guestContent = document.getElementById('guest-content');
+
+            loadingSection.style.display = 'block';
+
+            try {
+                // Ocultar pantalla de carga después de 3 segundos (o cuando quieras)
+                setTimeout(function() {
+                    loadingSection.style.display = 'none';
+                }, 3000);
+
+                // Escuchar cambios en el estado de autenticación
+                if (typeof AuthModule !== 'undefined') {
+                    AuthModule.addAuthStateListener(function(isLoggedIn, user) {
+                        if (isLoggedIn) {
+                            // Usuario autenticado, ocultar contenido para invitados
+                            if (guestContent) guestContent.style.display = 'none';
+                            // Actualizar estadísticas del usuario
+                            updateUserStats();
+                        } else {
+                            // Usuario no autenticado, mostrar contenido para invitados
+                            if (guestContent) guestContent.style.display = 'block';
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Error al inicializar Firebase:", error);
+                loadingSection.style.display = 'none';
+                firebaseError.style.display = 'block';
+            }
+
+            // Configurar botón para reintentar conexión
+            document.getElementById('retry-connection').addEventListener('click', function() {
+                window.location.reload();
+            });
+
+            // Función para actualizar estadísticas del usuario
+            function updateUserStats() {
+                if (!AuthModule.isAuthenticated()) return;
+
+                const userId = AuthModule.getCurrentUser().uid;
+                const db = firebase.firestore();
+
+                // Contar torneos del usuario
+                db.collection('torneos')
+                    .where('creador', '==', userId)
+                    .get()
+                    .then(snapshot => {
+                        const torneosCount = document.getElementById('user-torneos-count');
+                        if (torneosCount) torneosCount.textContent = snapshot.size;
+                    })
+                    .catch(error => {
+                        console.error('Error al contar torneos:', error);
+                    });
+
+                // Contar equipos del usuario
+                db.collection('equipos')
+                    .where('creador', '==', userId)
+                    .get()
+                    .then(snapshot => {
+                        const equiposCount = document.getElementById('user-equipos-count');
+                        if (equiposCount) equiposCount.textContent = snapshot.size;
+                    })
+                    .catch(error => {
+                        console.error('Error al contar equipos:', error);
+                    });
+
+                // Contar partidos del usuario
+                db.collection('partidos')
+                    .where('creador', '==', userId)
+                    .get()
+                    .then(snapshot => {
+                        const partidosCount = document.getElementById('user-partidos-count');
+                        if (partidosCount) partidosCount.textContent = snapshot.size;
+                    })
+                    .catch(error => {
+                        console.error('Error al contar partidos:', error);
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
