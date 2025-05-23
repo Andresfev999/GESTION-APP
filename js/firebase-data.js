@@ -500,3 +500,39 @@ const FirebaseDataStore = {
 window.FirebaseDataStore = FirebaseDataStore;
 
 // Ejemplo de uso de la función generarCalendario
+// Asumiendo que este archivo ya existe, agregamos o modificamos la función getJugadoresPorEquipo
+
+// Función para obtener jugadores por equipo
+window.FirebaseDataStore.getJugadoresPorEquipo = async (equipoId) => {
+  try {
+    console.log("Buscando jugadores para el equipo ID:", equipoId)
+
+    // Asegurarse de que el ID del equipo sea un string para la comparación
+    const equipoIdStr = String(equipoId)
+
+    // Obtener la colección de jugadores
+    const firebase = window.firebase // Declare the firebase variable
+    const jugadoresRef = firebase.firestore().collection("jugadores")
+    const snapshot = await jugadoresRef.where("equipoId", "==", equipoIdStr).get()
+
+    if (snapshot.empty) {
+      console.log("No se encontraron jugadores para este equipo")
+      return []
+    }
+
+    // Convertir los documentos a objetos
+    const jugadores = []
+    snapshot.forEach((doc) => {
+      jugadores.push({
+        id: doc.id,
+        ...doc.data(),
+      })
+    })
+
+    console.log(`Se encontraron ${jugadores.length} jugadores para el equipo ${equipoId}`)
+    return jugadores
+  } catch (error) {
+    console.error("Error al obtener jugadores por equipo:", error)
+    return []
+  }
+}

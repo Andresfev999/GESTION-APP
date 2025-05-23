@@ -9,27 +9,72 @@
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/buttons.css">
-    <link rel="stylesheet" href="css/auth.css">
     
+    <!-- Firebase App (la base) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    
+    <!-- Añade los productos que usarás -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Tu script de inicialización -->
+    <script src="js/firebase-config.js"></script>
 </head>
 <body>
-    <!-- Contenedor para la barra de navegación dinámica -->
-    <div id="navbar-container"></div>
+    <!-- Header con navbar usando tus clases existentes -->
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-futbol"></i>
+                <h1>Torneos de Fútbol</h1>
+            </div>
+            
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav class="main-nav" id="main-nav">
+                <ul class="nav-list">
+                    <li>
+                        <a href="index.html" class="active">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pages/torneos/index.html">
+                            <i class="fas fa-trophy"></i> Torneos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pages/equipos/index.html">
+                            <i class="fas fa-users"></i> Equipos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pages/jugadores/index.html">
+                            <i class="fas fa-user"></i> Jugadores
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pages/partidos/index.html">
+                            <i class="fas fa-futbol"></i> Partidos
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="header-actions">
+                <button id="themeToggle" class="btn btn-icon">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
     <!-- Loading screen -->
     <div id="loading-section" style="display: block;">
         <div class="loading-container">
             <div class="loading-spinner"></div>
             <p>Cargando aplicación...</p>
-        </div>
-    </div>
-
-    <!-- Error screen -->
-    <div id="firebase-error" style="display: none;">
-        <div class="error-container">
-            <h3>Error de conexión</h3>
-            <p>No se pudo conectar con el servidor. Por favor, intenta de nuevo.</p>
-            <button id="retry-connection" class="btn btn-primary">Reintentar</button>
         </div>
     </div>
 
@@ -68,62 +113,6 @@
                             <a href="pages/partidos/index.html" class="btn btn-primary">Gestionar Partidos</a>
                         </div>
                     </div>
-                    
-                    <!-- Contenido para usuarios no autenticados -->
-                    <div id="guest-content" class="guest-content">
-                        <div class="auth-cta">
-                            <h3>¿Quieres crear tus propios torneos?</h3>
-                            <p>Regístrate o inicia sesión para crear y gestionar tus propios torneos de fútbol.</p>
-                            <div class="auth-cta-buttons">
-                                <a href="login.html?from=index" class="btn btn-outline">Iniciar Sesión</a>
-                                <a href="register.html" class="btn btn-primary">Registrarse</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Contenido para usuarios autenticados -->
-                    <div id="protected-content" class="protected-content" style="display: none;">
-                        <div class="user-dashboard">
-                            <h3>Tu Panel de Control</h3>
-                            <div class="dashboard-stats">
-                                <div class="stat-card">
-                                    <div class="stat-icon">
-                                        <i class="fas fa-trophy"></i>
-                                    </div>
-                                    <div class="stat-info">
-                                        <span class="stat-value" id="user-torneos-count">0</span>
-                                        <span class="stat-label">Torneos</span>
-                                    </div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                    <div class="stat-info">
-                                        <span class="stat-value" id="user-equipos-count">0</span>
-                                        <span class="stat-label">Equipos</span>
-                                    </div>
-                                </div>
-                                <div class="stat-card">
-                                    <div class="stat-icon">
-                                        <i class="fas fa-futbol"></i>
-                                    </div>
-                                    <div class="stat-info">
-                                        <span class="stat-value" id="user-partidos-count">0</span>
-                                        <span class="stat-label">Partidos</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="dashboard-actions">
-                                <a href="torneos/crear.html" class="btn btn-primary">
-                                    <i class="fas fa-plus"></i> Crear Nuevo Torneo
-                                </a>
-                                <a href="mis-torneos.html" class="btn btn-outline">
-                                    <i class="fas fa-list"></i> Ver Mis Torneos
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -134,119 +123,71 @@
             <p>&copy; 2023 Torneos de Fútbol. Todos los derechos reservados.</p>
         </div>
     </footer>
-
-    <!-- Firebase App (la base) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    
-    <!-- Añade los productos que usarás -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    
-    <!-- Tu script de inicialización -->
-    <script src="js/firebase-config.js"></script>
     
     <!-- Scripts de la aplicación -->
     <script src="js/firebase-data.js"></script>
-    <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
     
     <script>
-        // Variable para controlar si ya se verificó la autenticación
-        let authCheckComplete = false;
-
         document.addEventListener('DOMContentLoaded', function() {
             const loadingSection = document.getElementById('loading-section');
             const mainContent = document.getElementById('main-content');
-            const firebaseError = document.getElementById('firebase-error');
             
             // Mostrar pantalla de carga
             if (loadingSection) loadingSection.style.display = 'block';
             if (mainContent) mainContent.style.display = 'none';
-            if (firebaseError) firebaseError.style.display = 'none';
             
-            // Cargar la barra de navegación
-            fetch('navbar.html')
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('navbar-container').innerHTML = html;
-                    waitForFirebase();
-                })
-                .catch(error => {
-                    console.error('Error al cargar la barra de navegación:', error);
-                    waitForFirebase();
-                });
+            // Inicializar la aplicación
+            initializeApp();
                 
-            // Después de 8 segundos, mostrar la página de todos modos
-            // (por si hay algún problema con Firebase)
+            // Después de 2 segundos, mostrar la página
             setTimeout(() => {
-                if (!authCheckComplete) {
-                    console.warn('Tiempo de espera agotado para Firebase. Mostrando página principal.');
-                    if (loadingSection) loadingSection.style.display = 'none';
-                    if (mainContent) mainContent.style.display = 'block';
-                    
-                    // Mostrar contenido para invitados
-                    const guestContent = document.getElementById('guest-content');
-                    const protectedContent = document.getElementById('protected-content');
-                    if (guestContent) guestContent.style.display = 'block';
-                    if (protectedContent) protectedContent.style.display = 'none';
-                }
-            }, 8000);
-        });
-        
-        function waitForFirebase() {
-            if (window.FirebaseUtils && window.FirebaseUtils.isFirebaseReady()) {
-                checkAuthAndInitialize();
-            } else {
-                setTimeout(waitForFirebase, 100);
-            }
-        }
-
-        function checkAuthAndInitialize() {
-            const loadingSection = document.getElementById('loading-section');
-            const mainContent = document.getElementById('main-content');
-            const guestContent = document.getElementById('guest-content');
-            const protectedContent = document.getElementById('protected-content');
-            
-            // Verificar si el usuario está autenticado
-            if (typeof firebase !== 'undefined') {
-                firebase.auth().onAuthStateChanged(function(user) {
-                    // Marcar que la verificación de autenticación se completó
-                    authCheckComplete = true;
-                    
-                    // Ocultar pantalla de carga y mostrar contenido principal
-                    if (loadingSection) loadingSection.style.display = 'none';
-                    if (mainContent) mainContent.style.display = 'block';
-                    
-                    if (user) {
-                        console.log('Usuario autenticado:', user.email);
-                        // Usuario autenticado, mostrar contenido protegido
-                        if (guestContent) guestContent.style.display = 'none';
-                        if (protectedContent) protectedContent.style.display = 'block';
-                        
-                        // Actualizar estadísticas del usuario
-                        updateUserStats(user);
-                    } else {
-                        console.log('Usuario no autenticado');
-                        // Usuario no autenticado, mostrar contenido para invitados
-                        if (guestContent) guestContent.style.display = 'block';
-                        if (protectedContent) protectedContent.style.display = 'none';
-                    }
-                    
-                    // Inicializar tema
-                    setupThemeToggle();
-                });
-            } else {
-                console.error('Firebase no está disponible');
-                // Si Firebase no está disponible, mostrar contenido para invitados
-                authCheckComplete = true;
                 if (loadingSection) loadingSection.style.display = 'none';
                 if (mainContent) mainContent.style.display = 'block';
-                if (guestContent) guestContent.style.display = 'block';
-                if (protectedContent) protectedContent.style.display = 'none';
-                
-                // Inicializar tema
-                setupThemeToggle();
+            }, 2000);
+            
+            // Manejar el menú móvil
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mainNav = document.getElementById('main-nav');
+            
+            if (mobileMenuToggle && mainNav) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                    
+                    // Cambiar icono del botón
+                    const icon = mobileMenuToggle.querySelector('i');
+                    if (mainNav.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
             }
+            
+            // Cerrar menú móvil al hacer clic en un enlace
+            const navLinks = document.querySelectorAll('.nav-list a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainNav && mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                        const icon = mobileMenuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            });
+        });
+        
+        function initializeApp() {
+            // Inicializar Firebase
+            if (window.FirebaseUtils && typeof window.FirebaseUtils.initializeFirebase === 'function') {
+                window.FirebaseUtils.initializeFirebase();
+            }
+            
+            // Inicializar tema
+            setupThemeToggle();
         }
 
         function setupThemeToggle() {
@@ -282,49 +223,6 @@
                 }
                 updateThemeIcon();
             }
-        }
-
-        function updateUserStats(user) {
-            if (!user || !window.FirebaseUtils || !window.FirebaseUtils.isFirebaseReady()) return;
-
-            const userId = user.uid;
-            const db = firebase.firestore();
-
-            // Contar torneos del usuario
-            db.collection('torneos')
-                .where('creador', '==', userId)
-                .get()
-                .then(snapshot => {
-                    const torneosCount = document.getElementById('user-torneos-count');
-                    if (torneosCount) torneosCount.textContent = snapshot.size;
-                })
-                .catch(error => {
-                    console.error('Error al contar torneos:', error);
-                });
-
-            // Contar equipos del usuario
-            db.collection('equipos')
-                .where('creador', '==', userId)
-                .get()
-                .then(snapshot => {
-                    const equiposCount = document.getElementById('user-equipos-count');
-                    if (equiposCount) equiposCount.textContent = snapshot.size;
-                })
-                .catch(error => {
-                    console.error('Error al contar equipos:', error);
-                });
-
-            // Contar partidos del usuario
-            db.collection('partidos')
-                .where('creador', '==', userId)
-                .get()
-                .then(snapshot => {
-                    const partidosCount = document.getElementById('user-partidos-count');
-                    if (partidosCount) partidosCount.textContent = snapshot.size;
-                })
-                .catch(error => {
-                    console.error('Error al contar partidos:', error);
-                });
         }
     </script>
 </body>

@@ -1,543 +1,960 @@
 /* Body */
 body {
-    background: var(--bg-color);
-    color: var(--text-color);
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 
 /* Botones */
 .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    border-radius: var(--border-radius);
-    font-weight: 500;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: var(--transition);
-    border: none;
-    font-size: 1rem;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  font-size: 1rem;
 }
 
 .btn-primary {
-    background: var(--primary-color);
-    color: var(--text-light);
+  background: var(--primary-color);
+  color: var(--text-light);
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark);
+  background: var(--primary-dark);
 }
 
 .btn-outline {
-    background: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
+  background: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
 }
 
 .btn-outline:hover {
-    background: var(--hover-bg);
-    color: var(--primary-dark);
+  background: var(--hover-bg);
+  color: var(--primary-dark);
 }
 
 .btn-danger {
-    background: var(--danger-color);
-    color: var(--text-light);
+  background: var(--danger-color);
+  color: var(--text-light);
 }
 
 .btn-danger:hover {
-    background: #d32f2f;
+  background: #d32f2f;
 }
 
 .btn-block {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
 }
 
 .btn-sm {
-    padding: 5px 10px;
-    font-size: 0.875rem;
+  padding: 5px 10px;
+  font-size: 0.875rem;
 }
 
 /* Cards */
 .card {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    overflow: hidden;
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  transition: var(--transition);
+  border: 1px solid var(--border-color);
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .card-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .card-title {
-    font-size: 1.25rem;
-    margin: 0;
-    color: var(--text-color);
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--text-color);
 }
 
 .card-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    margin: 20px auto 10px;
-    border-radius: 50%;
-    background: var(--hover-bg);
-    color: var(--primary-color);
-    font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin: 20px auto 10px;
+  border-radius: 50%;
+  background: var(--hover-bg);
+  color: var(--primary-color);
+  font-size: 1.5rem;
 }
 
 .card-content {
-    padding: 20px;
+  padding: 20px;
 }
 
 .card-footer {
-    padding: 15px 20px;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 15px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .card-img .escudo-lista {
-    width: 48px !important;
-    height: 48px !important;
-    max-width: 48px !important;
-    max-height: 48px !important;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto 1rem auto;
-    background: var(--card-bg);
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+  width: 48px !important;
+  height: 48px !important;
+  max-width: 48px !important;
+  max-height: 48px !important;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1rem auto;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 
 /* Grid para las tarjetas de equipos */
 #equipos-list.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
-    padding: 1rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
 }
 
 #equipos-list .card {
-    max-width: 340px;
-    margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    background: var(--card-bg);
-    transition: transform 0.15s;
+  max-width: 340px;
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background: var(--card-bg);
+  transition: transform 0.15s;
 }
 #equipos-list .card:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 /* Tarjetas de equipos con padding y sombra */
 .card.equipo-card {
-    min-height: 200px;
-    max-width: 150px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-    box-sizing: border-box;
-    padding: 1.5rem;
-    background: var(--card-bg);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    transition: box-shadow 0.2s, transform 0.15s;
+  min-height: 200px;
+  max-width: 150px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s, transform 0.15s;
 }
 
 .card.equipo-card:hover {
-    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-    transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transform: translateY(-6px) scale(1.03);
 }
 
 /* Badges */
 .badge {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .badge-primary {
-    background: var(--primary-color);
-    color: var(--text-light);
+  background: var(--primary-color);
+  color: var(--text-light);
 }
 
 .badge-warning {
-    background: var(--warning-color);
-    color: var(--text-light);
+  background: var(--warning-color);
+  color: var(--text-light);
 }
 
 .badge-danger {
-    background: var(--danger-color);
-    color: var(--text-light);
+  background: var(--danger-color);
+  color: var(--text-light);
 }
 
 .badge-outline {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-light);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-light);
 }
 
 /* Tablas */
 .table-container {
-    overflow-x: auto;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
+  overflow-x: auto;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--card-bg);
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
 }
 
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
 }
 
 th {
-    background: var(--table-header-bg);
-    font-weight: 600;
-    color: var(--table-header-text);
+  background: var(--table-header-bg);
+  font-weight: 600;
+  color: var(--table-header-text);
 }
 
 tr:last-child td {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 tr:hover {
-    background: var(--hover-bg);
+  background: var(--hover-bg);
 }
 
 /* Alertas */
 .alert {
-    padding: 15px;
-    border-radius: var(--border-radius);
-    margin-bottom: 20px;
-    border-left: 4px solid transparent;
+  padding: 15px;
+  border-radius: var(--border-radius);
+  margin-bottom: 20px;
+  border-left: 4px solid transparent;
 }
 
 .alert-info {
-    background: rgba(33, 150, 243, 0.1);
-    border-left-color: #2196f3;
-    color: #0d47a1;
+  background: rgba(33, 150, 243, 0.1);
+  border-left-color: #2196f3;
+  color: #0d47a1;
 }
 
 .alert-success {
-    background: rgba(76, 175, 80, 0.1);
-    border-left-color: var(--success-color);
-    color: #1b5e20;
+  background: rgba(76, 175, 80, 0.1);
+  border-left-color: var(--success-color);
+  color: #1b5e20;
 }
 
 .alert-warning {
-    background: rgba(255, 152, 0, 0.1);
-    border-left-color: var(--warning-color);
-    color: #e65100;
+  background: rgba(255, 152, 0, 0.1);
+  border-left-color: var(--warning-color);
+  color: #e65100;
 }
 
 .alert-danger {
-    background: rgba(244, 67, 54, 0.1);
-    border-left-color: var(--danger-color);
-    color: #b71c1c;
+  background: rgba(244, 67, 54, 0.1);
+  border-left-color: var(--danger-color);
+  color: #b71c1c;
 }
 
 /* Tabs */
 .tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 20px;
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
 }
 
 .tab {
-    padding: 10px 20px;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: var(--transition);
-    color: var(--text-light);
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: var(--transition);
+  color: var(--text-light);
 }
 
 .tab.active {
-    border-bottom-color: var(--primary-color);
-    color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .tab-content {
-    display: none;
+  display: none;
 }
 
 .tab-content.active {
-    display: block;
+  display: block;
 }
 
 /* Modales */
 .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--transition);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
 }
 
 .modal-backdrop.active {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    transform: translateY(-20px);
-    transition: var(--transition);
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-20px);
+  transition: var(--transition);
 }
 
 .modal-backdrop.active .modal {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 .modal-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .modal-title {
-    font-size: 1.25rem;
-    margin: 0;
+  font-size: 1.25rem;
+  margin: 0;
 }
 
 .modal-close {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-light);
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-light);
 }
 
 .modal-body {
-    padding: 20px;
+  padding: 20px;
 }
 
 .modal-footer {
-    padding: 15px 20px;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+  padding: 15px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 /* Escudo en detalle de equipo */
 .escudo-detalle {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto 1rem auto;
-    background: var(--card-bg);
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1rem auto;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 
 /* Estilos para la tabla de posiciones */
 #posiciones-container {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 .tabla-posiciones {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--card-bg);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
-.tabla-posiciones th, .tabla-posiciones td {
-    padding: 0.7rem 1rem;
-    text-align: center;
-    border-bottom: 1px solid var(--border-color);
+.tabla-posiciones th,
+.tabla-posiciones td {
+  padding: 0.7rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .tabla-posiciones th {
-    background: var(--table-header-bg);
-    color: var(--table-header-text);
-    font-weight: 600;
+  background: var(--table-header-bg);
+  color: var(--table-header-text);
+  font-weight: 600;
 }
 
 .tabla-posiciones tr:last-child td {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .tabla-posiciones .equipo-nombre {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
 }
 
 .tabla-posiciones .equipo-escudo {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    background: var(--card-bg);
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
 }
 
 @media (max-width: 700px) {
-    .tabla-posiciones th, .tabla-posiciones td {
-        padding: 0.4rem 0.3rem;
-        font-size: 0.95rem;
-    }
-    .tabla-posiciones .equipo-nombre {
-        font-size: 0.95rem;
-    }
+  .tabla-posiciones th,
+  .tabla-posiciones td {
+    padding: 0.4rem 0.3rem;
+    font-size: 0.95rem;
+  }
+  .tabla-posiciones .equipo-nombre {
+    font-size: 0.95rem;
+  }
 }
 
 /* Navbar: enlaces visibles en tema claro */
 .main-nav .nav-list li a {
-    color: var(--primary-color);
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    transition: background 0.2s, color 0.2s;
+  color: var(--primary-color);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  transition: background 0.2s, color 0.2s;
 }
 
 /* Enlace activo o hover: fondo verde, texto blanco */
 .main-nav .nav-list li a.active,
 .main-nav .nav-list li a:hover {
-    background: var(--primary-color);
-    color: #fff !important;
+  background: var(--primary-color);
+  color: #fff !important;
 }
 
 /* Botones de autenticación en header: texto verde en tema claro */
 .header-actions .btn-outline {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-    background: transparent;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background: transparent;
 }
 .header-actions .btn-outline:hover {
-    background: var(--primary-color);
-    color: #fff;
+  background: var(--primary-color);
+  color: #fff;
 }
 
 /* Navbar */
 .navbar {
-    background: var(--header-bg);
-    color: var(--header-text);
+  background: var(--header-bg);
+  color: var(--header-text);
 }
 
 /* Tarjetas de partidos */
-.cards-grid, .partidos-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.cards-grid,
+.partidos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .partido-card {
-    background: var(--card-bg);
-    border-radius: 10px;
-    box-shadow: var(--box-shadow);
-    padding: 1rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: var(--box-shadow);
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--border-color);
 }
 
 .partido-fecha {
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
 }
 
 .partido-hora {
-    color: var(--text-muted);
-    font-size: 0.95em;
-    margin-left: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.95em;
+  margin-left: 0.5rem;
 }
 
 .partido-equipos {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .partido-equipos-con-acciones {
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
-.equipo-local, .equipo-visitante {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-width: 120px;
+.equipo-local,
+.equipo-visitante {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
 }
 
 .resultado {
-    font-size: 1.3rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .separador {
-    margin: 0 0.2rem;
+  margin: 0 0.2rem;
 }
 
 .partido-acciones-horizontal {
-    margin-top: 0.5rem;
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .equipo-logo-sm {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
-    border-radius: 4px;
-    border: 1px solid var(--border-color);
-    background: var(--card-bg);
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA FORMULARIO DE RESULTADO (ESTILO INDEX) ===== */
+
+/* Estilos para la vista previa del partido en resultado.html - Estilo tarjetas del index */
+.partido-equipos-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.partido-equipos-preview:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
+}
+
+.equipo-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-width: 140px;
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.equipo-preview:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.escudo-preview {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  display: block;
+  margin: 0 auto;
+}
+
+.nombre-equipo-preview {
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--text-color);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.vs-preview {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  min-height: 60px;
+}
+
+/* Estilos para el formulario de resultado horizontal - Estilo tarjetas del index */
+.resultado-horizontal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.resultado-horizontal:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
+}
+
+.equipo-resultado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-width: 140px;
+  padding: 1.5rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.equipo-resultado:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.equipo-resultado .escudo-lista {
+  width: 60px !important;
+  height: 60px !important;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  display: block;
+  margin: 0 auto;
+}
+
+.equipo-resultado .nombre-equipo {
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-color);
+  font-size: 1rem;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.goles-input {
+  width: 80px;
+  height: 80px;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.goles-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.goles-input::placeholder {
+  color: var(--text-muted);
+  font-size: 1.5rem;
+}
+
+.vs-horizontal {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin: 0 0.5rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilos para la información del partido - Estilo tarjetas del index */
+.partido-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.partido-header:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
+}
+
+.torneo-info {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.partido-fecha-hora {
+  color: var(--text-color);
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.partido-hora {
+  margin-left: 1rem;
+  color: var(--text-muted);
+}
+
+/* Contenedor principal del formulario - Estilo tarjetas del index */
+#resultado-form {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  padding: 2rem;
+  margin: 2rem 0;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+#resultado-form:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
+}
+
+/* Estilos responsivos para partidos */
+@media (max-width: 768px) {
+  .partido-equipos-preview {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .vs-preview {
+    transform: rotate(90deg);
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+    min-width: 50px;
+    min-height: 50px;
+  }
+
+  .resultado-horizontal {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+
+  .vs-horizontal {
+    transform: rotate(90deg);
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .equipo-resultado,
+  .equipo-preview {
+    min-width: auto;
+    width: 100%;
+    max-width: 200px;
+    padding: 1rem;
+  }
+
+  .goles-input {
+    width: 70px;
+    height: 70px;
+    font-size: 1.8rem;
+  }
+
+  .escudo-preview {
+    width: 60px;
+    height: 60px;
+  }
+
+  .nombre-equipo-preview {
+    font-size: 1rem;
+  }
+
+  .torneo-info {
+    font-size: 1.1rem;
+  }
+
+  .partido-fecha-hora {
+    font-size: 1rem;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .partido-header {
+    padding: 1.5rem;
+  }
+
+  #resultado-form {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .resultado-horizontal {
+    padding: 1rem;
+  }
+
+  .goles-input {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .equipo-resultado .escudo-lista {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .vs-horizontal {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+
+  .equipo-resultado,
+  .equipo-preview {
+    padding: 0.75rem;
+  }
+
+  .partido-header {
+    padding: 1rem;
+  }
+
+  #resultado-form {
+    padding: 1rem;
+  }
+}
+
+/* Estilos para el estado de carga */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+.loading i {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Modo oscuro específico para partidos */
+.dark-mode .partido-equipos-preview {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-mode .resultado-horizontal {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-mode .equipo-preview,
+.dark-mode .equipo-resultado {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-mode .vs-preview,
+.dark-mode .vs-horizontal {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-mode .goles-input {
+  background: var(--input-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.dark-mode .goles-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 16px rgba(229, 57, 53, 0.2);
+}
+
+.dark-mode .partido-header {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-mode #resultado-form {
+  background: var(--card-bg);
+  border-color: var(--border-color);
 }
