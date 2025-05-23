@@ -17,7 +17,7 @@
     <div id="navbar-container"></div>
 
     <!-- Loading screen -->
-    <div id="loading-section" style="display: none;">
+    <div id="loading-section" style="display: block;">
         <div class="loading-container">
             <div class="loading-spinner"></div>
             <p>Cargando aplicación...</p>
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <main class="container">
+    <main class="container" style="display: none;" id="main-content">
         <section class="welcome-section">
             <div class="card">
                 <div class="card-header">
@@ -75,7 +75,7 @@
                             <h3>¿Quieres crear tus propios torneos?</h3>
                             <p>Regístrate o inicia sesión para crear y gestionar tus propios torneos de fútbol.</p>
                             <div class="auth-cta-buttons">
-                                <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+                                <a href="login.html?from=index" class="btn btn-outline">Iniciar Sesión</a>
                                 <a href="register.html" class="btn btn-primary">Registrarse</a>
                             </div>
                         </div>
@@ -151,90 +151,102 @@
     <script src="js/app.js"></script>
     
     <script>
-        let authStateListenerActive = false;
+        // Variable para controlar si ya se verificó la autenticación
+        let authCheckComplete = false;
 
         document.addEventListener('DOMContentLoaded', function() {
+            const loadingSection = document.getElementById('loading-section');
+            const mainContent = document.getElementById('main-content');
+            const firebaseError = document.getElementById('firebase-error');
+            
+            // Mostrar pantalla de carga
+            if (loadingSection) loadingSection.style.display = 'block';
+            if (mainContent) mainContent.style.display = 'none';
+            if (firebaseError) firebaseError.style.display = 'none';
+            
             // Cargar la barra de navegación
             fetch('navbar.html')
                 .then(response => response.text())
                 .then(html => {
                     document.getElementById('navbar-container').innerHTML = html;
-                    initializeApp();
+                    waitForFirebase();
                 })
                 .catch(error => {
                     console.error('Error al cargar la barra de navegación:', error);
-                    initializeApp();
+                    waitForFirebase();
                 });
-        });
-
-        function initializeApp() {
-            const loadingSection = document.getElementById('loading-section');
-            const firebaseError = document.getElementById('firebase-error');
-            const guestContent = document.getElementById('guest-content');
-            const protectedContent = document.getElementById('protected-content');
-
-            // Mostrar pantalla de carga
-            if (loadingSection) loadingSection.style.display = 'block';
-
-            // Función para esperar a que Firebase esté listo
-            function waitForFirebase() {
-                if (window.FirebaseUtils && window.FirebaseUtils.isFirebaseReady()) {
-                    setupAuthStateListener();
-                    setupThemeToggle();
+                
+            // Después de 8 segundos, mostrar la página de todos modos
+            // (por si hay algún problema con Firebase)
+            setTimeout(() => {
+                if (!authCheckComplete) {
+                    console.warn('Tiempo de espera agotado para Firebase. Mostrando página principal.');
+                    if (loadingSection) loadingSection.style.display = 'none';
+                    if (mainContent) mainContent.style.display = 'block';
                     
-                    // Ocultar pantalla de carga
-                    setTimeout(() => {
-                        if (loadingSection) loadingSection.style.display = 'none';
-                    }, 1000);
-                } else {
-                    // Si Firebase no está listo después de 10 segundos, mostrar error
-                    setTimeout(() => {
-                        if (!window.FirebaseUtils || !window.FirebaseUtils.isFirebaseReady()) {
-                            console.warn('Firebase no se pudo inicializar correctamente');
-                            if (loadingSection) loadingSection.style.display = 'none';
-                            if (guestContent) guestContent.style.display = 'block';
-                            if (protectedContent) protectedContent.style.display = 'none';
-                        }
-                    }, 10000);
-                    
-                    setTimeout(waitForFirebase, 100);
-                }
-            }
-
-            waitForFirebase();
-
-            // Configurar botón para reintentar conexión
-            const retryButton = document.getElementById('retry-connection');
-            if (retryButton) {
-                retryButton.addEventListener('click', function() {
-                    window.location.reload();
-                });
-            }
-        }
-
-        function setupAuthStateListener() {
-            if (authStateListenerActive || typeof firebase === 'undefined') return;
-            
-            authStateListenerActive = true;
-            const guestContent = document.getElementById('guest-content');
-            const protectedContent = document.getElementById('protected-content');
-
-            firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                    console.log('Usuario autenticado:', user.email);
-                    // Usuario autenticado
-                    if (guestContent) guestContent.style.display = 'none';
-                    if (protectedContent) protectedContent.style.display = 'block';
-                    
-                    // Actualizar estadísticas del usuario
-                    updateUserStats(user);
-                } else {
-                    console.log('Usuario no autenticado');
-                    // Usuario no autenticado
+                    // Mostrar contenido para invitados
+                    const guestContent = document.getElementById('guest-content');
+                    const protectedContent = document.getElementById('protected-content');
                     if (guestContent) guestContent.style.display = 'block';
                     if (protectedContent) protectedContent.style.display = 'none';
                 }
-            });
+            }, 8000);
+        });
+        
+        function waitForFirebase() {
+            if (window.FirebaseUtils && window.FirebaseUtils.isFirebaseReady()) {
+                checkAuthAndInitialize();
+            } else {
+                setTimeout(waitForFirebase, 100);
+            }
+        }
+
+        function checkAuthAndInitialize() {
+            const loadingSection = document.getElementById('loading-section');
+            const mainContent = document.getElementById('main-content');
+            const guestContent = document.getElementById('guest-content');
+            const protectedContent = document.getElementById('protected-content');
+            
+            // Verificar si el usuario está autenticado
+            if (typeof firebase !== 'undefined') {
+                firebase.auth().onAuthStateChanged(function(user) {
+                    // Marcar que la verificación de autenticación se completó
+                    authCheckComplete = true;
+                    
+                    // Ocultar pantalla de carga y mostrar contenido principal
+                    if (loadingSection) loadingSection.style.display = 'none';
+                    if (mainContent) mainContent.style.display = 'block';
+                    
+                    if (user) {
+                        console.log('Usuario autenticado:', user.email);
+                        // Usuario autenticado, mostrar contenido protegido
+                        if (guestContent) guestContent.style.display = 'none';
+                        if (protectedContent) protectedContent.style.display = 'block';
+                        
+                        // Actualizar estadísticas del usuario
+                        updateUserStats(user);
+                    } else {
+                        console.log('Usuario no autenticado');
+                        // Usuario no autenticado, mostrar contenido para invitados
+                        if (guestContent) guestContent.style.display = 'block';
+                        if (protectedContent) protectedContent.style.display = 'none';
+                    }
+                    
+                    // Inicializar tema
+                    setupThemeToggle();
+                });
+            } else {
+                console.error('Firebase no está disponible');
+                // Si Firebase no está disponible, mostrar contenido para invitados
+                authCheckComplete = true;
+                if (loadingSection) loadingSection.style.display = 'none';
+                if (mainContent) mainContent.style.display = 'block';
+                if (guestContent) guestContent.style.display = 'block';
+                if (protectedContent) protectedContent.style.display = 'none';
+                
+                // Inicializar tema
+                setupThemeToggle();
+            }
         }
 
         function setupThemeToggle() {

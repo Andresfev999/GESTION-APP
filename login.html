@@ -33,7 +33,15 @@
         </div>
     </header>
 
-    <main class="container">
+    <!-- Loading screen -->
+    <div id="loading-section" style="display: block;">
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Cargando...</p>
+        </div>
+    </div>
+
+    <main class="container" style="display: none;" id="main-content">
         <section class="auth-section">
             <div class="card auth-card">
                 <div class="card-header">
@@ -108,37 +116,87 @@
     <script src="js/auth.js"></script>
     
     <script>
-        let authStateListenerActive = false;
-
+        // Variable para controlar si ya se verificó la autenticación
+        let authCheckComplete = false;
+        
         document.addEventListener('DOMContentLoaded', function() {
+            const loadingSection = document.getElementById('loading-section');
+            const mainContent = document.getElementById('main-content');
+            
+            // Mostrar pantalla de carga
+            if (loadingSection) loadingSection.style.display = 'block';
+            if (mainContent) mainContent.style.display = 'none';
+            
             // Esperar a que Firebase esté completamente inicializado
             function waitForFirebase() {
                 if (window.FirebaseUtils && window.FirebaseUtils.isFirebaseReady()) {
-                    initializeLoginPage();
+                    checkAuthAndInitialize();
                 } else {
                     setTimeout(waitForFirebase, 100);
                 }
             }
             
             waitForFirebase();
+            
+            // Después de 5 segundos, mostrar la página de login de todos modos
+            // (por si hay algún problema con Firebase)
+            setTimeout(() => {
+                if (!authCheckComplete) {
+                    console.warn('Tiempo de espera agotado para Firebase. Mostrando página de login.');
+                    if (loadingSection) loadingSection.style.display = 'none';
+                    if (mainContent) mainContent.style.display = 'block';
+                }
+            }, 5000);
         });
 
-        function initializeLoginPage() {
-            // Verificar si el usuario ya está autenticado (solo una vez)
-            if (!authStateListenerActive && typeof firebase !== 'undefined') {
-                authStateListenerActive = true;
-                
+        function checkAuthAndInitialize() {
+            const loadingSection = document.getElementById('loading-section');
+            const mainContent = document.getElementById('main-content');
+            
+            // Verificar si el usuario ya está autenticado
+            if (typeof firebase !== 'undefined') {
                 firebase.auth().onAuthStateChanged(function(user) {
+                    // Marcar que la verificación de autenticación se completó
+                    authCheckComplete = true;
+                    
                     if (user) {
-                        console.log('Usuario ya autenticado, redirigiendo a index.html');
-                        // Pequeño delay para evitar conflictos
-                        setTimeout(() => {
+                        console.log('Usuario ya autenticado:', user.email);
+                        
+                        // Verificar si viene de una redirección desde index.html
+                        const referrer = document.referrer;
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const fromIndex = urlParams.get('from') === 'index';
+                        
+                        // Si viene de index o no hay referrer, no redirigir (evitar bucle)
+                        if (fromIndex || referrer.includes('index.html')) {
+                            console.log('Evitando bucle de redirección. Mostrando página de login.');
+                            if (loadingSection) loadingSection.style.display = 'none';
+                            if (mainContent) mainContent.style.display = 'block';
+                        } else {
+                            // Redirigir a index.html
+                            console.log('Redirigiendo a index.html');
                             window.location.href = 'index.html';
-                        }, 500);
+                        }
+                    } else {
+                        console.log('Usuario no autenticado. Mostrando página de login.');
+                        // Usuario no autenticado, mostrar página de login
+                        if (loadingSection) loadingSection.style.display = 'none';
+                        if (mainContent) mainContent.style.display = 'block';
+                        
+                        // Inicializar componentes de la página
+                        initializeLoginPage();
                     }
                 });
+            } else {
+                console.error('Firebase no está disponible');
+                // Si Firebase no está disponible, mostrar página de login de todos modos
+                authCheckComplete = true;
+                if (loadingSection) loadingSection.style.display = 'none';
+                if (mainContent) mainContent.style.display = 'block';
             }
-            
+        }
+
+        function initializeLoginPage() {
             // Inicializar botones de mostrar/ocultar contraseña
             const toggleButtons = document.querySelectorAll('.toggle-password');
             toggleButtons.forEach(button => {
@@ -239,6 +297,44 @@
                             });
                     }
                 });
+            }
+            
+            // Inicializar tema
+            setupThemeToggle();
+        }
+        
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                const icon = themeToggle.querySelector('i');
+                
+                function updateThemeIcon() {
+                    if(document.body.classList.contains('dark-mode')) {
+                        icon.classList.remove('fa-moon');
+                        icon.classList.add('fa-sun');
+                    } else {
+                        icon.classList.remove('fa-sun');
+                        icon.classList.add('fa-moon');
+                    }
+                }
+
+                themeToggle.addEventListener('click', function() {
+                    document.body.classList.toggle('dark-mode');
+                    if(document.body.classList.contains('dark-mode')) {
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        localStorage.setItem('theme', 'light');
+                    }
+                    updateThemeIcon();
+                });
+
+                // Aplicar tema guardado
+                if(localStorage.getItem('theme') === 'dark') {
+                    document.body.classList.add('dark-mode');
+                } else if(localStorage.getItem('theme') === 'light') {
+                    document.body.classList.remove('dark-mode');
+                }
+                updateThemeIcon();
             }
         }
     </script>
