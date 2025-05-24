@@ -129,22 +129,77 @@
     <script src="js/app.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loadingSection = document.getElementById('loading-section');
-            const mainContent = document.getElementById('main-content');
+        // Función para configurar el cambio de tema
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            if (!themeToggle) {
+                console.error('Botón de tema no encontrado');
+                return;
+            }
+
+            const icon = themeToggle.querySelector('i');
+            if (!icon) {
+                console.error('Icono del botón de tema no encontrado');
+                return;
+            }
             
-            // Mostrar pantalla de carga
-            if (loadingSection) loadingSection.style.display = 'block';
-            if (mainContent) mainContent.style.display = 'none';
-            
-            // Inicializar la aplicación
-            initializeApp();
+            // Función para actualizar el icono según el tema actual
+            function updateThemeIcon() {
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            }
+
+            // Evento click para cambiar tema
+            themeToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Cambiando tema...');
                 
-            // Después de 2 segundos, mostrar la página
-            setTimeout(() => {
-                if (loadingSection) loadingSection.style.display = 'none';
-                if (mainContent) mainContent.style.display = 'block';
-            }, 2000);
+                document.body.classList.toggle('dark-mode');
+                
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                    console.log('Tema cambiado a oscuro');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    console.log('Tema cambiado a claro');
+                }
+                
+                updateThemeIcon();
+            });
+
+            // Aplicar tema guardado al cargar la página
+            const savedTheme = localStorage.getItem('theme');
+            console.log('Tema guardado:', savedTheme);
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else if (savedTheme === 'light') {
+                document.body.classList.remove('dark-mode');
+            } else {
+                // Si no hay tema guardado, usar tema claro por defecto
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+            }
+            
+            updateThemeIcon();
+        }
+
+        // Función para inicializar la aplicación
+        function initializeApp() {
+            console.log('Inicializando aplicación...');
+            
+            // Inicializar Firebase
+            if (window.FirebaseUtils && typeof window.FirebaseUtils.initializeFirebase === 'function') {
+                window.FirebaseUtils.initializeFirebase();
+            }
+            
+            // Inicializar tema
+            setupThemeToggle();
             
             // Manejar el menú móvil
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
@@ -178,51 +233,35 @@
                     }
                 });
             });
-        });
-        
-        function initializeApp() {
-            // Inicializar Firebase
-            if (window.FirebaseUtils && typeof window.FirebaseUtils.initializeFirebase === 'function') {
-                window.FirebaseUtils.initializeFirebase();
-            }
-            
-            // Inicializar tema
-            setupThemeToggle();
         }
 
-        function setupThemeToggle() {
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                const icon = themeToggle.querySelector('i');
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM cargado, inicializando...');
+            
+            const loadingSection = document.getElementById('loading-section');
+            const mainContent = document.getElementById('main-content');
+            
+            // Mostrar pantalla de carga
+            if (loadingSection) loadingSection.style.display = 'block';
+            if (mainContent) mainContent.style.display = 'none';
+            
+            // Inicializar la aplicación
+            initializeApp();
                 
-                function updateThemeIcon() {
-                    if(document.body.classList.contains('dark-mode')) {
-                        icon.classList.remove('fa-moon');
-                        icon.classList.add('fa-sun');
-                    } else {
-                        icon.classList.remove('fa-sun');
-                        icon.classList.add('fa-moon');
-                    }
-                }
+            // Después de 2 segundos, mostrar la página
+            setTimeout(() => {
+                if (loadingSection) loadingSection.style.display = 'none';
+                if (mainContent) mainContent.style.display = 'block';
+                console.log('Aplicación cargada completamente');
+            }, 2000);
+        });
 
-                themeToggle.addEventListener('click', function() {
-                    document.body.classList.toggle('dark-mode');
-                    if(document.body.classList.contains('dark-mode')) {
-                        localStorage.setItem('theme', 'dark');
-                    } else {
-                        localStorage.setItem('theme', 'light');
-                    }
-                    updateThemeIcon();
-                });
-
-                // Aplicar tema guardado
-                if(localStorage.getItem('theme') === 'dark') {
-                    document.body.classList.add('dark-mode');
-                } else if(localStorage.getItem('theme') === 'light') {
-                    document.body.classList.remove('dark-mode');
-                }
-                updateThemeIcon();
-            }
+        // También inicializar si el DOM ya está cargado
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
         }
     </script>
 </body>

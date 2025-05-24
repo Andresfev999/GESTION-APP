@@ -1,70 +1,73 @@
-<nav class="main-navbar">
+<header class="main-header">
     <div class="container">
-        <div class="navbar-logo">
-            <a href="index.html">
-                <i class="fas fa-futbol"></i>
-                <span>Torneos de Fútbol</span>
-            </a>
+        <div class="logo">
+            <i class="fas fa-futbol"></i>
+            <h1>Torneos de Fútbol</h1>
         </div>
         
-        <button class="navbar-toggle" id="navbar-toggle">
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
             <i class="fas fa-bars"></i>
         </button>
         
-        <div class="navbar-menu" id="navbar-menu">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link">
+        <nav class="main-nav" id="main-nav">
+            <ul class="nav-list">
+                <li>
+                    <a href="../../index.html">
                         <i class="fas fa-home"></i> Inicio
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="pages/torneos/index.html" class="nav-link">
+                <li>
+                    <a href="../torneos/index.html">
                         <i class="fas fa-trophy"></i> Torneos
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="pages/equipos/index.html" class="nav-link">
+                <li>
+                    <a href="../equipos/index.html">
                         <i class="fas fa-users"></i> Equipos
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="pages/jugadores/index.html" class="nav-link">
+                <li>
+                    <a href="../jugadores/index.html">
                         <i class="fas fa-user"></i> Jugadores
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="pages/partidos/index.html" class="nav-link">
+                <li>
+                    <a href="../partidos/index.html">
                         <i class="fas fa-futbol"></i> Partidos
                     </a>
                 </li>
+                <li>
+                    <a href="../posiciones/index.html">
+                        <i class="fas fa-table"></i> Posiciones
+                    </a>
+                </li>
             </ul>
-        </div>
+        </nav>
         
-        <div class="navbar-actions">
+        <div class="header-actions">
             <button id="themeToggle" class="btn btn-icon">
                 <i class="fas fa-moon"></i>
             </button>
         </div>
     </div>
-</nav>
+</header>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Manejar el menú móvil
-        const navbarToggle = document.getElementById('navbar-toggle');
-        const navbarMenu = document.getElementById('navbar-menu');
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mainNav = document.getElementById('main-nav');
         
-        if (navbarToggle && navbarMenu) {
-            navbarToggle.addEventListener('click', function() {
-                navbarMenu.classList.toggle('active');
-                navbarToggle.classList.toggle('active');
+        if (mobileMenuToggle && mainNav) {
+            mobileMenuToggle.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+                mobileMenuToggle.classList.toggle('active');
             });
         }
         
         // Marcar el enlace activo
         const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('.nav-link');
+        const navLinks = document.querySelectorAll('.nav-list a');
         
         navLinks.forEach(link => {
             const linkPath = link.getAttribute('href');
