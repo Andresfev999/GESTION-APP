@@ -33,7 +33,7 @@
   color: var(--primary-color);
 }
 
-/* Navegación principal */
+/* 🔥 NAVEGACIÓN PRINCIPAL - ESTILO TEXTO COMO EN INDEX */
 .main-nav {
   display: flex;
   align-items: center;
@@ -47,6 +47,7 @@
   padding: 0;
 }
 
+/* 🔥 ENLACES COMO TEXTO, NO COMO BOTONES */
 .main-nav .nav-list li a {
   color: var(--header-text);
   text-decoration: none;
@@ -57,16 +58,20 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  /* 🔥 SIN FONDO POR DEFECTO */
+  background: transparent;
 }
 
+/* 🔥 HOVER: SOLO CAMBIO DE COLOR */
 .main-nav .nav-list li a:hover {
   color: var(--primary-color);
   background: var(--hover-bg);
 }
 
+/* 🔥 ACTIVO: FONDO SÓLIDO COMO EN INDEX */
 .main-nav .nav-list li a.active {
-  color: var(--primary-color);
-  background: var(--primary-color-light, rgba(220, 38, 38, 0.1));
+  color: var(--text-light);
+  background: var(--primary-color);
 }
 
 /* Acciones del header */
@@ -74,84 +79,6 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-}
-
-.auth-buttons .btn {
-  margin-left: 0.5rem;
-}
-
-.user-section {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.user-dropdown {
-  position: relative;
-}
-
-.user-dropdown-toggle {
-  background: none;
-  border: none;
-  color: var(--header-text);
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  gap: 0.5rem;
-}
-
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--card-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.user-initials {
-  color: var(--primary-color);
-  font-weight: bold;
-}
-
-.user-dropdown-menu {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 120%;
-  background: var(--card-bg);
-  color: var(--text-color);
-  min-width: 180px;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 100;
-  padding: 0.5rem 0;
-}
-
-.user-dropdown:hover .user-dropdown-menu {
-  display: block;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  color: var(--text-color);
-  text-decoration: none;
-  transition: background 0.2s;
-}
-
-.dropdown-item:hover {
-  background: var(--hover-bg);
-}
-
-.dropdown-divider {
-  height: 1px;
-  background: var(--border-color);
-  margin: 0.5rem 0;
 }
 
 .btn.btn-icon {
@@ -225,13 +152,4 @@
   .header-actions {
     gap: 0.5rem;
   }
-}
-
-/* Variables CSS adicionales para mejor compatibilidad */
-:root {
-  --primary-color-light: rgba(220, 38, 38, 0.1);
-}
-
-.dark-mode {
-  --primary-color-light: rgba(220, 38, 38, 0.2);
 }

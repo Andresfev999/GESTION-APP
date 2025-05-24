@@ -1,17 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equipos - Sistema de Gestión de Torneos de Fútbol</title>
-    <link rel="stylesheet" href="../../css/main.css">
+    
+    <!-- 🔥 MISMOS CSS QUE INDEX.HTML -->
     <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/navbar.css">
     <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/navbar-internal.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/buttons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-       <!-- El navbar se cargará dinámicamente aquí -->
+    <!-- ⚠️ IMPORTANTE: El navbar se carga aquí automáticamente por navbar.js -->
 
     <main class="container">
         <div class="page-header">
@@ -31,12 +34,11 @@
         </div>
 
         <div id="equipos-list" class="cards-grid">
-            <!-- Aquí se cargarán los equipos dinámicamente -->
-            <div class="loading-spinner"></div>
+            <div class="loading-spinner">Cargando equipos...</div>
         </div>
     </main>
 
-    <footer>
+    <footer class="main-footer">
         <div class="container">
             <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
         </div>
@@ -49,12 +51,13 @@
     <script src="../../js/firebase-config.js"></script>
     <script src="../../js/firebase-data.js"></script>
     <script src="../../js/app.js"></script>
-    <script src="../../js/components/navbar.js"></script>
-    <script src="../../js/modules/equipos.js"></script>
+    
+    <!-- 🔥 ESTE SCRIPT CARGA EL NAVBAR AUTOMÁTICAMENTE -->
     <script src="../../js/navbar.js"></script>
     
+    <script src="../../js/modules/equipos.js"></script>
+    
     <script>
-        // Establecer el año actual en el footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
 </body>

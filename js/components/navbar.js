@@ -47,11 +47,9 @@ function createFallbackNavbar() {
                 <i class="fas fa-futbol"></i>
                 <h1>Torneos de Fútbol</h1>
             </div>
-            
             <button class="mobile-menu-toggle" id="mobile-menu-toggle">
                 <i class="fas fa-bars"></i>
             </button>
-            
             <nav class="main-nav" id="main-nav">
                 <ul class="nav-list">
                     <li><a href="../../index.html"><i class="fas fa-home"></i> Inicio</a></li>
@@ -59,10 +57,8 @@ function createFallbackNavbar() {
                     <li><a href="../equipos/index.html"><i class="fas fa-users"></i> Equipos</a></li>
                     <li><a href="../jugadores/index.html"><i class="fas fa-user"></i> Jugadores</a></li>
                     <li><a href="../partidos/index.html"><i class="fas fa-futbol"></i> Partidos</a></li>
-                    <li><a href="../posiciones/index.html"><i class="fas fa-table"></i> Posiciones</a></li>
                 </ul>
             </nav>
-            
             <div class="header-actions">
                 <button id="themeToggle" class="btn btn-icon">
                     <i class="fas fa-moon"></i>
@@ -77,7 +73,7 @@ function createFallbackNavbar() {
   setupThemeToggle()
 }
 
-// Función para configurar el navbar (EXACTA del index.html)
+// Funciones para manejar el navbar
 function setupNavbar() {
   // Manejar el menú móvil
   const mobileMenuToggle = document.getElementById("mobile-menu-toggle")
@@ -100,7 +96,7 @@ function setupNavbar() {
   }
 
   // Cerrar menú móvil al hacer clic en un enlace
-  const navLinks = document.querySelectorAll(".nav-list a")
+  const navLinks = document.querySelectorAll(".main-nav .nav-list a")
   navLinks.forEach((link) => {
     link.addEventListener("click", () => {
       if (mainNav && mainNav.classList.contains("active")) {
@@ -116,10 +112,10 @@ function setupNavbar() {
   markActiveLink()
 }
 
-// Función para marcar el enlace activo
+// 🔥 FUNCIÓN MEJORADA PARA MARCAR ENLACE ACTIVO
 function markActiveLink() {
   const currentPath = window.location.pathname
-  const navLinks = document.querySelectorAll(".nav-list a")
+  const navLinks = document.querySelectorAll(".main-nav .nav-list a")
 
   navLinks.forEach((link) => {
     const linkPath = link.getAttribute("href")
@@ -136,29 +132,20 @@ function markActiveLink() {
       link.classList.add("active")
     } else if (currentPath.includes("/jugadores/") && linkPath.includes("jugadores")) {
       link.classList.add("active")
-    } else if (currentPath.includes("/posiciones/") && linkPath.includes("posiciones")) {
-      link.classList.add("active")
     } else if ((currentPath === "/" || currentPath.includes("index.html")) && linkPath.includes("index.html")) {
       link.classList.add("active")
     }
   })
 }
 
-// Función para configurar el cambio de tema (EXACTA del index.html)
+// Función para configurar el cambio de tema
 function setupThemeToggle() {
   const themeToggle = document.getElementById("themeToggle")
-  if (!themeToggle) {
-    console.error("Botón de tema no encontrado")
-    return
-  }
+  if (!themeToggle) return
 
   const icon = themeToggle.querySelector("i")
-  if (!icon) {
-    console.error("Icono del botón de tema no encontrado")
-    return
-  }
+  if (!icon) return
 
-  // Función para actualizar el icono según el tema actual
   function updateThemeIcon() {
     if (document.body.classList.contains("dark-mode")) {
       icon.classList.remove("fa-moon")
@@ -169,36 +156,25 @@ function setupThemeToggle() {
     }
   }
 
-  // Evento click para cambiar tema
   themeToggle.addEventListener("click", (e) => {
     e.preventDefault()
-    console.log("Cambiando tema...")
-
     document.body.classList.toggle("dark-mode")
 
     if (document.body.classList.contains("dark-mode")) {
       localStorage.setItem("theme", "dark")
-      console.log("Tema cambiado a oscuro")
     } else {
       localStorage.setItem("theme", "light")
-      console.log("Tema cambiado a claro")
     }
 
     updateThemeIcon()
   })
 
-  // Aplicar tema guardado al cargar la página
+  // Aplicar tema guardado
   const savedTheme = localStorage.getItem("theme")
-  console.log("Tema guardado:", savedTheme)
-
   if (savedTheme === "dark") {
     document.body.classList.add("dark-mode")
   } else if (savedTheme === "light") {
     document.body.classList.remove("dark-mode")
-  } else {
-    // Si no hay tema guardado, usar tema claro por defecto
-    document.body.classList.remove("dark-mode")
-    localStorage.setItem("theme", "light")
   }
 
   updateThemeIcon()
@@ -212,8 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadNavbar()
   } else {
     console.log("Página principal detectada, usando navbar estático")
-    setupNavbar()
-    setupThemeToggle()
   }
 })
 
