@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Partido - Sistema de Gestión de Torneos de Fútbol</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/navbar.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/forms.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="container">
+        <div class="page-header">
+            <h1>Crear Nuevo Partido</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-futbol"></i> Datos del Partido
+                </div>
+            </div>
+            <div class="card-content">
+                <form id="crear-partido-form">
+                    <div class="form-group">
+                        <label for="torneo">Torneo</label>
+                        <select id="torneo" class="form-control" required>
+                            <option value="">Selecciona un torneo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipoLocal">Equipo Local</label>
+                        <select id="equipoLocal" class="form-control" required>
+                            <option value="">Selecciona el equipo local</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipoVisitante">Equipo Visitante</label>
+                        <select id="equipoVisitante" class="form-control" required>
+                            <option value="">Selecciona el equipo visitante</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha">Fecha</label>
+                        <input type="date" id="fecha" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hora">Hora</label>
+                        <input type="time" id="hora" class="form-control" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Guardar Partido
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="../../js/firebase-config.js"></script>
+    <script src="../../js/firebase-data.js"></script>
+    <script src="../../js/app.js"></script>
+    <script src="../../js/modules/partidos.js"></script>
+    <script src="../../js/navbar.js"></script>
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

@@ -11,7 +11,54 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    
+     <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-futbol"></i>
+                <h1>Torneos de Fútbol</h1>
+            </div>
+            
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav class="main-nav" id="main-nav">
+                <ul class="nav-list">
+                    <li>
+                        <a href="../../index.html" class="active">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../torneos/index.html">
+                            <i class="fas fa-trophy"></i> Torneos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pages/equipos/index.html">
+                            <i class="fas fa-users"></i> Equipos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pages/jugadores/index.html">
+                            <i class="fas fa-user"></i> Jugadores
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pages/partidos/index.html">
+                            <i class="fas fa-futbol"></i> Partidos
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="header-actions">
+                <button id="themeToggle" class="btn btn-icon">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
     <main class="container">
         <div class="page-header">
@@ -104,7 +151,7 @@
             <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
         </div>
     </footer>
-<script src="../../js/navbar.js"></script>
+
     <!-- Scripts de Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>

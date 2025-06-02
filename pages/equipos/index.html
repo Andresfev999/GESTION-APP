@@ -8,13 +8,14 @@
     
     <!-- 🔥 MISMOS CSS QUE INDEX.HTML -->
     <link rel="stylesheet" href="../../css/styles.css">
-    <link rel="stylesheet" href="../../css/navbar.css">
+  
     <link rel="stylesheet" href="../../css/components.css">
     <link rel="stylesheet" href="../../css/buttons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <!-- ⚠️ IMPORTANTE: El navbar se carga aquí automáticamente por navbar.js -->
+    <!-- Agregar el div para el navbar -->
+    <div id="navbar-placeholder"></div>
 
     <main class="container">
         <div class="page-header">
@@ -50,14 +51,12 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="../../js/firebase-config.js"></script>
     <script src="../../js/firebase-data.js"></script>
+    <!-- Tu app y módulos -->
     <script src="../../js/app.js"></script>
-    
-    <!-- 🔥 ESTE SCRIPT CARGA EL NAVBAR AUTOMÁTICAMENTE -->
-    <script src="../../js/navbar.js"></script>
-    
     <script src="../../js/modules/equipos.js"></script>
-    
+    <script src="../../js/navbar.js"></script>
     <script>
+        // Establecer el año actual en el footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
 </body>

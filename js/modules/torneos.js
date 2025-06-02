@@ -67,21 +67,20 @@ const TorneosModule = {
                         <span class="badge ${estadoClass}">${torneo.estado}</span>
                     </div>
                     <div class="card-content">
-                        <div class="torneo-escudo">
-                            <img src="${torneo.escudo || '../../assets/img/default-trophy.png'}" alt="${torneo.nombre}">
-                        </div>
+                       
                         <div class="info-row">
                             <span class="info-label">Tipo:</span>
                             <span>${torneo.tipo}</span>
                         </div>
                         <div class="info-row">
+                            <span class="info-label">Categoría:</span>
+                            <span>${torneo.categoria || 'No especificada'}</span>
+                        </div>
+                        <div class="info-row">
                             <span class="info-label">Equipos:</span>
                             <span>${equipos}</span>
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">Partidos:</span>
-                            <span>${partidos}</span>
-                        </div>
+                        
                     </div>
                     <div class="card-footer">
                         <a href="detalle.html?id=${torneo.id}" class="btn btn-outline">Ver detalles</a>
@@ -176,6 +175,7 @@ const TorneosModule = {
     },
     
     // Inicializar el formulario de creación/edición
+    // Inicializar el formulario de creación/edición
     initForm: async function() {
         const form = document.getElementById('torneo-form');
         const urlParams = new URLSearchParams(window.location.search);
@@ -193,13 +193,12 @@ const TorneosModule = {
                 document.getElementById('fechaInicio').value = torneo.fechaInicio || '';
                 document.getElementById('fechaFin').value = torneo.fechaFin || '';
                 document.getElementById('estado').value = torneo.estado || '';
+                document.getElementById('categoria').value = torneo.categoria || ''; // Load category
                 equiposTorneo = torneo.equipos || [];
             }
         }
 
         // Espera a que los equipos estén cargados en el checklist
-        await TorneosModule.initEquiposSelect();
-
         // Marca los equipos ya asociados si es edición
         if (equiposTorneo.length > 0) {
             equiposTorneo.forEach(id => {
@@ -301,6 +300,7 @@ const TorneosModule = {
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;
         const estado = document.getElementById('estado').value;
+        const categoria = document.getElementById('categoria').value;
 
         // Obtén los equipos seleccionados
         const equipos = Array.from(document.querySelectorAll('#equipos-container input[type="checkbox"]:checked')).map(e => e.value);
@@ -314,6 +314,7 @@ const TorneosModule = {
             fechaInicio,
             fechaFin,
             estado,
+            categoria, 
             equipos
         };
         // Guarda el torneo y obtén el ID (si es nuevo)
@@ -703,7 +704,7 @@ const TorneosModule = {
     }
 };
 
-// Inicializar el módulo cuando el DOM esté cargado
-document.addEventListener('DOMContentLoaded', async function() {
+// Inicializar el módulo cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
     TorneosModule.init();
 });

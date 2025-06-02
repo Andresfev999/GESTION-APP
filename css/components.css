@@ -24,7 +24,10 @@ body {
 }
 
 .btn-primary:hover {
-  background: var(--primary-dark);
+  background-color: var(--bg-color);
+  color:#d23b3b;
+  border: solid 1px #d23b3b;
+  transition: 100ms;
 }
 
 .btn-outline {
@@ -325,6 +328,31 @@ tr:hover {
   transition: var(--transition);
 }
 
+/* Centrado y fondo oscuro para el modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.4);
+    z-index: 2000;
+}
+
+/* Contenido del modal centrado */
+.modal-content {
+    background: var(--card-bg, #fff);
+    padding: 2rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    min-width: 320px;
+    max-width: 95vw;
+    position: relative;
+}
+
 .modal-backdrop.active .modal {
   transform: translateY(0);
 }
@@ -376,29 +404,34 @@ tr:hover {
 
 /* Estilos para la tabla de posiciones */
 #posiciones-container {
-  margin-top: 2rem;
+    margin-top: 2rem;
 }
 
 .tabla-posiciones {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--card-bg);
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .tabla-posiciones th,
 .tabla-posiciones td {
-  padding: 0.7rem 1rem;
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
+    padding: 0.7rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .tabla-posiciones th {
-  background: var(--table-header-bg);
-  color: var(--table-header-text);
-  font-weight: 600;
+    background: var(--table-header-bg);
+    color: var(--table-header-text);
+}
+
+/* Nuevo estilo para la columna de puntos */
+.tabla-posiciones td:last-child {
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 
 .tabla-posiciones tr:last-child td {
@@ -893,26 +926,58 @@ tr:hover {
   }
 }
 
-/* Estilos para el estado de carga */
-.loading {
-  text-align: center;
-  padding: 2rem;
-  color: var(--text-muted);
+
+
+/* Tablas secundarias (goleadores y arco menos vencido) debajo de posiciones */
+.tablas-secundarias {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
 }
 
-.loading i {
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-  animation: spin 1s linear infinite;
+@media (min-width: 900px) {
+    .tablas-secundarias {
+        flex-direction: row;
+        gap: 2rem;
+        align-items: flex-start;
+    }
+    .tablas-secundarias > .card {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+}
+
+/* Asegúrate de que #posiciones-container NO tenga display:flex */
+#posiciones-container {
+    display: block;
+}
+
+/* Estilos para el estado de carga */
+.loading-spinner {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.loading-spinner::before {
+    content: "";
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid var(--text-muted);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Modo oscuro específico para partidos */
@@ -957,4 +1022,9 @@ tr:hover {
 .dark-mode #resultado-form {
   background: var(--card-bg);
   border-color: var(--border-color);
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
 }

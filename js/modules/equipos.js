@@ -17,7 +17,9 @@ const EquiposModule = {
 
   // Cargar la lista de equipos
   cargarEquipos: async () => {
+    // En la función cargarEquipos, modificar el div de loading-spinner
     const equiposList = document.getElementById("equipos-list")
+    equiposList.innerHTML = '<div class="loading-spinner"></div>'
     const equipos = await window.FirebaseDataStore.getEquipos()
 
     if (equipos.length === 0) {
@@ -222,6 +224,23 @@ const EquiposModule = {
       event.preventDefault()
       await this.guardarEquipo(equipoId)
     })
+
+    // Supón que tienes un array jugadoresEquipo con los jugadores del equipo
+    const jugadoresEquipo = await window.FirebaseDataStore.getJugadoresPorEquipo(equipoId)
+    const porteroSelect = document.getElementById('portero');
+    if (porteroSelect && jugadoresEquipo.length > 0) {
+        let opciones = '<option value="">Selecciona un portero</option>';
+        jugadoresEquipo.forEach(jugador => {
+            opciones += `<option value="${jugador.id}">${jugador.nombre} ${jugador.apellido || ''}</option>`;
+        });
+        porteroSelect.innerHTML = opciones;
+
+        // Seleccionar el portero guardado si existe
+        const equipo = await window.FirebaseDataStore.getEquipo(equipoId);
+        if (equipo && equipo.portero) {
+            porteroSelect.value = equipo.portero;
+        }
+    }
   },
 
   // Inicializar carga de archivos
@@ -300,6 +319,13 @@ const EquiposModule = {
     }
 
     await window.FirebaseDataStore.saveEquipo(equipo)
+
+    // Actualizar el portero en el documento del equipo en Firestore
+    const porteroId = document.getElementById('portero').value;
+    if (porteroId) {
+      await window.FirebaseDataStore.db.collection('equipos').doc(equipoId).update({ portero: porteroId });
+    }
+
     window.location.href = "index.html"
   },
 

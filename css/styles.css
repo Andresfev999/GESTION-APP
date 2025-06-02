@@ -36,10 +36,10 @@
 /* Tema oscuro */
 body.dark-mode,
 .dark-mode {
-  --primary-color: #e53935;
-  --primary-dark: #b71c1c;
-  --primary-light: #ff6659;
-  --accent-color: #e53935;
+  --primary-color: #d23b3b;
+  --primary-dark: #d23b3b;
+  --primary-light: #66bb6a;
+  --accent-color: #4caf50;
   --danger-color: #e53935;
   --warning-color: #ffc107;
   --info-color: #2196f3;
@@ -55,8 +55,8 @@ body.dark-mode,
   --border-color: #333;
 
   --header-bg: #111;
-  --header-text: #e53935;
-  --table-header-bg: #e53935;
+  --header-text: #ee0e0e;
+  --table-header-bg: #bc3737;
   --table-header-text: #fff;
   --table-row-bg: #232323;
   --table-row-alt-bg: #181818;

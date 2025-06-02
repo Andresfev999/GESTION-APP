@@ -27,6 +27,7 @@
     --background-color: #121212;
     --card-background: #1e1e1e;
     --border-color: #333;
+    --hover-bg: #2a2a2a; /* Añadir esta variable */
 }
 
 /* Solo referencias a variables, sin declarar colores */
@@ -155,22 +156,8 @@ footer p {
     color: var(--text-light);
 }
 
-/* Card component */
-.card {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    overflow: hidden;
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
-}
-
 /* Responsive */
 @media (max-width: 768px) {
-    .navbar-menu {
-        display: none;
-    }
-
     .hero h1 {
         font-size: 2rem;
     }

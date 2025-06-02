@@ -238,9 +238,35 @@ const FirebaseDataStore = {
     
     // Obtener jugadores por equipo
     getJugadoresPorEquipo: async function(equipoId) {
-        if (!this.db) this.init();
-        const snapshot = await this.db.collection('jugadores').where('equipo', '==', String(equipoId)).get();
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        try {
+            if (!this.db) this.init();
+
+            console.log("Buscando jugadores para el equipo ID:", equipoId);
+
+            const equipoIdStr = String(equipoId);
+
+            // Usar el campo correcto: 'equipo'
+            const snapshot = await this.db.collection('jugadores').where('equipo', '==', equipoIdStr).get();
+
+            if (snapshot.empty) {
+                console.log("No se encontraron jugadores para este equipo");
+                return [];
+            }
+
+            const jugadores = [];
+            snapshot.forEach(doc => {
+                jugadores.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+
+            console.log(`Se encontraron ${jugadores.length} jugadores para el equipo ${equipoId}`);
+            return jugadores;
+        } catch (error) {
+            console.error("Error al obtener jugadores por equipo:", error);
+            return [];
+        }
     },
     
     // Eliminar jugador
@@ -396,14 +422,31 @@ const FirebaseDataStore = {
     },
 
     // Registrar resultado de partido
-    registrarResultado: async function(partidoId, golesLocal, golesVisitante, observaciones) {
+    registrarResultado: async function(partidoId, golesLocal, golesVisitante, observaciones, goleadoresLocal = [], goleadoresVisitante = []) {
         if (!this.db) this.init();
         const resultado = {
             golesLocal: parseInt(golesLocal),
             golesVisitante: parseInt(golesVisitante),
             observaciones: observaciones || ""
         };
-        await this.db.collection('partidos').doc(partidoId).update({ resultado, estado: "Finalizado" });
+        // Unifica los arrays de goleadores
+        const goleadores = [
+            ...goleadoresLocal.map(g => ({ ...g, equipo: 'local' })),
+            ...goleadoresVisitante.map(g => ({ ...g, equipo: 'visitante' }))
+        ];
+        await this.db.collection('partidos').doc(partidoId).update({ resultado, estado: "Finalizado", goleadores });
+
+        // Sumar goles a cada jugador
+        for (const gol of goleadores) {
+            if (gol.jugadorId && gol.goles) {
+                const jugadorRef = this.db.collection('jugadores').doc(gol.jugadorId);
+                // Usa FieldValue.increment para sumar los goles
+                await jugadorRef.update({
+                    goles: firebase.firestore.FieldValue.increment(gol.goles)
+                });
+            }
+        }
+
         return true;
     },
 
@@ -494,45 +537,20 @@ const FirebaseDataStore = {
             }));
 
         return posiciones;
-    },
+    }
 };
 
+// Asignar a window para uso global
 window.FirebaseDataStore = FirebaseDataStore;
 
-// Ejemplo de uso de la función generarCalendario
-// Asumiendo que este archivo ya existe, agregamos o modificamos la función getJugadoresPorEquipo
-
-// Función para obtener jugadores por equipo
-window.FirebaseDataStore.getJugadoresPorEquipo = async (equipoId) => {
-  try {
-    console.log("Buscando jugadores para el equipo ID:", equipoId)
-
-    // Asegurarse de que el ID del equipo sea un string para la comparación
-    const equipoIdStr = String(equipoId)
-
-    // Obtener la colección de jugadores
-    const firebase = window.firebase // Declare the firebase variable
-    const jugadoresRef = firebase.firestore().collection("jugadores")
-    const snapshot = await jugadoresRef.where("equipoId", "==", equipoIdStr).get()
-
-    if (snapshot.empty) {
-      console.log("No se encontraron jugadores para este equipo")
-      return []
+window.FirebaseDataStore.crearPartido = async function(partido) {
+    try {
+        const db = firebase.firestore();
+        // Ajusta la colección si usas otro nombre
+        await db.collection('partidos').add(partido);
+        return true;
+    } catch (error) {
+        console.error('Error al crear partido:', error);
+        return false;
     }
-
-    // Convertir los documentos a objetos
-    const jugadores = []
-    snapshot.forEach((doc) => {
-      jugadores.push({
-        id: doc.id,
-        ...doc.data(),
-      })
-    })
-
-    console.log(`Se encontraron ${jugadores.length} jugadores para el equipo ${equipoId}`)
-    return jugadores
-  } catch (error) {
-    console.error("Error al obtener jugadores por equipo:", error)
-    return []
-  }
-}
+};

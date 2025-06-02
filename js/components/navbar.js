@@ -139,45 +139,32 @@ function markActiveLink() {
 }
 
 // Función para configurar el cambio de tema
-function setupThemeToggle() {
-  const themeToggle = document.getElementById("themeToggle")
-  if (!themeToggle) return
+// Después de la función loadNavbar()
 
-  const icon = themeToggle.querySelector("i")
-  if (!icon) return
+function setupThemeToggle() {
+  const themeToggle = document.getElementById('themeToggle');
+  if (!themeToggle) return;
+
+  const icon = themeToggle.querySelector('i');
+  const body = document.body;
 
   function updateThemeIcon() {
-    if (document.body.classList.contains("dark-mode")) {
-      icon.classList.remove("fa-moon")
-      icon.classList.add("fa-sun")
-    } else {
-      icon.classList.remove("fa-sun")
-      icon.classList.add("fa-moon")
-    }
+    const isDarkMode = body.classList.contains('dark-mode');
+    icon.className = isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
   }
 
-  themeToggle.addEventListener("click", (e) => {
-    e.preventDefault()
-    document.body.classList.toggle("dark-mode")
-
-    if (document.body.classList.contains("dark-mode")) {
-      localStorage.setItem("theme", "dark")
-    } else {
-      localStorage.setItem("theme", "light")
-    }
-
-    updateThemeIcon()
-  })
+  themeToggle.addEventListener('click', () => {
+    const isDarkMode = body.classList.toggle('dark-mode');
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    updateThemeIcon();
+  });
 
   // Aplicar tema guardado
-  const savedTheme = localStorage.getItem("theme")
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark-mode")
-  } else if (savedTheme === "light") {
-    document.body.classList.remove("dark-mode")
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.add('dark-mode');
   }
-
-  updateThemeIcon()
+  updateThemeIcon();
 }
 
 // Inicializar cuando el DOM esté cargado

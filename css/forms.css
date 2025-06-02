@@ -158,6 +158,17 @@
     margin-right: 0.5rem;
 }
 
+/* Add styles for equipo-item to align checkbox and label */
+.equipo-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.equipo-item input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
 /* Estilos para mensajes de alerta */
 .alert {
     position: relative;
@@ -212,4 +223,28 @@
 .was-validated .form-control:invalid ~ .invalid-feedback,
 .form-control.is-invalid ~ .invalid-feedback {
     display: block;
+}
+
+.goleadores-container {
+    margin-bottom: 1rem;
+}
+
+.goleador-input {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.goleador-input .jugador-select {
+    flex: 2;
+}
+
+.goleador-input .goles-jugador {
+    flex: 1;
+    max-width: 100px;
+}
+
+.goleador-input .add-goleador {
+    flex: 0;
 }

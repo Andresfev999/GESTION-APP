@@ -70,6 +70,32 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Goleadores Equipo Local</label>
+                        <div id="goleadores-local" class="goleadores-container">
+                            <div class="goleador-input">
+                                <select class="form-control jugador-select" data-equipo="local"></select>
+                                <input type="number" class="form-control goles-jugador" min="0" placeholder="Goles">
+                                <button type="button" class="btn btn-sm btn-outline add-goleador" data-equipo="local">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Goleadores Equipo Visitante</label>
+                        <div id="goleadores-visitante" class="goleadores-container">
+                            <div class="goleador-input">
+                                <select class="form-control jugador-select" data-equipo="visitante"></select>
+                                <input type="number" class="form-control goles-jugador" min="0" placeholder="Goles">
+                                <button type="button" class="btn btn-sm btn-outline add-goleador" data-equipo="visitante">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="observaciones">Observaciones</label>
                         <textarea id="observaciones" class="form-control" rows="3" placeholder="Observaciones del partido..."></textarea>
                     </div>

@@ -17,6 +17,11 @@ const PartidosModule = {
         if (document.getElementById('resultado-form')) {
             this.initFormResultado();
         }
+
+        // Inicializar el formulario de creación manual de partido
+        if (document.getElementById('crear-partido-form')) {
+            this.initFormCrearPartido();
+        }
     },
 
     // Cargar la lista de partidos
@@ -80,35 +85,45 @@ const PartidosModule = {
                             const equipoVisitante = await window.FirebaseDataStore.getEquipo(partido.visitante);
 
                             if (equipoLocal && equipoVisitante) {
+                                let fechaPartido;
+                                if (typeof partido.fecha === 'string') {
+                                    // Asegura formato correcto y evita problemas de zona horaria
+                                    const [year, month, day] = partido.fecha.split('-');
+                                    fechaPartido = new Date(Number(year), Number(month) - 1, Number(day));
+                                } else {
+                                    fechaPartido = new Date(partido.fecha);
+                                }
+                                const fechaFormateada = fechaPartido.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+
                                 html += `
-    <div class="partido-card">
-        <div class="partido-fecha">
-            <i class="fas fa-calendar"></i>
-            ${new Date(partido.fecha).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
-            ${partido.hora ? `<span class="partido-hora"><i class="fas fa-clock"></i> ${partido.hora}</span>` : ''}
+<div class="partido-card">
+    <div class="partido-fecha">
+        <i class="fas fa-calendar"></i>
+        ${fechaFormateada}
+        ${partido.hora ? `<span class="partido-hora"><i class="fas fa-clock"></i> ${partido.hora}</span>` : ''}
+    </div>
+    <div class="partido-equipos partido-equipos-con-acciones">
+        <div class="equipo-local">
+            <img src="${equipoLocal.escudo || '../../assets/img/default-shield.png'}" alt="${equipoLocal.nombre}" class="equipo-logo-sm">
+            <span>${equipoLocal.nombre}</span>
         </div>
-        <div class="partido-equipos partido-equipos-con-acciones">
-            <div class="equipo-local">
-                <img src="${equipoLocal.escudo || '../../assets/img/default-shield.png'}" alt="${equipoLocal.nombre}" class="equipo-logo-sm">
-                <span>${equipoLocal.nombre}</span>
-            </div>
-            <div class="resultado">
-                <span class="goles">${partido.resultado ? partido.resultado.golesLocal : ''}</span>
-                <span class="separador">-</span>
-                <span class="goles">${partido.resultado ? partido.resultado.golesVisitante : ''}</span>
-            </div>
-            <div class="equipo-visitante">
-                <span>${equipoVisitante.nombre}</span>
-                <img src="${equipoVisitante.escudo || '../../assets/img/default-shield.png'}" alt="${equipoVisitante.nombre}" class="equipo-logo-sm">
-            </div>
-            <div class="partido-acciones-horizontal">
-                <button class="btn btn-sm btn-outline editar-fecha-btn" data-id="${partido.id}" data-fecha="${partido.fecha}">
-                    <i class="fas fa-edit"></i> Editar fecha
-                </button>
-                <a href="resultado.html?id=${partido.id}" class="btn btn-sm btn-primary">Ingresar Resultado</a>
-            </div>
+        <div class="resultado">
+            <span class="goles">${partido.resultado ? partido.resultado.golesLocal : ''}</span>
+            <span class="separador">-</span>
+            <span class="goles">${partido.resultado ? partido.resultado.golesVisitante : ''}</span>
+        </div>
+        <div class="equipo-visitante">
+            <span>${equipoVisitante.nombre}</span>
+            <img src="${equipoVisitante.escudo || '../../assets/img/default-shield.png'}" alt="${equipoVisitante.nombre}" class="equipo-logo-sm">
+        </div>
+        <div class="partido-acciones-horizontal">
+            <button class="btn btn-sm btn-outline editar-fecha-btn" data-id="${partido.id}" data-fecha="${partido.fecha}">
+                <i class="fas fa-edit"></i> Editar fecha
+            </button>
+            <a href="resultado.html?id=${partido.id}" class="btn btn-sm btn-primary">Ingresar Resultado</a>
         </div>
     </div>
+</div>
 `;
                             }
                         }
@@ -158,29 +173,39 @@ const PartidosModule = {
                             const equipoVisitante = await window.FirebaseDataStore.getEquipo(partido.visitante);
 
                             if (equipoLocal && equipoVisitante && partido.resultado) {
+                                let fechaPartido;
+                                if (typeof partido.fecha === 'string') {
+                                    // Asegura formato correcto y evita problemas de zona horaria
+                                    const [year, month, day] = partido.fecha.split('-');
+                                    fechaPartido = new Date(Number(year), Number(month) - 1, Number(day));
+                                } else {
+                                    fechaPartido = new Date(partido.fecha);
+                                }
+                                const fechaFormateada = fechaPartido.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+
                                 html += `
-                    <div class="partido-card">
-                        <div class="partido-fecha">
-                            <i class="fas fa-calendar-check"></i>
-                            ${new Date(partido.fecha).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+                <div class="partido-card">
+                    <div class="partido-fecha">
+                        <i class="fas fa-calendar-check"></i>
+                        ${fechaFormateada}
+                    </div>
+                    <div class="partido-equipos">
+                        <div class="equipo-local">
+                            <img src="${equipoLocal.escudo || '../../assets/img/default-shield.png'}" alt="${equipoLocal.nombre}" class="equipo-logo-sm">
+                            <span>${equipoLocal.nombre}</span>
                         </div>
-                        <div class="partido-equipos">
-                            <div class="equipo-local">
-                                <img src="${equipoLocal.escudo || '../../assets/img/default-shield.png'}" alt="${equipoLocal.nombre}" class="equipo-logo-sm">
-                                <span>${equipoLocal.nombre}</span>
-                            </div>
-                            <div class="resultado">
-                                <span class="goles">${partido.resultado.golesLocal}</span>
-                                <span class="separador">-</span>
-                                <span class="goles">${partido.resultado.golesVisitante}</span>
-                            </div>
-                            <div class="equipo-visitante">
-                                <span>${equipoVisitante.nombre}</span>
-                                <img src="${equipoVisitante.escudo || '../../assets/img/default-shield.png'}" alt="${equipoVisitante.nombre}" class="equipo-logo-sm">
-                            </div>
+                        <div class="resultado">
+                            <span class="goles">${partido.resultado.golesLocal}</span>
+                            <span class="separador">-</span>
+                            <span class="goles">${partido.resultado.golesVisitante}</span>
+                        </div>
+                        <div class="equipo-visitante">
+                            <span>${equipoVisitante.nombre}</span>
+                            <img src="${equipoVisitante.escudo || '../../assets/img/default-shield.png'}" alt="${equipoVisitante.nombre}" class="equipo-logo-sm">
                         </div>
                     </div>
-                `;
+                </div>
+            `;
                             }
                         }
 
@@ -325,84 +350,457 @@ const PartidosModule = {
 
     // Inicializar el formulario de resultado
     initFormResultado: async function() {
-        const form = document.getElementById('resultado-form');
-        const partidoInfoContainer = document.getElementById('partido-info');
+    const form = document.getElementById('resultado-form');
+    const partidoInfoContainer = document.getElementById('partido-info');
 
-        // Obtener ID del partido de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const partidoId = urlParams.get('id');
+    // Obtener ID del partido de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const partidoId = urlParams.get('id');
 
-        if (!partidoId) {
-            window.location.href = 'index.html';
-            return;
-        }
+    if (!partidoId) {
+        window.location.href = 'index.html';
+        return;
+    }
 
-        const partido = await window.FirebaseDataStore.getPartido(partidoId);
-        if (!partido) {
-            window.location.href = 'index.html';
-            return;
-        }
+    const partido = await window.FirebaseDataStore.getPartido(partidoId);
+    if (!partido) {
+        window.location.href = 'index.html';
+        return;
+    }
 
-        // Mostrar información del partido
-        const equipoLocal = await window.FirebaseDataStore.getEquipo(partido.local);
-        const equipoVisitante = await window.FirebaseDataStore.getEquipo(partido.visitante);
-        const torneo = await window.FirebaseDataStore.getTorneo(partido.torneo);
+    // Mostrar información del partido
+    const equipoLocal = await window.FirebaseDataStore.getEquipo(partido.local);
+    const equipoVisitante = await window.FirebaseDataStore.getEquipo(partido.visitante);
+    const torneo = await window.FirebaseDataStore.getTorneo(partido.torneo);
 
-        if (equipoLocal && equipoVisitante && torneo) {
-            // Mostrar detalles del partido
-            partidoInfoContainer.innerHTML = `
-                <div class="partido-header">
-                    <div class="torneo-info">
-                        <i class="fas fa-trophy"></i> ${torneo.nombre}
-                    </div>
-                    <div class="partido-fecha-hora">
-                        <i class="fas fa-calendar"></i> ${new Date(partido.fecha).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
-                        <span class="partido-hora"><i class="fas fa-clock"></i> ${partido.hora}</span>
-                    </div>
+    if (equipoLocal && equipoVisitante && torneo) {
+        // Guardar IDs de equipos en dataset para uso posterior
+        partidoInfoContainer.dataset.equipoLocal = equipoLocal.id;
+        partidoInfoContainer.dataset.equipoVisitante = equipoVisitante.id;
+
+        // Mostrar detalles del partido
+        partidoInfoContainer.innerHTML = `
+            <div class="partido-header">
+                <div class="torneo-info">
+                    <i class="fas fa-trophy"></i> ${torneo.nombre}
                 </div>
-            `;
+                <div class="partido-fecha-hora">
+                    <i class="fas fa-calendar"></i> ${(() => {
+                        if (typeof partido.fecha === 'string') {
+                            const [year, month, day] = partido.fecha.split('-');
+                            return new Date(Number(year), Number(month) - 1, Number(day))
+                                .toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+                        } else {
+                            return new Date(partido.fecha)
+                                .toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+                        }
+                    })()}
+                    <span class="partido-hora"><i class="fas fa-clock"></i> ${partido.hora || ''}</span>
+                </div>
+            </div>
+        `;
 
-            // Mostrar formulario de resultado
-            form.style.display = 'block';
+        // Mostrar formulario de resultado
+        if (form) form.style.display = 'block';
 
-            // Establecer información de equipos
-            document.getElementById('escudo-local').src = equipoLocal.escudo || '../../assets/img/default-shield.png';
-            document.getElementById('nombre-local').textContent = equipoLocal.nombre;
-            document.getElementById('escudo-visitante').src = equipoVisitante.escudo || '../../assets/img/default-shield.png';
-            document.getElementById('nombre-visitante').textContent = equipoVisitante.nombre;
+        // Establecer información de equipos
+        const escudoLocal = document.getElementById('escudo-local');
+        const nombreLocal = document.getElementById('nombre-local');
+        const escudoVisitante = document.getElementById('escudo-visitante');
+        const nombreVisitante = document.getElementById('nombre-visitante');
+        if (escudoLocal) escudoLocal.src = equipoLocal.escudo || '../../assets/img/default-shield.png';
+        if (nombreLocal) nombreLocal.textContent = equipoLocal.nombre;
+        if (escudoVisitante) escudoVisitante.src = equipoVisitante.escudo || '../../assets/img/default-shield.png';
+        if (nombreVisitante) nombreVisitante.textContent = equipoVisitante.nombre;
 
-            // Si ya hay un resultado, mostrarlo
-            if (partido.resultado) {
-                document.getElementById('goles-local').value = partido.resultado.golesLocal;
-                document.getElementById('goles-visitante').value = partido.resultado.golesVisitante;
-            }
+        // Cargar jugadores de ambos equipos
+        const jugadoresLocal = await window.FirebaseDataStore.getJugadoresPorEquipo(partido.local) || [];
+        const jugadoresVisitante = await window.FirebaseDataStore.getJugadoresPorEquipo(partido.visitante) || [];
+
+        // Llenar selectores de jugadores local
+        const selectorLocal = document.querySelector('.jugador-select[data-equipo="local"]');
+        let opcionesLocal = '<option value="">Seleccionar jugador</option>';
+        if (jugadoresLocal.length > 0) {
+            jugadoresLocal.forEach(jugador => {
+                opcionesLocal += `<option value="${jugador.id}">${jugador.nombre}</option>`;
+            });
         } else {
-            partidoInfoContainer.innerHTML = `
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Error al cargar la información del partido.
-                </div>
-            `;
+            opcionesLocal = '<option value="">No se encontraron jugadores para este equipo</option>';
         }
+        if (selectorLocal) selectorLocal.innerHTML = opcionesLocal;
+
+        // Llenar selectores de jugadores visitante
+        const selectorVisitante = document.querySelector('.jugador-select[data-equipo="visitante"]');
+        let opcionesVisitante = '<option value="">Seleccionar jugador</option>';
+        if (jugadoresVisitante.length > 0) {
+            jugadoresVisitante.forEach(jugador => {
+                opcionesVisitante += `<option value="${jugador.id}">${jugador.nombre}</option>`;
+            });
+        } else {
+            opcionesVisitante = '<option value="">No se encontraron jugadores para este equipo</option>';
+        }
+        if (selectorVisitante) selectorVisitante.innerHTML = opcionesVisitante;
+
+        // Agregar event listeners para los botones de agregar goleador
+        document.querySelectorAll('.add-goleador').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const equipo = this.dataset.equipo;
+                const container = document.getElementById(`goleadores-${equipo}`);
+                const template = container.querySelector('.goleador-input').cloneNode(true);
+
+                // Limpiar valores del clon
+                template.querySelector('select').value = '';
+                template.querySelector('input').value = '';
+
+                // Agregar botón de eliminar
+                const btnEliminar = document.createElement('button');
+                btnEliminar.type = 'button';
+                btnEliminar.className = 'btn btn-sm btn-outline remove-goleador';
+                btnEliminar.innerHTML = '<i class="fas fa-minus"></i>';
+                btnEliminar.onclick = function() {
+                    this.parentElement.remove();
+                };
+                template.appendChild(btnEliminar);
+
+                // Llenar el select de jugadores en el clon
+                const select = template.querySelector('select');
+                let opciones = '<option value="">Seleccionar jugador</option>';
+                const jugadores = equipo === 'local' ? jugadoresLocal : jugadoresVisitante;
+                if (jugadores.length > 0) {
+                    jugadores.forEach(jugador => {
+                        opciones += `<option value="${jugador.id}">${jugador.nombre}</option>`;
+                    });
+                } else {
+                    opciones = '<option value="">No se encontraron jugadores para este equipo</option>';
+                }
+                select.innerHTML = opciones;
+
+                container.appendChild(template);
+            });
+        });
+
+        // Evento de envío del formulario
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const golesLocal = parseInt(document.getElementById('goles-local').value) || 0;
+                const golesVisitante = parseInt(document.getElementById('goles-visitante').value) || 0;
+                const observaciones = document.getElementById('observaciones').value;
+
+                // Recolectar goles de jugadores locales
+                const golesJugadoresLocal = [];
+                document.querySelectorAll('#goleadores-local .goleador-input').forEach(div => {
+                    const jugadorId = div.querySelector('select').value;
+                    const goles = parseInt(div.querySelector('input').value) || 0;
+                    if (jugadorId && goles > 0) {
+                        golesJugadoresLocal.push({ jugadorId, goles });
+                    }
+                });
+
+                // Recolectar goles de jugadores visitantes
+                const golesJugadoresVisitante = [];
+                document.querySelectorAll('#goleadores-visitante .goleador-input').forEach(div => {
+                    const jugadorId = div.querySelector('select').value;
+                    const goles = parseInt(div.querySelector('input').value) || 0;
+                    if (jugadorId && goles > 0) {
+                        golesJugadoresVisitante.push({ jugadorId, goles });
+                    }
+                });
+
+                // Validar que la suma de goles individuales coincida con el total
+                const totalGolesLocalIndividual = golesJugadoresLocal.reduce((sum, g) => sum + g.goles, 0);
+                const totalGolesVisitanteIndividual = golesJugadoresVisitante.reduce((sum, g) => sum + g.goles, 0);
+
+                if (totalGolesLocalIndividual !== golesLocal || totalGolesVisitanteIndividual !== golesVisitante) {
+                    alert('La suma de goles individuales no coincide con el total del equipo');
+                    return;
+                }
+
+                // Registrar resultado y goles de jugadores
+                const resultado = await window.FirebaseDataStore.registrarResultado(
+                    partidoId,
+                    golesLocal,
+                    golesVisitante,
+                    observaciones,
+                    golesJugadoresLocal,
+                    golesJugadoresVisitante
+                );
+
+                if (resultado) {
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Error al guardar el resultado.');
+                }
+            });
+        }
+    } else {
+        partidoInfoContainer.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                Error al cargar la información del partido.
+            </div>
+        `;
+    }
+},
+
+    // NUEVO: Inicializar el formulario de creación manual de partido
+    initFormCrearPartido: async function() {
+        const form = document.getElementById('crear-partido-form');
+        const torneoSelect = document.getElementById('torneo');
+        const equipoLocalSelect = document.getElementById('equipoLocal'); // <--- corregido
+        const equipoVisitanteSelect = document.getElementById('equipoVisitante'); // <--- corregido
+
+        // Cargar torneos
+        if (torneoSelect) {
+            const torneos = await window.FirebaseDataStore.getTorneos();
+            let opcionesTorneos = '<option value="">Selecciona un torneo</option>';
+            torneos.forEach(torneo => {
+                opcionesTorneos += `<option value="${torneo.id}">${torneo.nombre}</option>`;
+            });
+            torneoSelect.innerHTML = opcionesTorneos;
+
+            // Cuando se selecciona un torneo, cargar equipos
+            torneoSelect.addEventListener('change', async function() {
+                const torneoId = this.value;
+                if (torneoId) {
+                    const torneo = await window.FirebaseDataStore.getTorneo(torneoId);
+                    if (torneo && torneo.equipos) {
+                        let opcionesEquipos = '<option value="">Selecciona equipo</option>';
+                        for (const equipoId of torneo.equipos) {
+                            const equipo = await window.FirebaseDataStore.getEquipo(equipoId);
+                            if (equipo) {
+                                opcionesEquipos += `<option value="${equipo.id}">${equipo.nombre}</option>`;
+                            }
+                        }
+                        equipoLocalSelect.innerHTML = opcionesEquipos;
+                        equipoVisitanteSelect.innerHTML = opcionesEquipos;
+                    }
+                } else {
+                    equipoLocalSelect.innerHTML = '<option value="">Selecciona equipo</option>';
+                    equipoVisitanteSelect.innerHTML = '<option value="">Selecciona equipo</option>';
+                }
+            });
+        }
+
+        // Validar que no se seleccione el mismo equipo en local y visitante
+        equipoLocalSelect.addEventListener('change', function() {
+            const local = this.value;
+            Array.from(equipoVisitanteSelect.options).forEach(opt => {
+                opt.disabled = (opt.value && opt.value === local);
+            });
+        });
+        equipoVisitanteSelect.addEventListener('change', function() {
+            const visitante = this.value;
+            Array.from(equipoLocalSelect.options).forEach(opt => {
+                opt.disabled = (opt.value && opt.value === visitante);
+            });
+        });
 
         // Evento de envío del formulario
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const torneo = torneoSelect.value;
+            const local = equipoLocalSelect.value;
+            const visitante = equipoVisitanteSelect.value;
+            const fecha = document.getElementById('fecha').value;
+            const hora = document.getElementById('hora').value;
 
-            const golesLocal = document.getElementById('goles-local').value;
-            const golesVisitante = document.getElementById('goles-visitante').value;
-            const observaciones = document.getElementById('observaciones').value;
+            if (!torneo || !local || !visitante || !fecha || !hora) {
+                alert('Completa todos los campos.');
+                return;
+            }
+            if (local === visitante) {
+                alert('El equipo local y visitante no pueden ser el mismo.');
+                return;
+            }
 
-            // Registrar resultado en Firebase
-            const resultado = await window.FirebaseDataStore.registrarResultado(partidoId, golesLocal, golesVisitante, observaciones);
+            // Guardar partido en Firebase
+            const exito = await window.FirebaseDataStore.crearPartido({
+                torneo,
+                local,
+                visitante,
+                fecha,
+                hora,
+                estado: 'Próximo'
+            });
 
-            if (resultado) {
-                window.location.href = 'index.html'; // Esto te regresa al index
+            if (exito) {
+                window.location.href = 'index.html';
             } else {
-                alert('Error al guardar el resultado.');
+                alert('Error al crear el partido.');
             }
         });
+    },
+
+    // Función para cargar jugadores por equipo
+    cargarJugadoresPorEquipo: async function(equipoId) {
+        try {
+            const jugadores = await window.FirebaseDataStore.getJugadoresPorEquipo(equipoId);
+            return jugadores || [];
+        } catch (error) {
+            console.error('Error al cargar jugadores:', error);
+            return [];
+        }
+    },
+
+    // Función para actualizar los selectores de jugadores
+    actualizarSelectoresJugadores: async function(equipoLocalId, equipoVisitanteId) {
+        const selectoresLocal = document.querySelectorAll('.jugadores-local select');
+        const selectoresVisitante = document.querySelectorAll('.jugadores-visitante select');
+        
+        // Cargar jugadores del equipo local
+        if (equipoLocalId && selectoresLocal.length > 0) {
+            const jugadoresLocal = await this.cargarJugadoresPorEquipo(equipoLocalId);
+            let opcionesLocal = '<option value="">Seleccionar jugador</option>';
+            jugadoresLocal.forEach(jugador => {
+                opcionesLocal += `<option value="${jugador.id}">${jugador.nombre} ${jugador.apellido}</option>`;
+            });
+            
+            selectoresLocal.forEach(select => {
+                if (select) select.innerHTML = opcionesLocal;
+            });
+        }
+        
+        // Cargar jugadores del equipo visitante
+        if (equipoVisitanteId && selectoresVisitante.length > 0) {
+            const jugadoresVisitante = await this.cargarJugadoresPorEquipo(equipoVisitanteId);
+            let opcionesVisitante = '<option value="">Seleccionar jugador</option>';
+            jugadoresVisitante.forEach(jugador => {
+                opcionesVisitante += `<option value="${jugador.id}">${jugador.nombre} ${jugador.apellido}</option>`;
+            });
+            
+            selectoresVisitante.forEach(select => {
+                if (select) select.innerHTML = opcionesVisitante;
+            });
+        }
+    },
+
+    // Función para agregar campo de gol
+    agregarCampoGol: function(tipo) {
+        const container = document.getElementById(`goles-${tipo}`);
+        if (!container) return; // Verifica que el contenedor exista
+
+        const contadorGoles = container.querySelectorAll('.gol-item').length;
+        
+        const nuevoGol = document.createElement('div');
+        nuevoGol.className = 'gol-item';
+        nuevoGol.innerHTML = `
+            <select name="jugador-${tipo}[]" class="form-control" required>
+                <option value="">Seleccionar jugador</option>
+            </select>
+            <input type="number" name="minuto-${tipo}[]" class="form-control minuto-input" 
+                   placeholder="Min" min="1" max="120" required>
+            <button type="button" class="btn btn-sm btn-danger" onclick="PartidosModule.eliminarCampoGol(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+        
+        container.appendChild(nuevoGol);
+        
+        // Actualizar opciones del nuevo selector
+        const partidoInfo = document.getElementById('partido-info');
+        if (!partidoInfo) return;
+        const equipoLocalId = partidoInfo.dataset.equipoLocal;
+        const equipoVisitanteId = partidoInfo.dataset.equipoVisitante;
+        
+        if (tipo === 'local') {
+            this.cargarJugadoresPorEquipo(equipoLocalId).then(jugadores => {
+                const select = nuevoGol.querySelector('select');
+                if (select) {
+                    jugadores.forEach(jugador => {
+                        const option = document.createElement('option');
+                        option.value = jugador.id;
+                        option.textContent = `${jugador.nombre} ${jugador.apellido}`;
+                        select.appendChild(option);
+                    });
+                }
+            });
+        } else {
+            this.cargarJugadoresPorEquipo(equipoVisitanteId).then(jugadores => {
+                const select = nuevoGol.querySelector('select');
+                if (select) {
+                    jugadores.forEach(jugador => {
+                        const option = document.createElement('option');
+                        option.value = jugador.id;
+                        option.textContent = `${jugador.nombre} ${jugador.apellido}`;
+                        select.appendChild(option);
+                    });
+                }
+            });
+        }
+    },
+
+    // Función para eliminar campo de gol
+    eliminarCampoGol: function(button) {
+        const golItem = button.closest('.gol-item');
+        golItem.remove();
+        
+        // Actualizar contador de goles
+        const container = button.closest('.goles-container');
+        const tipo = container.id.includes('local') ? 'local' : 'visitante';
+        const input = document.getElementById(`goles-${tipo}`);
+        const cantidadGoles = container.querySelectorAll('.gol-item').length;
+        input.value = cantidadGoles;
+    },
+
+    // Función para actualizar contador de goles
+    actualizarContadorGoles: function(tipo) {
+        const container = document.getElementById(`goles-${tipo}`);
+        const input = document.getElementById(`goles-${tipo}`);
+        const cantidadGoles = container.querySelectorAll('.gol-item').length;
+        input.value = cantidadGoles;
+    },
+
+    // Función para recopilar información de goleadores
+    recopilarGoleadores: function() {
+        const goleadores = [];
+        
+        // Goles del equipo local
+        const golesLocal = document.querySelectorAll('#goles-local .gol-item');
+        golesLocal.forEach(item => {
+            const jugador = item.querySelector('select').value;
+            const minuto = item.querySelector('input[name*="minuto"]').value;
+            if (jugador && minuto) {
+                goleadores.push({
+                    jugadorId: jugador,
+                    minuto: parseInt(minuto),
+                    equipo: 'local'
+                });
+            }
+        });
+        
+        // Goles del equipo visitante
+        const golesVisitante = document.querySelectorAll('#goles-visitante .gol-item');
+        golesVisitante.forEach(item => {
+            const jugador = item.querySelector('select').value;
+            const minuto = item.querySelector('input[name*="minuto"]').value;
+            if (jugador && minuto) {
+                goleadores.push({
+                    jugadorId: jugador,
+                    minuto: parseInt(minuto),
+                    equipo: 'visitante'
+                });
+            }
+        });
+        
+        return goleadores;
+    },
+
+    // Función para cargar goleadores existentes
+    cargarGoleadoresExistentes: function(goleadores) {
+        goleadores.forEach(gol => {
+            this.agregarCampoGol(gol.equipo);
+            const container = document.getElementById(`goles-${gol.equipo}`);
+            const ultimoItem = container.lastElementChild;
+            const select = ultimoItem.querySelector('select');
+            const inputMinuto = ultimoItem.querySelector('input[name*="minuto"]');
+            
+            select.value = gol.jugadorId;
+            inputMinuto.value = gol.minuto;
+        });
     }
+
 };
 
 // Inicializar el módulo cuando el DOM esté cargado
@@ -455,4 +853,3 @@ document.querySelectorAll('.tab').forEach(tab => {
         document.getElementById(target).classList.add('active');
     });
 });
-
