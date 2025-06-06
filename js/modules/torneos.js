@@ -343,6 +343,24 @@ const TorneosModule = {
         // Obtén los equipos seleccionados
         const equipos = Array.from(document.querySelectorAll('#equipos-container input[type="checkbox"]:checked')).map(e => e.value);
 
+        // Si tienes escudo en base64
+        let escudo = '';
+        const escudoPreview = document.getElementById('escudo-preview');
+        if (escudoPreview && escudoPreview.dataset.base64) {
+            escudo = escudoPreview.dataset.base64;
+        }
+
+        // Si el formato es "copa", obtén los grupos
+        let grupos = {};
+        if (tipo.toLowerCase() === 'copa') {
+            // Supón que tienes inputs con data-grupo="A", data-grupo="B", etc.
+            document.querySelectorAll('#asignacion-grupos input[type="checkbox"]:checked').forEach(input => {
+                const grupo = input.dataset.grupo;
+                if (!grupos[grupo]) grupos[grupo] = [];
+                grupos[grupo].push(input.value);
+            });
+        }
+
         // Crea o actualiza el torneo
         const torneo = {
             id: torneoId,
@@ -352,32 +370,25 @@ const TorneosModule = {
             fechaInicio,
             fechaFin,
             estado,
-            categoria, 
-            equipos
+            categoria,
+            equipos,
+            escudo
         };
-        // Guarda el torneo y obtén el ID (si es nuevo)
-        const torneoGuardado = await window.FirebaseDataStore.saveTorneo(torneo);
-        const idTorneoFinal = torneoGuardado?.id || torneoId;
 
-        // Asigna el campo torneo a cada equipo seleccionado
-        for (const equipoId of equipos) {
-            await window.FirebaseDataStore.updateEquipoTorneo(equipoId, idTorneoFinal);
+        // Si hay grupos, agrégalos al objeto torneo
+        if (Object.keys(grupos).length > 0) {
+            torneo.grupos = grupos;
         }
 
-        // Si es edición, elimina el campo torneo de los equipos que ya no están seleccionados
-        if (torneoId) {
-            // Obtén todos los equipos de este torneo antes de la edición
-            const torneoAnterior = await window.FirebaseDataStore.getTorneo(torneoId);
-            const equiposAntes = torneoAnterior?.equipos || [];
-            const equiposQuitados = equiposAntes.filter(id => !equipos.includes(id));
-            for (const equipoId of equiposQuitados) {
-                await window.FirebaseDataStore.updateEquipoTorneo(equipoId, null);
-            }
-        }
+        // Guarda el torneo en Firebase
+        const resultado = await window.FirebaseDataStore.saveTorneo(torneo);
 
-        // Mostrar mensaje en consola y redirigir
-        console.log("Cambios guardados");
-        window.location.href = "index.html";
+        if (resultado && resultado.id) {
+            window.showNotification('Torneo guardado correctamente', 'success');
+            window.location.href = 'detalle.html?id=' + resultado.id;
+        } else {
+            window.showNotification('Error al guardar el torneo', 'error');
+        }
     },
     
     // Cargar detalle de un torneo
@@ -406,55 +417,49 @@ const TorneosModule = {
     },
     
     // Cargar equipos de un torneo
-    cargarEquiposTorneo: async function(torneo) {
+    cargarEquiposTorneo: async function(torneoId) {
         const equiposContainer = document.getElementById('torneo-equipos');
         if (!equiposContainer) return;
-        
-        if (!torneo.equipos || torneo.equipos.length === 0) {
+
+        // Mensaje visual de carga
+        equiposContainer.innerHTML = `
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Cargando equipos...
+            </div>
+        `;
+
+        // Obtén los equipos
+        const equipos = await window.FirebaseDataStore.getEquiposTorneo(torneoId);
+
+        // Mensaje en consola
+        console.log("Equipos cargados:", equipos);
+
+        // Si no hay equipos, muestra mensaje
+        if (!equipos || equipos.length === 0) {
             equiposContainer.innerHTML = `
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle"></i>
-                    No hay equipos registrados para este torneo.
-                </div>
-                <div class="text-center mt-4">
-                    <a href="crear.html?id=${torneo.id}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Añadir Equipos
-                    </a>
+                    No se encontraron equipos para este torneo.
                 </div>
             `;
             return;
         }
-        
-        let html = `
-            <div class="text-right mb-3">
-                <a href="crear.html?id=${torneo.id}" class="btn btn-primary">
-                    <i class="fas fa-edit"></i> Editar Equipos
-                </a>
-            </div>
+
+        // Renderiza los equipos como tarjetas
+        equiposContainer.innerHTML = `
             <div class="equipos-grid">
-        `;
-        
-        // Obtener detalles de cada equipo
-        for (const equipoId of torneo.equipos) {
-            const equipo = await window.FirebaseDataStore.getEquipo(equipoId);
-            if (equipo) {
-                html += `
+                ${equipos.map(eq => `
                     <div class="equipo-card">
-                        <div class="equipo-escudo">
-                            <img src="${equipo.escudo || '../../assets/img/default-shield.png'}" alt="${equipo.nombre}">
+                        <div class="equipo-card-img">
+                            <img src="${eq.escudo || '../../assets/img/default-shield.png'}" alt="${eq.nombre}" />
                         </div>
-                        <div class="equipo-info">
-                            <div class="equipo-nombre">${equipo.nombre}</div>
-                            <div class="equipo-ciudad">${equipo.ciudad || ''}</div>
+                        <div class="equipo-card-body">
+                            <span class="equipo-card-nombre">${eq.nombre}</span>
                         </div>
-                        <a href="../equipos/detalle.html?id=${equipo.id}" class="btn btn-sm btn-outline">Ver equipo</a>
                     </div>
-                `;
-            }
-        };
-        
-        html += '</div>';
-        equiposContainer.innerHTML = html;
+                `).join('')}
+            </div>
+        `;
     },
     
     // Cargar partidos de un torneo
@@ -746,3 +751,207 @@ const TorneosModule = {
 document.addEventListener('DOMContentLoaded', () => {
     TorneosModule.init();
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const tipoSelect = document.getElementById('tipo');
+    const configGrupos = document.getElementById('config-grupos');
+    const numGruposInput = document.getElementById('num-grupos');
+    const equiposPorGrupoInput = document.getElementById('equipos-por-grupo');
+    const asignacionGrupos = document.getElementById('asignacion-grupos');
+    const equiposContainer = document.getElementById('equipos-container');
+
+    if (
+        tipoSelect &&
+        configGrupos &&
+        numGruposInput &&
+        equiposPorGrupoInput &&
+        asignacionGrupos &&
+        equiposContainer
+    ) {
+        function renderAsignacionGrupos() {
+            const numGrupos = parseInt(numGruposInput.value, 10);
+            const equiposPorGrupo = parseInt(equiposPorGrupoInput.value, 10);
+            const equiposSeleccionados = Array.from(equiposContainer.querySelectorAll('input[type="checkbox"]:checked'));
+            const totalEquipos = equiposSeleccionados.length;
+
+            asignacionGrupos.innerHTML = '';
+
+            if (totalEquipos < numGrupos * equiposPorGrupo) {
+                asignacionGrupos.innerHTML = `<div class="alert alert-warning">Selecciona al menos ${numGrupos * equiposPorGrupo} equipos.</div>`;
+                return;
+            }
+
+            // Crear selects para cada grupo
+            for (let g = 1; g <= numGrupos; g++) {
+                const div = document.createElement('div');
+                div.className = 'form-group';
+                div.innerHTML = `<label>Grupo ${g}</label>`;
+                for (let e = 1; e <= equiposPorGrupo; e++) {
+                    const select = document.createElement('select');
+                    select.className = 'form-control grupo-select';
+                    select.name = `grupo${g}-equipo${e}`;
+                    // Opciones: equipos seleccionados
+                    equiposSeleccionados.forEach(eq => {
+                        const option = document.createElement('option');
+                        option.value = eq.value;
+                        option.textContent = eq.parentElement.textContent.trim();
+                        select.appendChild(option);
+                    });
+                    div.appendChild(select);
+                }
+                asignacionGrupos.appendChild(div);
+            }
+        }
+
+        tipoSelect.addEventListener('change', function() {
+            if (this.value === 'Copa') {
+                configGrupos.style.display = '';
+                renderAsignacionGrupos();
+            } else {
+                configGrupos.style.display = 'none';
+                asignacionGrupos.innerHTML = '';
+            }
+        });
+
+        numGruposInput.addEventListener('input', renderAsignacionGrupos);
+        equiposPorGrupoInput.addEventListener('input', renderAsignacionGrupos);
+
+        equiposContainer.addEventListener('change', function(e) {
+            if (tipoSelect.value === 'Copa') {
+                renderAsignacionGrupos();
+            }
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+
+            this.classList.add('active');
+            const target = this.getAttribute('data-target');
+            const content = document.getElementById(target);
+            if (content) content.classList.add('active');
+
+            // Solo renderiza si es la pestaña de equipos
+            if (target === 'equipos-tab') {
+                const equiposContainer = document.getElementById('torneo-equipos');
+                if (equiposContainer) {
+                    if (window.equiposTorneoCargados && window.equiposTorneoCargados.length > 0) {
+                        equiposContainer.innerHTML = window.equiposTorneoCargados.map(eq => `
+                            <div class="equipo-item-list">
+                                <img src="${eq.escudo || '../../assets/img/default-shield.png'}" alt="${eq.nombre}" class="escudo-lista" />
+                                <span>${eq.nombre}</span>
+                            </div>
+                        `).join('');
+                    } else {
+                        equiposContainer.innerHTML = `
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                No se encontraron equipos para este torneo.
+                            </div>
+                        `;
+                    }
+                }
+            }
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const torneoId = new URLSearchParams(window.location.search).get('id');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Quitar clase activa de todas las pestañas y contenidos
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+
+            // Activar la pestaña y el contenido correspondiente
+            this.classList.add('active');
+            const target = this.getAttribute('data-target');
+            const content = document.getElementById(target);
+            if (content) content.classList.add('active');
+
+            // Si es la pestaña de equipos, cargar los equipos
+            if (target === 'equipos-tab' && window.TorneosModule && torneoId) {
+                console.log("Click en pestaña equipos, llamando a cargarEquiposTorneo con id:", torneoId);
+                TorneosModule.cargarEquiposTorneo(torneoId);
+            }
+        });
+    });
+    
+    const equiposTab = document.querySelector('.tab[data-target="equipos-tab"]');
+    if (
+        equiposTab &&
+        equiposTab.classList.contains('active') &&
+        window.TorneosModule &&
+        torneoId
+    ) {
+        console.log("Pestaña equipos activa al cargar, llamando a cargarEquiposTorneo con id:", torneoId);
+        TorneosModule.cargarEquiposTorneo(torneoId);
+    }
+});
+
+
+window.FirebaseDataStore = {
+    // Simulación de métodos de Firebase Data Store
+    getTorneos: async function() {
+        const snapshot = await firebase.firestore().collection('torneos').get();
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    },
+    getTorneo: async function(id) {
+        const doc = await firebase.firestore().collection('torneos').doc(id).get();
+        return doc.exists ? { id: doc.id, ...doc.data() } : null;
+    },
+    getPartidosPorTorneo: async function(torneoId) {
+        const snapshot = await firebase.firestore().collection('partidos')
+            .where('torneo', '==', torneoId)
+            .get();
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    },
+    deletePartido: async function(id) {
+        console.log(`Partido ${id} eliminado`);
+    },
+    deleteTorneo: async function(id) {
+        await firebase.firestore().collection('torneos').doc(id).delete();
+        return true;
+    },
+    saveTorneo: async function(torneo) {
+    const db = firebase.firestore();
+    let torneoId = torneo.id;
+
+    if (!torneoId) {
+        const docRef = await db.collection('torneos').add(torneo);
+        torneoId = docRef.id;
+        await db.collection('torneos').doc(torneoId).update({ id: torneoId });
+    } else {
+        await db.collection('torneos').doc(torneoId).set(torneo);
+    }
+
+    // NO actualices los equipos aquí
+
+    return { id: torneoId };
+},
+    updateEquipoTorneo: async function(equipoId, torneoId) {
+        console.log(`Equipo ${equipoId} actualizado con torneo ${torneoId}`);
+    },
+    getEquipos: async function() {
+        const snapshot = await firebase.firestore().collection('equipos').get();
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    },
+    getEquiposTorneo: async function(torneoId) {
+        const torneo = await this.getTorneo(torneoId);
+        if (!torneo || !torneo.equipos || torneo.equipos.length === 0) return [];
+        const todos = await this.getEquipos();
+        // Fuerza la comparación como string
+        return todos.filter(eq => torneo.equipos.includes(eq.id.toString()));
+    },
+ 
+    };

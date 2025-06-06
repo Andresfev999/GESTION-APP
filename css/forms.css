@@ -161,12 +161,15 @@
 /* Add styles for equipo-item to align checkbox and label */
 .equipo-item {
     display: flex;
+    
     align-items: center;
     margin-bottom: 0.5rem;
 }
 
 .equipo-item input[type="checkbox"] {
     margin-right: 0.5rem;
+    
+    
 }
 
 /* Estilos para mensajes de alerta */

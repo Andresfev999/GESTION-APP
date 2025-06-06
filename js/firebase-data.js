@@ -450,24 +450,29 @@ const FirebaseDataStore = {
         return true;
     },
 
-    // Calcular posiciones
+    // Calcular posiciones usando el array de equipos del torneo
     calcularPosiciones: async function(torneoId) {
         if (!this.db) this.init();
 
-        // Obtener equipos del torneo
-        const equiposSnapshot = await this.db.collection('equipos').where('torneo', '==', torneoId).get();
-        const equipos = equiposSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-            puntos: 0,
-            pj: 0,
-            pg: 0,
-            pe: 0,
-            pp: 0,
-            gf: 0,
-            gc: 0,
-            dif: 0
-        }));
+        // Obtener el torneo para saber qué equipos participan
+        const torneo = await this.getTorneo(torneoId);
+        if (!torneo || !Array.isArray(torneo.equipos) || torneo.equipos.length === 0) return [];
+
+        // Obtener solo los equipos cuyos IDs están en el array del torneo
+        const equiposPromises = torneo.equipos.map(equipoId => this.getEquipo(equipoId));
+        const equipos = (await Promise.all(equiposPromises))
+            .filter(e => e) // Elimina nulos si algún equipo no existe
+            .map(e => ({
+                ...e,
+                puntos: 0,
+                pj: 0,
+                pg: 0,
+                pe: 0,
+                pp: 0,
+                gf: 0,
+                gc: 0,
+                dif: 0
+            }));
 
         // Map para acceso rápido por id
         const equiposMap = {};

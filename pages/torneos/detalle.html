@@ -24,11 +24,11 @@
             <div class="header-content">
                 <img id="torneo-escudo" class="torneo-escudo" src="../../assets/img/default-shield.png" alt="Escudo del torneo" style="display: none;">
                 <div>
-                    <h1 id="torneo-nombre">Cargando...</h1>
+                    <h1 id="torneo-nombre"></h1>
                     <div class="torneo-meta">
-                        <span class="meta-item"><i class="fas fa-trophy"></i> <span id="torneo-tipo">-</span></span>
-                        <span class="meta-item"><i class="fas fa-calendar"></i> <span id="torneo-fecha-inicio">-</span> a <span id="torneo-fecha-fin">-</span></span>
-                        <span class="meta-item"><i class="fas fa-flag"></i> <span id="torneo-estado">-</span></span>
+                        <span class="meta-item"><i class="fas fa-trophy"></i> <span id="torneo-tipo"></span></span>
+                        <span class="meta-item"><i class="fas fa-calendar"></i> <span id="torneo-fecha-inicio"></span> a <span id="torneo-fecha-fin"></span></span>
+                        <span class="meta-item"><i class="fas fa-flag"></i> <span id="torneo-estado"></span></span>
                     </div>
                 </div>
             </div>
@@ -42,8 +42,7 @@
         <div class="tabs">
             <div class="tab active" data-target="info-tab">Información</div>
             <div class="tab" data-target="equipos-tab">Equipos</div>
-            <div class="tab" data-target="partidos-tab">Partidos</div>
-            <div class="tab" data-target="posiciones-tab">Posiciones</div>
+         
         </div>
 
         <div id="info-tab" class="tab-content active">
@@ -55,27 +54,27 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <div class="info-label">Nombre</div>
-                            <div class="info-value" id="info-nombre">-</div>
+                            <div class="info-value" id="info-nombre"></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Tipo</div>
-                            <div class="info-value" id="info-tipo">-</div>
+                            <div class="info-value" id="info-tipo"></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Estado</div>
-                            <div class="info-value" id="info-estado">-</div>
+                            <div class="info-value" id="info-estado"></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Fecha de Inicio</div>
-                            <div class="info-value" id="info-fecha-inicio">-</div>
+                            <div class="info-value" id="info-fecha-inicio"></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Fecha de Finalización</div>
-                            <div class="info-value" id="info-fecha-fin">-</div>
+                            <div class="info-value" id="info-fecha-fin"></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Equipos Participantes</div>
-                            <div class="info-value" id="info-equipos">-</div>
+                            <div class="info-value" id="info-equipos"></div>
                         </div>
                     </div>
                 </div>
@@ -87,12 +86,7 @@
                 <div class="card-header">
                     <h2 class="card-title">Equipos Participantes</h2>
                 </div>
-                <div class="card-content" id="torneo-equipos">
-                    <!-- Aquí se cargarán dinámicamente los equipos -->
-                    <div class="loading">
-                        <i class="fas fa-spinner fa-spin"></i> Cargando equipos...
-                    </div>
-                </div>
+                <div class="card-content" id="torneo-equipos"></div>
             </div>
         </div>
 
@@ -157,6 +151,54 @@
             }
         });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const torneoId = new URLSearchParams(window.location.search).get('id');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+
+            this.classList.add('active');
+            const target = this.getAttribute('data-target');
+            const content = document.getElementById(target);
+            if (content) content.classList.add('active');
+
+            // Siempre carga los equipos desde Firestore al abrir la pestaña
+            if (target === 'equipos-tab' && window.TorneosModule && torneoId) {
+                TorneosModule.cargarEquiposTorneo(torneoId);
+            }
+            // Si quieres cargar partidos o posiciones, llama aquí a sus funciones también
+        });
+    });
+
+    // Si la pestaña equipos está activa al cargar, carga los equipos
+    const equiposTab = document.querySelector('.tab[data-target="equipos-tab"]');
+    if (
+        equiposTab &&
+        equiposTab.classList.contains('active') &&
+        window.TorneosModule &&
+        torneoId
+    ) {
+        TorneosModule.cargarEquiposTorneo(torneoId);
+    }
+});
+</script>
+<script>
+// Variable global para almacenar los equipos del torneo
+window.equiposTorneoCargados = [];
+document.addEventListener('DOMContentLoaded', async function() {
+    const torneoId = new URLSearchParams(window.location.search).get('id');
+    if (torneoId) {
+        // Carga los equipos del torneo desde Firestore y guárdalos en memoria
+        window.equiposTorneoCargados = await window.FirebaseDataStore.getEquiposTorneo(torneoId);
+        console.log("Equipos cargados al iniciar detalles:", window.equiposTorneoCargados);
+    }
+});
+</script>
     
 </body>
 </html>

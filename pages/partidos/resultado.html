@@ -13,26 +13,7 @@
     />
 </head>
 <body>
-    <header class="navbar">
-        <div class="container">
-            <div class="navbar-brand">
-                <a href="../../index.html" class="logo">TorneosFútbol</a>
-            </div>
-            <nav class="navbar-menu">
-                <ul>
-                    <li><a href="../../index.html">Inicio</a></li>
-                    <li><a href="../torneos/index.html">Torneos</a></li>
-                    <li><a href="../equipos/index.html">Equipos</a></li>
-                    <li><a href="../jugadores/index.html">Jugadores</a></li>
-                    <li><a href="../partidos/index.html" class="active">Partidos</a></li>
-                    <li><a href="../posiciones/index.html">Posiciones</a></li>
-                </ul>
-            </nav>
-            <button class="theme-toggle" id="themeToggle">
-                <i class="fas fa-moon"></i>
-            </button>
-        </div>
-    </header>
+    <div id="navbar-placeholder"></div>
 
     <main class="container">
         <div class="page-header">
@@ -124,8 +105,9 @@
     <script src="../../js/firebase-data.js"></script>
     <script src="../../js/app.js"></script>
     <script src="../../js/modules/partidos.js"></script>
+    <script src="../../js/navbar.js"></script>
     <script>
-        // Establecer el año actual en el footer
+        // Establecer el año current en el footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
 </body>

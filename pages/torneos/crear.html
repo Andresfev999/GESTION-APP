@@ -99,6 +99,18 @@
                         <div id="escudo-preview" style="margin-top:10px;"></div>
                     </div>
 
+                    <div id="config-grupos" style="display:none; margin-top:1rem;">
+                        <div class="form-group">
+                            <label for="num-grupos">Cantidad de grupos</label>
+                            <input type="number" id="num-grupos" class="form-control" min="2" max="16" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="equipos-por-grupo">Equipos por grupo</label>
+                            <input type="number" id="equipos-por-grupo" class="form-control" min="2" max="16" value="2">
+                        </div>
+                        <div id="asignacion-grupos"></div>
+                    </div>
+
                     <div class="form-actions">
                         <a href="index.html" class="btn btn-outline">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Guardar Torneo</button>
@@ -128,6 +140,45 @@
         // Establecer el año actual en el footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', async function() {
+    // Detectar si hay un id en la URL (modo edición)
+    const params = new URLSearchParams(window.location.search);
+    const torneoId = params.get('id');
+    if (torneoId) {
+        // Cambia el título
+        document.getElementById('torneo-title').textContent = 'Editar Torneo';
+
+        // Carga los datos del torneo
+        const torneo = await window.FirebaseDataStore.getTorneo(torneoId);
+        if (torneo) {
+            document.getElementById('nombre').value = torneo.nombre || '';
+            document.getElementById('tipo').value = torneo.tipo || '';
+            document.getElementById('descripcion').value = torneo.descripcion || '';
+            document.getElementById('fechaInicio').value = torneo.fechaInicio || '';
+            document.getElementById('fechaFin').value = torneo.fechaFin || '';
+            document.getElementById('estado').value = torneo.estado || '';
+            document.getElementById('categoria').value = torneo.categoria || '';
+
+            // Si tienes lógica para seleccionar equipos, márcalos aquí
+            if (Array.isArray(torneo.equipos)) {
+                // Espera a que los equipos estén cargados en el DOM
+                setTimeout(() => {
+                    torneo.equipos.forEach(id => {
+                        const checkbox = document.querySelector(`input[type="checkbox"][data-id="${id}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }, 500);
+            }
+
+            // Si tienes lógica para mostrar el escudo, agrégala aquí
+            if (torneo.escudo) {
+                document.getElementById('escudo-preview').innerHTML = `<img src="${torneo.escudo}" alt="Escudo" style="max-width:100px;">`;
+            }
+        }
+    }
+});
+</script>
    
 </body>
 </html>

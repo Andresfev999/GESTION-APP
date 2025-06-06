@@ -331,3 +331,23 @@ const PosicionesModule = {
 document.addEventListener('DOMContentLoaded', function() {
     PosicionesModule.init();
 });
+
+async function calcularPosiciones(torneoId) {
+    const torneo = await window.FirebaseDataStore.getTorneo(torneoId);
+    console.log("Torneo:", torneo);
+
+    if (!torneo || !Array.isArray(torneo.equipos) || torneo.equipos.length === 0) {
+        console.log("No hay equipos en el torneo");
+        return [];
+    }
+
+    const equipos = await Promise.all(
+        torneo.equipos.map(id => window.FirebaseDataStore.getEquipo(id))
+    );
+    console.log("Equipos:", equipos);
+
+    const partidos = await window.FirebaseDataStore.getPartidosPorTorneo(torneoId);
+    console.log("Partidos:", partidos);
+
+    // ...resto de tu lógica...
+}

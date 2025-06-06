@@ -66,55 +66,70 @@
     </script>
     <script>
 document.getElementById('descargar-pdf').addEventListener('click', async function() {
-    const logoOrganizacion = await safeGetBase64FromUrl('../../assets/img/logo-organizacion.png');
-    const logoTorneo = window.torneoSeleccionado ? window.torneoSeleccionado.logo : null;
+    const posicionesContainer = document.getElementById('posiciones-container');
+    if (!posicionesContainer) return;
 
-    setTimeout(async () => {
-        const posicionesContainer = document.getElementById('posiciones-container');
-        if (!posicionesContainer) return;
+    // Guardar estilos originales
+    const originalWidth = posicionesContainer.style.width;
+    const originalOverflow = posicionesContainer.style.overflow;
 
-        const canvas = await html2canvas(posicionesContainer, { scale: 2 });
-        const imgData = canvas.toDataURL('image/png');
+    // Forzar ancho grande y mostrar todo el contenido
+    posicionesContainer.style.width = '900px';
+    posicionesContainer.style.overflow = 'visible';
 
-        const pdf = new jspdf.jsPDF({
-            orientation: 'portrait',
-            unit: 'pt',
-            format: 'a4'
-        });
+    // Esperar a que el navegador aplique los estilos
+    await new Promise(r => setTimeout(r, 100));
 
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const headerHeight = 90;
-        const logoSize = 60;
+    // Capturar imagen
+    const canvas = await html2canvas(posicionesContainer, { scale: 2 });
+    const imgData = canvas.toDataURL('image/png');
 
-        // Encabezado con fondo
-        pdf.setFillColor(20, 20, 30);
-        pdf.rect(0, 0, pageWidth, headerHeight, 'F');
+    // Restaurar estilos originales
+    posicionesContainer.style.width = originalWidth;
+    posicionesContainer.style.overflow = originalOverflow;
 
-        // Logos
-        if (logoOrganizacion) {
-            pdf.addImage(logoOrganizacion, 'PNG', 30, 15, logoSize, logoSize);
-        }
-        if (logoTorneo) {
-            pdf.addImage(logoTorneo, 'PNG', pageWidth - 30 - logoSize, 15, logoSize, logoSize);
-        }
+    const pdf = new jspdf.jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'a4'
+    });
 
-        // Título centrado
-        pdf.setTextColor(255,255,255);
-        pdf.setFontSize(18);
-        pdf.setFont('helvetica', 'bold');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const headerHeight = 90;
+    const logoSize = 60;
 
-        const nombreTorneo = window.torneoSeleccionado ? window.torneoSeleccionado.nombre : 'Nombre del Torneo';
+    // Encabezado con fondo
+    pdf.setFillColor(20, 20, 30);
+    pdf.rect(0, 0, pageWidth, headerHeight, 'F');
+
+    // Logos
+    const logoOrganizacion = window.logoOrganizacion || null;
+const logoTorneo = window.torneoSeleccionado && window.torneoSeleccionado.escudo ? window.torneoSeleccionado.escudo : null;
+
+// Logos
+if (logoOrganizacion) {
+    pdf.addImage(logoOrganizacion, 'PNG', 30, 15, logoSize, logoSize);
+}
+if (logoTorneo) {
+    pdf.addImage(logoTorneo, 'PNG', pageWidth - 30 - logoSize, 15, logoSize, logoSize);
+}
+
+    // Título centrado
+    pdf.setTextColor(255,255,255);
+    pdf.setFontSize(18);
+    pdf.setFont('helvetica', 'bold');
+
+    const nombreTorneo = window.torneoSeleccionado ? window.torneoSeleccionado.nombre : 'Nombre del Torneo';
 const categoriaTorneo = window.torneoSeleccionado ? window.torneoSeleccionado.categoria : 'Categoría';
 pdf.text(`${nombreTorneo}\n${categoriaTorneo}`, pageWidth / 2, 35, { align: 'center', baseline: 'middle' });
 
-        // Imagen de la tabla debajo del encabezado
-        const imgWidth = pageWidth * 0.7;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-        pdf.addImage(imgData, 'PNG', 40, headerHeight + 20, imgWidth, imgHeight);
+    // Imagen de la tabla debajo del encabezado
+    const imgWidth = pageWidth * 0.7;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+    pdf.addImage(imgData, 'PNG', 40, headerHeight + 20, imgWidth, imgHeight);
 
-        pdf.save('tabla_posiciones_' + new Date().toISOString().slice(0,10) + '.pdf');
-    }, 300);
-});
+    pdf.save('tabla_posiciones_' + new Date().toISOString().slice(0,10) + '.pdf');
+}, 300);
     </script>
     <script>
 function getBase64FromUrl(url) {
@@ -137,27 +152,13 @@ async function safeGetBase64FromUrl(url) {
     }
 }
 </script>
+
 <script>
-    // Cuando el usuario selecciona un torneo:
-document.getElementById('torneo-select').addEventListener('change', async function() {
-    const torneoId = this.value;
-    if (!torneoId) return;
+window.logoOrganizacion = null; // Valor por defecto
 
-    const torneo = await window.FirebaseDataStore.getTorneo(torneoId);
-    if (!torneo) {
-        document.getElementById('posiciones-container').innerHTML = `
-            <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle"></i>
-                El torneo seleccionado no existe.
-            </div>
-        `;
-        window.torneoSeleccionado = null;
-        return;
-    }
-
-    window.torneoSeleccionado = torneo; // <--- AQUÍ
-
-    // ...cargar posiciones, tablas, etc...
+// Si tienes el logo en assets/img/logo-organizacion.png:
+getBase64FromUrl('../../assets/img/logo-organizacion.png').then(base64 => {
+    window.logoOrganizacion = base64;
 });
 </script>
 </body>
