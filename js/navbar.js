@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Cargar el navbar
-    fetch('../../navbar.html')
+    // Cargar el navbar desde la raíz
+    fetch('/navbar.html')
         .then(response => response.text())
         .then(data => {
             document.getElementById('navbar-placeholder').innerHTML = data;

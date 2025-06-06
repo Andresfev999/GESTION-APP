@@ -36,10 +36,8 @@
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark);
-    
-    
-    
+    background-color: transparent; 
+    border: var(--primary-color) 1px solid;
 }
 
 .btn-primary:active {
@@ -63,11 +61,12 @@
 
 .btn-danger {
     background: var(--error-color);
-    color: var(--text-light);
+    color: var(--primary-color);
 }
 
 .btn-danger:hover {
     background: #D32F2F;
+    color: var(--text-light);
 }
 
 .btn-success {

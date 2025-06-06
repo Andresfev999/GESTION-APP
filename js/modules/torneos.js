@@ -172,6 +172,14 @@ const TorneosModule = {
                 }
             });
         });
+        
+        document.getElementById('buscador-equipos').addEventListener('input', function() {
+            const filtro = this.value.toLowerCase();
+            document.querySelectorAll('#equipos-container .equipo-checkbox-label').forEach(label => {
+                const nombre = label.textContent.toLowerCase();
+                label.style.display = nombre.includes(filtro) ? '' : 'none';
+            });
+        });
     },
     
     // Inicializar el formulario de creación/edición
@@ -193,12 +201,14 @@ const TorneosModule = {
                 document.getElementById('fechaInicio').value = torneo.fechaInicio || '';
                 document.getElementById('fechaFin').value = torneo.fechaFin || '';
                 document.getElementById('estado').value = torneo.estado || '';
-                document.getElementById('categoria').value = torneo.categoria || ''; // Load category
+                document.getElementById('categoria').value = torneo.categoria || '';
                 equiposTorneo = torneo.equipos || [];
             }
         }
 
         // Espera a que los equipos estén cargados en el checklist
+        await this.initEquiposSelect();
+
         // Marca los equipos ya asociados si es edición
         if (equiposTorneo.length > 0) {
             equiposTorneo.forEach(id => {
@@ -211,6 +221,34 @@ const TorneosModule = {
             e.preventDefault();
             await TorneosModule.guardarTorneo(torneoId); // Pasa el id para actualizar si existe
         });
+        
+        document.getElementById('escudo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('escudo-preview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    preview.innerHTML = `<img src="${evt.target.result}" alt="Escudo" style="max-width:100px;max-height:100px;">`;
+                    // Guarda el base64 en un atributo para usarlo al guardar
+                    preview.dataset.base64 = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '';
+                preview.dataset.base64 = '';
+            }
+        });
+        
+        const buscadorEquipos = document.getElementById('buscador-equipos');
+        if (buscadorEquipos) {
+            buscadorEquipos.addEventListener('input', function() {
+                const filtro = this.value.toLowerCase();
+                document.querySelectorAll('#equipos-container .equipo-checkbox-label').forEach(label => {
+                    const nombre = label.textContent.toLowerCase();
+                    label.style.display = nombre.includes(filtro) ? '' : 'none';
+                });
+            });
+        }
     },
     
     // Inicializar carga de archivos
@@ -278,10 +316,10 @@ const TorneosModule = {
         let html = '';
         equipos.forEach(equipo => {
             html += `
-                <div class="equipo-item">
+                <label class="equipo-checkbox-label" style="display:block;">
                     <input type="checkbox" id="equipo-${equipo.id}" value="${equipo.id}">
-                    <label for="equipo-${equipo.id}">${equipo.nombre}</label>
-                </div>
+                    ${equipo.nombre}
+                </label>
             `;
         });
 

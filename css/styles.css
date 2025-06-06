@@ -3,10 +3,10 @@
    ========================= */
 :root {
   /* Tema claro */
-  --primary-color: #4caf50;
-  --primary-dark: #388e3c;
-  --primary-light: #a5d6a7;
-  --accent-color: #388e3c;
+  --primary-color: #1976d2;      /* Azul principal */
+  --primary-dark: #115293;       /* Azul oscuro */
+  --primary-light: #63a4ff;      /* Azul claro */
+  --accent-color: #1976d2;
   --danger-color: #e53935;
   --warning-color: #ffc107;
   --info-color: #2196f3;
@@ -23,7 +23,7 @@
 
   --header-bg: #fff;
   --header-text: #222;
-  --table-header-bg: #4caf50;
+  --table-header-bg: #1976d2;
   --table-header-text: #fff;
   --table-row-bg: #fff;
   --table-row-alt-bg: #f9f9f9;
@@ -684,3 +684,4 @@ tr:last-child td {
     transform: rotate(360deg);
   }
 }
+

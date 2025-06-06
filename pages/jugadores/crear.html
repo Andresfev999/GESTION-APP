@@ -4,61 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Añadir Jugador - Sistema de Gestión de Torneos de Fútbol</title>
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/forms.css">
-    <link rel="stylesheet" href="../../css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos principales del sistema -->
+    <link rel="stylesheet" href="../../css/styles.css" />
+    <link rel="stylesheet" href="../../css/components.css" />
+    <link rel="stylesheet" href="../../css/buttons.css" />
+    <link rel="stylesheet" href="../../css/navbar.css" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+/>
 </head>
 <body>
-     <header class="main-header">
-        <div class="container">
-            <div class="logo">
-                <i class="fas fa-futbol"></i>
-                <h1>Torneos de Fútbol</h1>
-            </div>
-            
-            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <nav class="main-nav" id="main-nav">
-                <ul class="nav-list">
-                    <li>
-                        <a href="../../index.html" class="active">
-                            <i class="fas fa-home"></i> Inicio
-                        </a>
-                    </li>
-                    <li>
-                        <a href="../torneos/index.html">
-                            <i class="fas fa-trophy"></i> Torneos
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pages/equipos/index.html">
-                            <i class="fas fa-users"></i> Equipos
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pages/jugadores/index.html">
-                            <i class="fas fa-user"></i> Jugadores
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pages/partidos/index.html">
-                            <i class="fas fa-futbol"></i> Partidos
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <div class="header-actions">
-                <button id="themeToggle" class="btn btn-icon">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- Navbar dinámico -->
+    <div id="navbar-placeholder"></div>
 
     <main class="container">
         <div class="page-header">
@@ -126,13 +84,13 @@
                     <div class="form-row">
                         <div class="form-col">
                             <div class="form-group file-input-container">
-                                <label for="fotoDocFrontal">Foto Documento Identidad (Frontal)</label>
+                                <label for="fotoDocFrontal">Foto Documento Identidad </label>
                                 <input type="file" id="fotoDocFrontal" class="form-control" accept="image/*">
                             </div>
                         </div>
                         <div class="form-col">
                             <div class="form-group file-input-container">
-                                <label for="fotoDocReverso">Foto Documento Identidad (Reverso)</label>
+                                <label for="fotoDocReverso">Certificado Afiliacion EPS </label>
                                 <input type="file" id="fotoDocReverso" class="form-control" accept="image/*">
                             </div>
                         </div>
@@ -162,12 +120,13 @@
     <script src="../../js/app.js"></script>
     <script src="../../js/data.js"></script>
     <script src="../../js/modules/jugadores.js"></script>
-    
+    <script src="../../js/navbar.js"></script>
     <script>
-        // Establecer el año actual en el footer
+        // Establecer el año currentYear en el footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
     <script>
+        // Previsualización de la foto
         document.getElementById('foto').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;

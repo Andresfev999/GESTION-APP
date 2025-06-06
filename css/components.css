@@ -24,9 +24,9 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: var(--bg-color);
-  color:#d23b3b;
-  border: solid 1px #d23b3b;
+  
+  color:var(--primary-color);
+  border: solid var(--primary-color);
   transition: 100ms;
 }
 
@@ -150,6 +150,7 @@ body {
 
 /* Tarjetas de equipos con padding y sombra */
 .card.equipo-card {
+ 
   min-height: 200px;
   max-width: 150px;
   margin: 0 auto;
@@ -278,7 +279,7 @@ tr:hover {
   cursor: pointer;
   border-bottom: 2px solid transparent;
   transition: var(--transition);
-  color: var(--text-light);
+  color: var(--primary-color);
 }
 
 .tab.active {
@@ -1027,4 +1028,43 @@ tr:hover {
 .button-group {
     display: flex;
     gap: 10px;
+}
+
+#jugadores-lista {
+    background: #232323;
+    border-radius: 12px;
+    padding: 2rem 2rem 1rem 2rem;
+    min-width: 320px;
+    max-width: 400px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    margin: 0 auto;
+}
+
+.jugador-card {
+    display: flex;
+    align-items: center;
+    background: #181818;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.jugador-card img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 1rem;
+    background: #fff;
+    border: 1px solid #444;
+}
+
+.jugador-info {
+    flex: 1;
+}
+
+.jugador-actions {
+    display: flex;
+    gap: 0.5rem;
 }

@@ -1,48 +1,57 @@
-
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Equipos - Sistema de Gestión de Torneos de Fútbol</title>
-    
-    <!-- 🔥 MISMOS CSS QUE INDEX.HTML -->
-    <link rel="stylesheet" href="../../css/styles.css">
-  
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/buttons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<body>
+
+    <!-- Estilos principales del sistema -->
+    <link rel="stylesheet" href="../../css/styles.css" />
+    <link rel="stylesheet" href="../../css/components.css" />
+    <link rel="stylesheet" href="../../css/buttons.css" />
+    <link rel="stylesheet" href="../../css/navbar.css" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
     <!-- Agregar el div para el navbar -->
     <div id="navbar-placeholder"></div>
 
     <main class="container">
-        <div class="page-header">
-            <h1>Gestión de Equipos</h1>
-            <div class="page-actions">
-                <a href="crear.html" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Crear Equipo
-                </a>
-            </div>
+      <div class="page-header">
+        <h1>Gestión de Equipos</h1>
+        <div class="page-actions">
+          <a href="crear.html" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Crear Equipo
+          </a>
         </div>
+      </div>
 
-        <div class="filters-section">
-            <div class="search-box">
-                <input type="text" id="buscar-equipo" placeholder="Buscar equipos..." class="form-control">
-                <i class="fas fa-search"></i>
-            </div>
+      <div class="filters-section">
+        <div class="search-box">
+          <input
+            type="text"
+            id="buscar-equipo"
+            placeholder="Buscar equipos..."
+            class="form-control"
+          />
+          <i class="fas fa-search"></i>
         </div>
+      </div>
 
-        <div id="equipos-list" class="cards-grid">
-            <div class="loading-spinner">Cargando equipos...</div>
-        </div>
+      <div id="equipos-list" class="cards-grid">
+        <div class="loading-spinner">Cargando equipos...</div>
+      </div>
     </main>
 
     <footer class="main-footer">
-        <div class="container">
-            <p>&copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de Fútbol</p>
-        </div>
+      <div class="container">
+        <p>
+          &copy; <span id="currentYear"></span> Sistema de Gestión de Torneos de
+          Fútbol
+        </p>
+      </div>
     </footer>
 
     <!-- Scripts de Firebase -->
@@ -56,8 +65,9 @@
     <script src="../../js/modules/equipos.js"></script>
     <script src="../../js/navbar.js"></script>
     <script>
-        // Establecer el año actual en el footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+      // Establecer el año actual en el footer
+      document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
     </script>
-</body>
+  </body>
 </html>

@@ -305,6 +305,12 @@ const EquiposModule = {
       const previewImg = document.querySelector(".file-preview img")
       if (previewImg) {
         escudo = previewImg.src
+      } else if (equipoId) {
+        // Si no hay preview y es edición, obtener el escudo anterior de la base de datos
+        const equipoAnterior = await window.FirebaseDataStore.getEquipo(equipoId)
+        if (equipoAnterior && equipoAnterior.escudo) {
+          escudo = equipoAnterior.escudo
+        }
       }
     }
 
@@ -439,53 +445,32 @@ const EquiposModule = {
       })
 
       let html = `
-                <div class="text-right mb-3">
-                    <a href="../jugadores/crear.html?equipoId=${equipo.id}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Añadir Jugador
-                    </a>
-                </div>
-            `
+    <div class="text-right mb-3">
+        <a href="../jugadores/crear.html?equipoId=${equipo.id}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Añadir Jugador
+        </a>
+    </div>
+`;
 
-      // Mostrar jugadores por posición
-      for (const posicion in jugadoresPorPosicion) {
-        if (jugadoresPorPosicion[posicion].length > 0) {
+      jugadores.forEach(jugador => {
           html += `
-                        <div class="jugadores-seccion">
-                            <h3 class="posicion-titulo">${posicion}s</h3>
-                            <div class="jugadores-grid">
-                    `
+        <div class="jugador-card">
+            <img src="${jugador.foto || '../../assets/img/default-player.png'}" alt="${jugador.nombre}">
+            <div class="jugador-info">
+                <strong>${jugador.nombre}</strong><br>
+                <span>${jugador.posicion || ''}</span>
+            </div>
+            <div class="jugador-actions">
+                <a href="../jugadores/detalle.html?id=${jugador.id}" class="btn btn-outline btn-sm">Ver perfil</a>
+                <button class="btn btn-danger btn-sm eliminar-jugador" data-id="${jugador.id}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+});
 
-          jugadoresPorPosicion[posicion].forEach((jugador) => {
-            html += `
-                            <div class="jugador-card" data-id="${jugador.id}">
-                                <div class="jugador-foto">
-                                    <img src="${jugador.foto || "../../assets/img/default-player.png"}" alt="${jugador.nombre}">
-                                </div>
-                                <div class="jugador-info">
-                                    <div class="jugador-nombre">${jugador.nombre}</div>
-                                    <div class="jugador-dorsal">${jugador.dorsal || "-"}</div>
-                                </div>
-                                <div class="jugador-acciones">
-                                    <a href="../jugadores/detalle.html?id=${jugador.id}" class="btn btn-sm btn-outline">Ver perfil</a>
-                                    <a href="../jugadores/crear.html?id=${jugador.id}" class="btn btn-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button class="btn btn-sm btn-danger eliminar-jugador" data-id="${jugador.id}">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `
-          })
-
-          html += `
-                            </div>
-                        </div>
-                    `
-        }
-      }
-
-      jugadoresContainer.innerHTML = html
+jugadoresContainer.innerHTML = html
 
       // Agregar eventos para eliminar jugadores
       const botonesEliminar = jugadoresContainer.querySelectorAll(".eliminar-jugador")

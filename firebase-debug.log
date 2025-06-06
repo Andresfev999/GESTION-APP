@@ -1,0 +1,64 @@
+[debug] [2025-06-02T03:28:07.689Z] ----------------------------------------------------------------------
+[debug] [2025-06-02T03:28:07.699Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\USUARIO\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2025-06-02T03:28:07.700Z] CLI Version:   14.5.1
+[debug] [2025-06-02T03:28:07.701Z] Platform:      win32
+[debug] [2025-06-02T03:28:07.701Z] Node Version:  v22.16.0
+[debug] [2025-06-02T03:28:07.702Z] Time:          Sun Jun 01 2025 22:28:07 GMT-0500 (hora estándar de Colombia)
+[debug] [2025-06-02T03:28:07.702Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-06-02T03:28:08.354Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-06-02T03:28:08.355Z] > authorizing via signed-in user (legion.deportiva2025@gmail.com)
+[debug] [2025-06-02T03:28:08.356Z] [iam] checking project legion-deportiva-9363c for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-06-02T03:28:08.359Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:28:08.360Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:28:08.363Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions [none]
+[debug] [2025-06-02T03:28:08.363Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions x-goog-quota-user=projects/legion-deportiva-9363c
+[debug] [2025-06-02T03:28:08.364Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-06-02T03:28:09.045Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions 200
+[debug] [2025-06-02T03:28:09.045Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-06-02T03:28:09.047Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:28:09.048Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:28:09.049Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/legion-deportiva-9363c [none]
+[debug] [2025-06-02T03:28:09.500Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/legion-deportiva-9363c 200
+[debug] [2025-06-02T03:28:09.501Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/legion-deportiva-9363c {"projectId":"legion-deportiva-9363c","projectNumber":"795189789462","displayName":"Legion-deportiva","name":"projects/legion-deportiva-9363c","resources":{"hostingSite":"legion-deportiva-9363c"},"state":"ACTIVE","etag":"1_d645e003-d449-4434-bf75-f5bc4ff3b8be"}
+[info] 
+[info] === Deploying to 'legion-deportiva-9363c'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2025-06-02T03:28:09.525Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:28:09.526Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:28:09.526Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/legion-deportiva-9363c/versions [none]
+[debug] [2025-06-02T03:28:09.526Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/legion-deportiva-9363c/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2025-06-02T03:28:10.389Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/legion-deportiva-9363c/versions 200
+[debug] [2025-06-02T03:31:54.732Z] ----------------------------------------------------------------------
+[debug] [2025-06-02T03:31:54.737Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\USUARIO\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2025-06-02T03:31:54.738Z] CLI Version:   14.5.1
+[debug] [2025-06-02T03:31:54.738Z] Platform:      win32
+[debug] [2025-06-02T03:31:54.739Z] Node Version:  v22.16.0
+[debug] [2025-06-02T03:31:54.739Z] Time:          Sun Jun 01 2025 22:31:54 GMT-0500 (hora estándar de Colombia)
+[debug] [2025-06-02T03:31:54.739Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-06-02T03:31:55.243Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-06-02T03:31:55.243Z] > authorizing via signed-in user (legion.deportiva2025@gmail.com)
+[debug] [2025-06-02T03:31:55.244Z] [iam] checking project legion-deportiva-9363c for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-06-02T03:31:55.246Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:31:55.247Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:31:55.248Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions [none]
+[debug] [2025-06-02T03:31:55.249Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions x-goog-quota-user=projects/legion-deportiva-9363c
+[debug] [2025-06-02T03:31:55.249Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-06-02T03:31:55.940Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions 200
+[debug] [2025-06-02T03:31:55.940Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/legion-deportiva-9363c:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-06-02T03:31:55.941Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:31:55.941Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:31:55.942Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/legion-deportiva-9363c [none]
+[debug] [2025-06-02T03:31:56.409Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/legion-deportiva-9363c 200
+[debug] [2025-06-02T03:31:56.409Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/legion-deportiva-9363c {"projectId":"legion-deportiva-9363c","projectNumber":"795189789462","displayName":"Legion-deportiva","name":"projects/legion-deportiva-9363c","resources":{"hostingSite":"legion-deportiva-9363c"},"state":"ACTIVE","etag":"1_d645e003-d449-4434-bf75-f5bc4ff3b8be"}
+[info] 
+[info] === Deploying to 'legion-deportiva-9363c'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2025-06-02T03:31:56.428Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:31:56.428Z] Checked if tokens are valid: true, expires at: 1748838225310
+[debug] [2025-06-02T03:31:56.428Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/legion-deportiva-9363c/versions [none]
+[debug] [2025-06-02T03:31:56.428Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/legion-deportiva-9363c/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2025-06-02T03:31:57.438Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/legion-deportiva-9363c/versions 200

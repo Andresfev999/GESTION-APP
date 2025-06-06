@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabla de Posiciones - Sistema de Gestión de Torneos de Fútbol</title>
-    <link rel="stylesheet" href="../../css/styles.css">
-    <link rel="stylesheet" href="../../css/navbar.css">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+       <link rel="stylesheet" href="../../css/styles.css" />
+    <link rel="stylesheet" href="../../css/components.css" />
+    <link rel="stylesheet" href="../../css/buttons.css" />
+    <link rel="stylesheet" href="../../css/navbar.css" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
 </head>
 <body>
     <!-- Agregar el div para el navbar -->
@@ -27,6 +29,9 @@
                     <!-- Opciones de torneos se cargarán dinámicamente -->
                 </select>
             </div>
+            <button id="descargar-pdf" class="btn btn-primary" style="margin-left:1rem; margin-top:1rem;">
+                <i class="fas fa-file-pdf"></i> Descargar PDF
+            </button>
         </div>
 
         <div id="posiciones-container">
@@ -53,9 +58,107 @@
     <script src="../../js/app.js"></script>
     <script src="../../js/modules/posiciones.js"></script>
     <script src="../../js/navbar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        // Establecer el año actual en el footer
+        // Establecer el año current en el footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
+    <script>
+document.getElementById('descargar-pdf').addEventListener('click', async function() {
+    const logoOrganizacion = await safeGetBase64FromUrl('../../assets/img/logo-organizacion.png');
+    const logoTorneo = window.torneoSeleccionado ? window.torneoSeleccionado.logo : null;
+
+    setTimeout(async () => {
+        const posicionesContainer = document.getElementById('posiciones-container');
+        if (!posicionesContainer) return;
+
+        const canvas = await html2canvas(posicionesContainer, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+
+        const pdf = new jspdf.jsPDF({
+            orientation: 'portrait',
+            unit: 'pt',
+            format: 'a4'
+        });
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const headerHeight = 90;
+        const logoSize = 60;
+
+        // Encabezado con fondo
+        pdf.setFillColor(20, 20, 30);
+        pdf.rect(0, 0, pageWidth, headerHeight, 'F');
+
+        // Logos
+        if (logoOrganizacion) {
+            pdf.addImage(logoOrganizacion, 'PNG', 30, 15, logoSize, logoSize);
+        }
+        if (logoTorneo) {
+            pdf.addImage(logoTorneo, 'PNG', pageWidth - 30 - logoSize, 15, logoSize, logoSize);
+        }
+
+        // Título centrado
+        pdf.setTextColor(255,255,255);
+        pdf.setFontSize(18);
+        pdf.setFont('helvetica', 'bold');
+
+        const nombreTorneo = window.torneoSeleccionado ? window.torneoSeleccionado.nombre : 'Nombre del Torneo';
+const categoriaTorneo = window.torneoSeleccionado ? window.torneoSeleccionado.categoria : 'Categoría';
+pdf.text(`${nombreTorneo}\n${categoriaTorneo}`, pageWidth / 2, 35, { align: 'center', baseline: 'middle' });
+
+        // Imagen de la tabla debajo del encabezado
+        const imgWidth = pageWidth * 0.7;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        pdf.addImage(imgData, 'PNG', 40, headerHeight + 20, imgWidth, imgHeight);
+
+        pdf.save('tabla_posiciones_' + new Date().toISOString().slice(0,10) + '.pdf');
+    }, 300);
+});
+    </script>
+    <script>
+function getBase64FromUrl(url) {
+    return fetch(url)
+        .then(response => response.blob())
+        .then(blob => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        }));
+}
+
+async function safeGetBase64FromUrl(url) {
+    try {
+        return await getBase64FromUrl(url);
+    } catch (e) {
+        console.warn('No se pudo cargar la imagen:', url);
+        return null;
+    }
+}
+</script>
+<script>
+    // Cuando el usuario selecciona un torneo:
+document.getElementById('torneo-select').addEventListener('change', async function() {
+    const torneoId = this.value;
+    if (!torneoId) return;
+
+    const torneo = await window.FirebaseDataStore.getTorneo(torneoId);
+    if (!torneo) {
+        document.getElementById('posiciones-container').innerHTML = `
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                El torneo seleccionado no existe.
+            </div>
+        `;
+        window.torneoSeleccionado = null;
+        return;
+    }
+
+    window.torneoSeleccionado = torneo; // <--- AQUÍ
+
+    // ...cargar posiciones, tablas, etc...
+});
+</script>
 </body>
 </html>

@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Torneo - Sistema de Gestión de Torneos de Fútbol</title>
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/forms.css">
-    <link rel="stylesheet" href="../../css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="../../css/styles.css" />
+    <link rel="stylesheet" href="../../css/components.css" />
+    <link rel="stylesheet" href="../../css/buttons.css" />
+    <link rel="stylesheet" href="../../css/navbar.css" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
 </head>
 <body>
     <div id="navbar-placeholder"></div>
@@ -72,10 +74,12 @@
                             <option value="2012-2013">2012-2013</option>
                         </select>
                     </div>
+<!-- Buscador de equipos -->
+                    <input type="text" id="buscador-equipos" class="form-control" placeholder="Buscar equipo..." style="margin-bottom:10px;">
 
                     <div class="form-group">
                         <label>Equipos Participantes</label>
-                        <div id="equipos-container">
+                        <div id="equipos-container" style="max-height: 320px; overflow-y: auto;">
                             <!-- Aquí se cargarán dinámicamente los equipos -->
                             <div class="loading">
                                 <i class="fas fa-spinner fa-spin"></i> Cargando equipos...
@@ -86,6 +90,13 @@
                                 <i class="fas fa-plus"></i> Crear nuevo equipo
                             </a>
                         </div>
+                    </div>
+
+                    
+                    <div class="form-group">
+                        <label for="escudo">Escudo del Torneo</label>
+                        <input type="file" id="escudo" class="form-control" accept="image/*">
+                        <div id="escudo-preview" style="margin-top:10px;"></div>
                     </div>
 
                     <div class="form-actions">
