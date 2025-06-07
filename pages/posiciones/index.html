@@ -4,7 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabla de Posiciones - Sistema de Gestión de Torneos de Fútbol</title>
-       <link rel="stylesheet" href="../../css/styles.css" />
+    
+    <script>
+    (function() {
+        const savedTheme = localStorage.getItem('theme');
+        document.addEventListener('DOMContentLoaded', function() {
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        });
+    })();
+    </script>
+    <link rel="stylesheet" href="../../css/styles.css" />
     <link rel="stylesheet" href="../../css/components.css" />
     <link rel="stylesheet" href="../../css/buttons.css" />
     <link rel="stylesheet" href="../../css/navbar.css" />
@@ -12,7 +25,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
 </head>
-<body>
+<body>  
     <!-- Agregar el div para el navbar -->
     <div id="navbar-placeholder"></div>
 
@@ -55,7 +68,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="../../js/firebase-config.js"></script>
     <script src="../../js/firebase-data.js"></script>
-    <script src="../../js/app.js"></script>
     <script src="../../js/modules/posiciones.js"></script>
     <script src="../../js/navbar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -153,13 +165,8 @@ async function safeGetBase64FromUrl(url) {
 }
 </script>
 
-<script>
-window.logoOrganizacion = null; // Valor por defecto
 
-// Si tienes el logo en assets/img/logo-organizacion.png:
-getBase64FromUrl('../../assets/img/logo-organizacion.png').then(base64 => {
-    window.logoOrganizacion = base64;
-});
-</script>
+
+
 </body>
 </html>

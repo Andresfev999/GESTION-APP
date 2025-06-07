@@ -25,6 +25,7 @@ const PosicionesModule = {
         // Evento de cambio de torneo
         torneoSelect.addEventListener('change', async () => {
             const torneoId = torneoSelect.value;
+            console.log("Torneo seleccionado:", torneoId);
             if (torneoId) {
                 await this.cargarTablaPosiciones(torneoId);
             } else {
@@ -36,28 +37,26 @@ const PosicionesModule = {
                 `;
             }
         });
+
+        console.log("initTorneoSelect ejecutado");
     },
 
     // Cargar tabla de posiciones
     cargarTablaPosiciones: async function(torneoId) {
         const posicionesContainer = document.getElementById('posiciones-container');
-        const torneo = await window.FirebaseDataStore.getTorneo(torneoId);
+        posicionesContainer.innerHTML = '<div>Cargando...</div>';
 
-        if (!torneo) {
-            posicionesContainer.innerHTML = `
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Error al cargar la información del torneo.
-                </div>
-            `;
-            return;
-        }
-
-        // Calcular posiciones usando Firebase
+        // Espera a que se calculen todas las posiciones
         const posiciones = await window.FirebaseDataStore.calcularPosiciones(torneoId);
 
+        // Ahora sí, renderiza la tabla con los datos ya calculados
+        this.renderTablaPosiciones(posiciones, posicionesContainer, torneoId);
+    },
+
+    // Renderizar tabla de posiciones
+    renderTablaPosiciones: async function(posiciones, container, torneoId) {
         if (!posiciones || posiciones.length === 0) {
-            posicionesContainer.innerHTML = `
+            container.innerHTML = `
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle"></i>
                     No hay datos suficientes para mostrar la tabla de posiciones de este torneo.
@@ -71,7 +70,7 @@ const PosicionesModule = {
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <i class="fas fa-trophy"></i> ${torneo.nombre} - Tabla de Posiciones
+                        <i class="fas fa-trophy"></i> Tabla de Posiciones
                     </div>
                 </div>
                 <div class="card-content">
@@ -134,10 +133,10 @@ const PosicionesModule = {
         `;
 
         // Renderiza la tabla de posiciones normalmente (arriba)
-        posicionesContainer.innerHTML = htmlPosiciones;
+        container.innerHTML = htmlPosiciones;
 
         // Luego, debajo, agrega un contenedor para las dos tablas secundarias
-        posicionesContainer.innerHTML += `
+        container.innerHTML += `
           <div class="tablas-secundarias"></div>
         `;
 
@@ -330,24 +329,15 @@ const PosicionesModule = {
 // Inicializar el módulo cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
     PosicionesModule.init();
+    console.log("PosicionesModule cargado");
+    console.log(">>> posiciones.js cargado <<<");
 });
 
-async function calcularPosiciones(torneoId) {
-    const torneo = await window.FirebaseDataStore.getTorneo(torneoId);
-    console.log("Torneo:", torneo);
 
-    if (!torneo || !Array.isArray(torneo.equipos) || torneo.equipos.length === 0) {
-        console.log("No hay equipos en el torneo");
-        return [];
-    }
 
-    const equipos = await Promise.all(
-        torneo.equipos.map(id => window.FirebaseDataStore.getEquipo(id))
-    );
-    console.log("Equipos:", equipos);
+window.logoOrganizacion = null; // Valor por defecto
 
-    const partidos = await window.FirebaseDataStore.getPartidosPorTorneo(torneoId);
-    console.log("Partidos:", partidos);
-
-    // ...resto de tu lógica...
-}
+// Si tienes el logo en assets/img/logo-organizacion.png:
+getBase64FromUrl('../../assets/img/logo-organizacion.png').then(base64 => {
+    window.logoOrganizacion = base64;
+});

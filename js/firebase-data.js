@@ -454,84 +454,74 @@ const FirebaseDataStore = {
     calcularPosiciones: async function(torneoId) {
         if (!this.db) this.init();
 
-        // Obtener el torneo para saber qué equipos participan
         const torneo = await this.getTorneo(torneoId);
         if (!torneo || !Array.isArray(torneo.equipos) || torneo.equipos.length === 0) return [];
 
-        // Obtener solo los equipos cuyos IDs están en el array del torneo
-        const equiposPromises = torneo.equipos.map(equipoId => this.getEquipo(equipoId));
-        const equipos = (await Promise.all(equiposPromises))
-            .filter(e => e) // Elimina nulos si algún equipo no existe
-            .map(e => ({
-                ...e,
-                puntos: 0,
-                pj: 0,
-                pg: 0,
-                pe: 0,
-                pp: 0,
-                gf: 0,
-                gc: 0,
-                dif: 0
-            }));
+        // Inicializa los equipos con todos los campos en 0
+        const equipos = (await Promise.all(
+            torneo.equipos.map(id => this.getEquipo(id))
+        )).filter(e => e).map(e => ({
+            ...e,
+            puntos: 0,
+            pj: 0,
+            pg: 0,
+            pe: 0,
+            pp: 0,
+            gf: 0,
+            gc: 0,
+            dif: 0
+        }));
 
-        // Map para acceso rápido por id
+        // Mapa para acceso rápido
         const equiposMap = {};
         equipos.forEach(e => equiposMap[e.id] = e);
 
-        // Obtener partidos finalizados del torneo
-        const partidosSnapshot = await this.db.collection('partidos')
-            .where('torneo', '==', torneoId)
-            .where('estado', '==', 'Finalizado')
-            .get();
+        // Obtener partidos finalizados
+        const partidos = await this.getPartidosPorTorneo(torneoId);
+        partidos
+            .filter(p => p.estado === "Finalizado" && p.resultado && !isNaN(parseInt(p.resultado.golesLocal)) && !isNaN(parseInt(p.resultado.golesVisitante)))
+            .forEach(partido => {
+                const local = equiposMap[partido.local];
+                const visitante = equiposMap[partido.visitante];
+                if (!local || !visitante) return;
 
-        partidosSnapshot.forEach(doc => {
-            const partido = doc.data();
-            if (!partido.resultado) return;
+                const gl = parseInt(partido.resultado.golesLocal) || 0;
+                const gv = parseInt(partido.resultado.golesVisitante) || 0;
 
-            const local = equiposMap[partido.local];
-            const visitante = equiposMap[partido.visitante];
-            if (!local || !visitante) return;
+                // Partidos jugados
+                local.pj += 1;
+                visitante.pj += 1;
 
-            const gl = parseInt(partido.resultado.golesLocal);
-            const gv = parseInt(partido.resultado.golesVisitante);
+                // Goles a favor y en contra
+                local.gf += gl;
+                local.gc += gv;
+                visitante.gf += gv;
+                visitante.gc += gl;
 
-            // Partidos jugados
-            local.pj += 1;
-            visitante.pj += 1;
+                // Diferencia de goles
+                local.dif = local.gf - local.gc;
+                visitante.dif = visitante.gf - visitante.gc;
 
-            // Goles a favor y en contra
-            local.gf += gl;
-            local.gc += gv;
-            visitante.gf += gv;
-            visitante.gc += gl;
-
-            // Diferencia de goles
-            local.dif = local.gf - local.gc;
-            visitante.dif = visitante.gf - visitante.gc;
-
-            // Resultado
-            if (gl > gv) {
-                // Gana local
-                local.pg += 1;
-                local.puntos += 3;
-                visitante.pp += 1;
-            } else if (gl < gv) {
-                // Gana visitante
-                visitante.pg += 1;
-                visitante.puntos += 3;
-                local.pp += 1;
-            } else {
-                // Empate
-                local.pe += 1;
-                visitante.pe += 1;
-                local.puntos += 1;
-                visitante.puntos += 1;
-            }
-        });
+                // Resultado
+                if (gl > gv) {
+                    local.pg += 1;
+                    local.puntos += 3;
+                    visitante.pp += 1;
+                } else if (gl < gv) {
+                    visitante.pg += 1;
+                    visitante.puntos += 3;
+                    local.pp += 1;
+                } else {
+                    local.pe += 1;
+                    visitante.pe += 1;
+                    local.puntos += 1;
+                    visitante.puntos += 1;
+                }
+            });
 
         // Ordenar por puntos, diferencia de goles, goles a favor
         const posiciones = Object.values(equiposMap)
-            .sort((a, b) => 
+            .sort((a, b) =>
                 b.puntos - a.puntos ||
                 b.dif - a.dif ||
                 b.gf - a.gf
@@ -559,3 +549,49 @@ window.FirebaseDataStore.crearPartido = async function(partido) {
         return false;
     }
 };
+
+// Ejemplo de uso de la función de generación de calendario
+async function ejemploGenerarCalendario() {
+    const torneoId = "ID_DEL_TORNEO";
+    const formato = "ida-vuelta"; // o "solo-ida"
+    const fechaInicio = new Date(); // Fecha de inicio
+    const opciones = {}; // Opciones adicionales si es necesario
+
+    // Llama a la función para generar el calendario
+    const resultado = await FirebaseDataStore.generarCalendario(torneoId, formato, fechaInicio, opciones);
+
+    console.log("Resultado de la generación del calendario:", resultado);
+}
+
+// Descomentar para ejecutar el ejemplo
+// ejemploGenerarCalendario();
+
+// Ejemplo de uso de la función de cálculo de posiciones
+async function ejemploCalcularPosiciones() {
+    const torneoId = "ID_DEL_TORNEO";
+
+    // Llama a la función para calcular posiciones
+    const posiciones = await FirebaseDataStore.calcularPosiciones(torneoId);
+
+    console.log("Posiciones calculadas:", posiciones);
+}
+
+// Descomentar para ejecutar el ejemplo
+// ejemploCalcularPosiciones();
+
+// Ejemplo de registro de resultado
+async function ejemploRegistrarResultado() {
+    const partidoId = "ID_DEL_PARTIDO";
+    const golesLocal = 2;
+    const golesVisitante = 1;
+    const observaciones = "Gran partido";
+    const goleadoresLocal = [{ jugadorId: "ID_JUGADOR_LOCAL", goles: 2 }];
+    const goleadoresVisitante = [{ jugadorId: "ID_JUGADOR_VISITANTE", goles: 1 }];
+
+    const resultado = await FirebaseDataStore.registrarResultado(partidoId, golesLocal, golesVisitante, observaciones, goleadoresLocal, goleadoresVisitante);
+
+    console.log("Resultado del registro:", resultado);
+}
+
+// Descomentar para ejecutar el ejemplo
+// ejemploRegistrarResultado();
