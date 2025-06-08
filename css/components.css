@@ -1070,3 +1070,15 @@ tr:hover {
     display: flex;
     gap: 0.5rem;
 }
+
+/* Puedes poner esto en styles.css o components.css */
+.jugador-foto {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #eee;
+  background: #fafafa;
+  display: block;
+  margin-bottom: 1rem;
+}

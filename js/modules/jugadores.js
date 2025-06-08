@@ -178,8 +178,11 @@ const JugadoresModule = {
             const jugador = await window.FirebaseDataStore.getJugador(jugadorId);
             if (jugador) {
                 document.getElementById('jugador-title').textContent = 'Editar Jugador';
-                document.getElementById('nombre').value = jugador.nombre.split(' ')[0] || '';
-                document.getElementById('apellidos').value = jugador.nombre.split(' ').slice(1).join(' ') || '';
+                if (jugador.nombre) {
+                    const partes = jugador.nombre.trim().split(' ');
+                    document.getElementById('nombre').value = partes.shift() || '';
+                    document.getElementById('apellidos').value = partes.join(' ') || '';
+                }
 
                 if (jugador.fechaNacimiento) {
                     document.getElementById('fechaNacimiento').value = jugador.fechaNacimiento;
