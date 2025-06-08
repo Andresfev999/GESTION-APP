@@ -353,12 +353,20 @@ const TorneosModule = {
         // Si el formato es "copa", obtén los grupos
         let grupos = {};
         if (tipo.toLowerCase() === 'copa') {
-            // Supón que tienes inputs con data-grupo="A", data-grupo="B", etc.
-            document.querySelectorAll('#asignacion-grupos input[type="checkbox"]:checked').forEach(input => {
-                const grupo = input.dataset.grupo;
-                if (!grupos[grupo]) grupos[grupo] = [];
-                grupos[grupo].push(input.value);
-            });
+            // Toma los equipos de los selects de grupo
+            const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numGrupos = parseInt(document.getElementById('num-grupos').value, 10) || 2;
+            for (let g = 1; g <= numGrupos; g++) {
+                const grupoLetra = letras[g - 1];
+                grupos[grupoLetra] = [];
+                // Busca los selects de este grupo
+                const selects = document.querySelectorAll(`#asignacion-grupos select[name^="grupo${g}-equipo"]`);
+                selects.forEach(select => {
+                    if (select.value && !grupos[grupoLetra].includes(select.value)) {
+                        grupos[grupoLetra].push(select.value);
+                    }
+                });
+            }
         }
 
         // Crea o actualiza el torneo
@@ -371,7 +379,7 @@ const TorneosModule = {
             fechaFin,
             estado,
             categoria,
-            equipos,
+            equipos, // puedes dejarlo vacío si es copa
             escudo
         };
 

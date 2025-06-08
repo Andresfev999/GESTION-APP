@@ -55,94 +55,139 @@ const PosicionesModule = {
 
     // Renderizar tabla de posiciones
     renderTablaPosiciones: async function(posiciones, container, torneoId) {
-        if (!posiciones || posiciones.length === 0) {
-            container.innerHTML = `
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i>
-                    No hay datos suficientes para mostrar la tabla de posiciones de este torneo.
-                </div>
-            `;
-            return;
-        }
+        // Obtén el torneo para saber si es tipo Copa y tiene grupos
+        const torneo = await window.FirebaseDataStore.getTorneo(torneoId);
 
-        // Mostrar tabla de posiciones
-        let htmlPosiciones = `
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-trophy"></i> Tabla de Posiciones
-                    </div>
-                </div>
-                <div class="card-content">
-                    <div class="table-container">
-                        <table class="tabla-posiciones">
-                            <thead>
-                                <tr>
-                                    <th>Pos</th>
-                                    <th>Equipo</th>
-                                    <th class="text-center">PJ</th>
-                                    <th class="text-center">PG</th>
-                                    <th class="text-center">PE</th>
-                                    <th class="text-center">PP</th>
-                                    <th class="text-center">GF</th>
-                                    <th class="text-center">GC</th>
-                                    <th class="text-center">DIF</th>
-                                    <th class="text-center">PTS</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-`;
-
-        for (const equipo of posiciones) {
-            const equipoObj = await window.FirebaseDataStore.getEquipo(equipo.id);
-            if (equipoObj) {
-                htmlPosiciones += `
-                    <tr class="${equipo.posicion <= 3 ? 'destacado' : ''}">
-                        <td class="text-center">${equipo.posicion}</td>
-                        <td>
-                            <div class="equipo-nombre">
-                                <img src="${equipoObj.escudo || '../../assets/img/default-shield.png'}" alt="${equipoObj.nombre}" class="equipo-escudo">
-                                <span>${equipoObj.nombre}</span>
+        if (torneo.tipo && torneo.tipo.toLowerCase() === 'copa' && torneo.grupos) {
+            // Renderizar una tabla por cada grupo
+            let html = '';
+            for (const grupo in torneo.grupos) {
+                // Filtra posiciones solo de los equipos de este grupo
+                const equiposGrupo = torneo.grupos[grupo];
+                const posicionesGrupo = posiciones.filter(eq => equiposGrupo.includes(eq.id));
+                // Ordena por puntos, diferencia de goles, goles a favor
+                posicionesGrupo.sort((a, b) =>
+                    b.puntos - a.puntos ||
+                    b.dif - a.dif ||
+                    b.gf - a.gf
+                );
+                html += `
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <strong>Grupo ${grupo}</strong>
+                        </div>
+                        <div class="card-content">
+                            <div class="table-container">
+                                <table class="tabla-posiciones">
+                                    <thead>
+                                        <tr>
+                                            <th>Pos</th>
+                                            <th>Equipo</th>
+                                            <th class="text-center">PJ</th>
+                                            <th class="text-center">PG</th>
+                                            <th class="text-center">PE</th>
+                                            <th class="text-center">PP</th>
+                                            <th class="text-center">GF</th>
+                                            <th class="text-center">GC</th>
+                                            <th class="text-center">DIF</th>
+                                            <th class="text-center">PTS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${posicionesGrupo.map((equipo, idx) => `
+                                            <tr>
+                                                <td class="text-center">${idx + 1}</td>
+                                                <td>
+                                                    <div class="equipo-nombre">
+                                                        <img src="${equipo.escudo || '../../assets/img/default-shield.png'}" alt="${equipo.nombre}" class="equipo-escudo">
+                                                        <span>${equipo.nombre}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">${equipo.pj}</td>
+                                                <td class="text-center">${equipo.pg}</td>
+                                                <td class="text-center">${equipo.pe}</td>
+                                                <td class="text-center">${equipo.pp}</td>
+                                                <td class="text-center">${equipo.gf}</td>
+                                                <td class="text-center">${equipo.gc}</td>
+                                                <td class="text-center">${equipo.dif > 0 ? '+' + equipo.dif : equipo.dif}</td>
+                                                <td class="text-center font-bold">${equipo.puntos}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
                             </div>
-                        </td>
-                        <td class="text-center">${equipo.pj}</td>
-                        <td class="text-center">${equipo.pg}</td>
-                        <td class="text-center">${equipo.pe}</td>
-                        <td class="text-center">${equipo.pp}</td>
-                        <td class="text-center">${equipo.gf}</td>
-                        <td class="text-center">${equipo.gc}</td>
-                        <td class="text-center">${equipo.dif > 0 ? '+' + equipo.dif : equipo.dif}</td>
-                        <td class="text-center font-bold">${equipo.puntos}</td>
-                    </tr>
+                        </div>
+                    </div>
                 `;
             }
-        }
+            // Renderiza las tablas de grupos
+            container.innerHTML = html;
 
-        htmlPosiciones += `
-                            </tbody>
-                        </table>
+            // Agrega el contenedor para las tablas secundarias
+            container.innerHTML += `<div class="tablas-secundarias"></div>`;
+            const secundariasContainer = container.querySelector('.tablas-secundarias');
+            await this.mostrarTablasSecundarias(torneoId, secundariasContainer);
+
+        } else {
+            // Renderiza la tabla normal (liga)
+            // Por ejemplo:
+            let htmlPosiciones = `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-trophy"></i> Tabla de Posiciones
+                        </div>
                     </div>
-                    <div class="posiciones-leyenda mt-4">
-                        <div class="leyenda-item">
-                            <div class="leyenda-color destacado"></div>
-                            <div class="leyenda-texto">Posiciones de clasificación</div>
+                    <div class="card-content">
+                        <div class="table-container">
+                            <table class="tabla-posiciones">
+                                <thead>
+                                    <tr>
+                                        <th>Pos</th>
+                                        <th>Equipo</th>
+                                        <th class="text-center">PJ</th>
+                                        <th class="text-center">PG</th>
+                                        <th class="text-center">PE</th>
+                                        <th class="text-center">PP</th>
+                                        <th class="text-center">GF</th>
+                                        <th class="text-center">GC</th>
+                                        <th class="text-center">DIF</th>
+                                        <th class="text-center">PTS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${posiciones.map((equipo, idx) => `
+                                        <tr>
+                                            <td class="text-center">${idx + 1}</td>
+                                            <td>
+                                                <div class="equipo-nombre">
+                                                    <img src="${equipo.escudo || '../../assets/img/default-shield.png'}" alt="${equipo.nombre}" class="equipo-escudo">
+                                                    <span>${equipo.nombre}</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">${equipo.pj}</td>
+                                            <td class="text-center">${equipo.pg}</td>
+                                            <td class="text-center">${equipo.pe}</td>
+                                            <td class="text-center">${equipo.pp}</td>
+                                            <td class="text-center">${equipo.gf}</td>
+                                            <td class="text-center">${equipo.gc}</td>
+                                            <td class="text-center">${equipo.dif > 0 ? '+' + equipo.dif : equipo.dif}</td>
+                                            <td class="text-center font-bold">${equipo.puntos}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
+            container.innerHTML = htmlPosiciones;
 
-        // Renderiza la tabla de posiciones normalmente (arriba)
-        container.innerHTML = htmlPosiciones;
-
-        // Luego, debajo, agrega un contenedor para las dos tablas secundarias
-        container.innerHTML += `
-          <div class="tablas-secundarias"></div>
-        `;
-
-        // Llama a ambas funciones y pásales el contenedor secundario
-        const secundariasContainer = document.querySelector('.tablas-secundarias');
-        await this.mostrarTablasSecundarias(torneoId, secundariasContainer);
+            // Agrega el contenedor para las tablas secundarias
+            container.innerHTML += `<div class="tablas-secundarias"></div>`;
+            const secundariasContainer = container.querySelector('.tablas-secundarias');
+            await this.mostrarTablasSecundarias(torneoId, secundariasContainer);
+        }
     },
 
     // Mostrar ambas tablas secundarias: goleadores y arco menos vencido
