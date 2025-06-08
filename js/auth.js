@@ -111,12 +111,10 @@ const AuthModule = {
     
     // Actualizar último acceso
     updateLastLogin: function(userId) {
-        const firebase = window.firebase; // Declare the firebase variable
-        const db = firebase.firestore();
-        
-        db.collection('usuarios').doc(userId).update({
-            ultimoAcceso: new Date()
-        })
+        const userRef = firebase.firestore().collection('usuarios').doc(userId);
+        userRef.set({
+            ultimoAcceso: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true })
         .catch(error => {
             console.error('Error al actualizar último acceso:', error);
         });
@@ -226,29 +224,28 @@ const AuthModule = {
     // Verificar si estamos en una página protegida
     checkProtectedPage: function() {
         const protectedPages = [
-            '/admin/',
-            '/torneos/crear.html',
-            '/torneos/editar.html',
-            '/equipos/crear.html',
-            '/equipos/editar.html',
-            '/jugadores/crear.html',
-            '/jugadores/editar.html',
-            '/partidos/crear.html',
-            '/partidos/editar.html'
+            '/pages/torneos/crear.html',
+            '/pages/torneos/editar.html',
+            '/pages/equipos/crear.html',
+            '/pages/equipos/editar.html',
+            '/pages/jugadores/crear.html',
+            '/pages/jugadores/editar.html',
+            '/pages/partidos/crear.html',
+            '/pages/partidos/editar.html',
+            // Agrega más rutas si tienes otras páginas protegidas
         ];
-        
+
         const currentPath = window.location.pathname;
-        
-        // Verificar si la página actual es protegida
-        const isProtected = protectedPages.some(page => 
-            currentPath.includes(page) || 
-            currentPath.endsWith(page)
+
+        // Verifica si la página actual es protegida
+        const isProtected = protectedPages.some(page =>
+            currentPath.endsWith(page) || currentPath.includes(page)
         );
-        
-        if (isProtected && !this.currentUser) {
-            // Redirigir a la página de login
+
+        if (isProtected && !this.isAuthenticated()) {
+            // Redirige a login con returnUrl para volver después de autenticarse
             const returnUrl = encodeURIComponent(window.location.href);
-            window.location.href = `/login.html?returnUrl=${returnUrl}`;
+            window.location.href = '/pages/autenticacion/login.html?returnUrl=' + returnUrl;
         }
     },
     

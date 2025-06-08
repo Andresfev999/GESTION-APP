@@ -12,32 +12,32 @@
         <nav class="main-nav" id="main-nav">
             <ul class="nav-list">
                 <li>
-                    <a href="../../index.html">
+                    <a href="/index.html">
                         <i class="fas fa-home"></i> Inicio
                     </a>
                 </li>
                 <li>
-                    <a href="../torneos/index.html">
+                    <a href="/pages/torneos/index.html">
                         <i class="fas fa-trophy"></i> Torneos
                     </a>
                 </li>
                 <li>
-                    <a href="../equipos/index.html">
+                    <a href="/pages/equipos/index.html">
                         <i class="fas fa-users"></i> Equipos
                     </a>
                 </li>
                 <li>
-                    <a href="../jugadores/index.html">
+                    <a href="/pages/jugadores/index.html">
                         <i class="fas fa-user"></i> Jugadores
                     </a>
                 </li>
                 <li>
-                    <a href="../partidos/index.html">
+                    <a href="/pages/partidos/index.html">
                         <i class="fas fa-futbol"></i> Partidos
                     </a>
                 </li>
                 <li>
-                    <a href="../posiciones/index.html">
+                    <a href="/pages/posiciones/index.html">
                         <i class="fas fa-table"></i> Posiciones
                     </a>
                 </li>
@@ -48,22 +48,25 @@
             <button id="themeToggle" class="btn btn-icon">
                 <i class="fas fa-moon"></i>
             </button>
+            <div id="user-info" style="display: none; align-items: center; gap: 0.5rem;">
+                <span id="user-name" style="font-weight: 500;"></span>
+                <button id="logout-btn" class="btn btn-outline btn-sm" style="margin-left: 0.5rem;">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                </button>
+            </div>
         </div>
     </div>
 </header>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Manejar el menú móvil
+        // Menú móvil
         const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
         const mainNav = document.getElementById('main-nav');
-        
         if (mobileMenuToggle && mainNav) {
             mobileMenuToggle.addEventListener('click', function() {
                 mainNav.classList.toggle('active');
                 mobileMenuToggle.classList.toggle('active');
-                
-                // Cambiar icono del botón
                 const icon = mobileMenuToggle.querySelector('i');
                 if (mainNav.classList.contains('active')) {
                     icon.classList.remove('fa-bars');
@@ -74,32 +77,40 @@
                 }
             });
         }
-        
-        // Marcar el enlace activo
+
+        // Marcar enlace activo
         const currentPath = window.location.pathname;
         const navLinks = document.querySelectorAll('.nav-list a');
-        
         navLinks.forEach(link => {
             const linkPath = link.getAttribute('href');
-            
-            // Remover clase active de todos los enlaces
             link.classList.remove('active');
-            
-            // Determinar si el enlace debe estar activo
-            if (currentPath.includes('/equipos/') && linkPath.includes('equipos')) {
+            if (currentPath === linkPath) {
                 link.classList.add('active');
-            } else if (currentPath.includes('/partidos/') && linkPath.includes('partidos')) {
-                link.classList.add('active');
-            } else if (currentPath.includes('/torneos/') && linkPath.includes('torneos')) {
-                link.classList.add('active');
-            } else if (currentPath.includes('/jugadores/') && linkPath.includes('jugadores')) {
-                link.classList.add('active');
-            } else if (currentPath.includes('/posiciones/') && linkPath.includes('posiciones')) {
-                link.classList.add('active');
-            } else if ((currentPath === '/' || currentPath.includes('index.html')) && linkPath.includes('index.html')) {
+            } else if (linkPath !== '/' && currentPath.startsWith(linkPath.replace('/index.html', ''))) {
                 link.classList.add('active');
             }
         });
-        // Eliminar o comentar el código de setupThemeToggle aquí
+
+        // Mostrar usuario autenticado y botón de logout
+        if (window.firebase && firebase.auth) {
+            firebase.auth().onAuthStateChanged(function(user) {
+                const userInfo = document.getElementById('user-info');
+                const userName = document.getElementById('user-name');
+                const logoutBtn = document.getElementById('logout-btn');
+                if (user) {
+                    userInfo.style.display = 'flex';
+                    userName.textContent = user.displayName || user.email;
+                    if (logoutBtn) {
+                        logoutBtn.onclick = function() {
+                            firebase.auth().signOut().then(function() {
+                                window.location.href = '/pages/autenticacion/login.html';
+                            });
+                        };
+                    }
+                } else {
+                    userInfo.style.display = 'none';
+                }
+            });
+        }
     });
 </script>

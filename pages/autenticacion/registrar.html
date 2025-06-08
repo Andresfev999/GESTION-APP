@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Administrador - Torneos</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <header class="main-header themed-navbar">
+        <div class="container" style="display: flex; align-items: center; justify-content: center; position: relative;">
+            <span class="navbar-brand" style="font-size: 1.5rem; font-weight: bold; letter-spacing: 1px;">
+                Sistema de Gestión de Torneos de Fútbol
+            </span>
+            <button id="theme-toggle" title="Cambiar tema"
+                style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; font-size: 1.4rem;">
+                <i id="theme-icon" class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <div class="auth-container">
+        <h2>Registro Administrador</h2>
+        <form id="register-form">
+            <div class="form-group">
+                <label for="register-email">Correo electrónico</label>
+                <input type="email" id="register-email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Contraseña</label>
+                <input type="password" id="register-password" class="form-control" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label for="register-password2">Repetir contraseña</label>
+                <input type="password" id="register-password2" class="form-control" required minlength="6">
+            </div>
+            <button type="submit" class="btn btn-primary">Registrarse</button>
+        </form>
+        <a href="login.html" class="auth-link">¿Ya tienes cuenta? Inicia sesión</a>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="../../js/firebase-config.js"></script>
+<script src="../../js/auth.js"></script>
+    <script>
+    // Aquí puedes agregar la lógica de registro con Firebase Auth
+    document.getElementById('register-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        // Tu lógica de registro aquí
+    });
+    </script>
+    <script>
+function setTheme(theme) {
+    if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-icon').className = 'fas fa-sun';
+    } else {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('theme-icon').className = 'fas fa-moon';
+    }
+    localStorage.setItem('theme', theme);
+}
+// Inicializar tema al cargar
+(function() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+})();
+// Botón de cambio de tema
+document.getElementById('theme-toggle').addEventListener('click', function() {
+    const isDark = document.body.classList.contains('dark-mode');
+    setTheme(isDark ? 'light' : 'dark');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Admin Torneos</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+</head>
+<body>
+    <header class="main-header themed-navbar">
+        <div class="container" style="display: flex; align-items: center; justify-content: center; position: relative;">
+            <span class="navbar-brand" style="font-size: 1.5rem; font-weight: bold; letter-spacing: 1px;">
+                Sistema de Gestión de Torneos de Fútbol
+            </span>
+            <button id="theme-toggle" title="Cambiar tema"
+                style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; font-size: 1.4rem;">
+                <i id="theme-icon" class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <div class="auth-container">
+        <h2>Iniciar Sesión</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email">Correo electrónico</label>
+                <input type="email" id="login-email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Ingresar</button>
+            <span id="login-error" style="color:red"></span>
+        </form>
+        <a href="registrar.html" class="auth-link">¿No tienes cuenta? Regístrate</a>
+    </div>
+    <script>
+    // Cambio de tema
+    function setTheme(theme) {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('theme-icon').className = 'fas fa-sun';
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.getElementById('theme-icon').className = 'fas fa-moon';
+        }
+        localStorage.setItem('theme', theme);
+    }
+    // Inicializar tema al cargar
+    (function() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+    })();
+    // Botón de cambio de tema
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+        const isDark = document.body.classList.contains('dark-mode');
+        setTheme(isDark ? 'light' : 'dark');
+    });
+
+    // Aquí puedes agregar la lógica de autenticación con Firebase Auth
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+        const errorSpan = document.getElementById('login-error');
+        errorSpan.textContent = '';
+
+        try {
+            await firebase.auth().signInWithEmailAndPassword(email, password);
+            // Obtener returnUrl de la URL
+            const params = new URLSearchParams(window.location.search);
+            const returnUrl = params.get('returnUrl');
+            if (returnUrl) {
+                window.location.href = decodeURIComponent(returnUrl);
+            } else {
+                window.location.href = "../../index.html";
+            }
+        } catch (error) {
+            // Validar si el usuario no existe
+            if (error.code === 'auth/user-not-found') {
+                errorSpan.textContent = 'El usuario no existe.';
+            } else if (error.code === 'auth/wrong-password') {
+                errorSpan.textContent = 'Contraseña incorrecta.';
+            } else if (error.code === 'auth/invalid-email') {
+                errorSpan.textContent = 'Correo electrónico inválido.';
+            } else {
+                errorSpan.textContent = 'Error al iniciar sesión: ' + error.message;
+            }
+        }
+    });
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="../../js/firebase-config.js"></script>
+    <script src="../../js/auth.js"></script>
+</body>
+</html>

@@ -4,273 +4,215 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneos de Fútbol</title>
-    
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/buttons.css">
-    
+
     <!-- Firebase App (la base) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    
-    <!-- Añade los productos que usarás -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Tu script de inicialización -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
 </head>
 <body>
-    <!-- Header con navbar usando tus clases existentes -->
-    <header class="main-header">
-        <div class="container">
-            <div class="logo">
-                <i class="fas fa-futbol"></i>
-                <h1>Torneos de Fútbol</h1>
-            </div>
-            
-            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <nav class="main-nav" id="main-nav">
-                <ul class="nav-list">
-                    <li>
-                        <a href="index.html" class="active">
-                            <i class="fas fa-home"></i> Inicio
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pages/torneos/index.html">
-                            <i class="fas fa-trophy"></i> Torneos
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pages/equipos/index.html">
-                            <i class="fas fa-users"></i> Equipos
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pages/jugadores/index.html">
-                            <i class="fas fa-user"></i> Jugadores
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pages/partidos/index.html">
-                            <i class="fas fa-futbol"></i> Partidos
-                        </a>
-                    </li>
-                    <li>
-                    <a href="pages/posiciones/index.html">
-                        <i class="fas fa-table"></i> Posiciones
-                    </a>
-                </li>
-                </ul>
-            </nav>
-            
-            <div class="header-actions">
-                <button id="themeToggle" class="btn btn-icon">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
+  <!-- NAVBAR ESTÁTICO MEJORADO CON MODAL DE USUARIO -->
+<header class="main-header themed-navbar">
+    <div class="container navbar-flex">
+        <!-- Logo y nombre -->
+        <div class="navbar-logo">
+            <i class="fas fa-futbol"></i>
+            <span class="navbar-brand">Sistema de Gestión de Torneos de Fútbol</span>
         </div>
-    </header>
-
-    <!-- Loading screen -->
-    <div id="loading-section" style="display: block;">
-        <div class="loading-container">
-            <div class="loading-spinner"></div>
-            <p>Cargando aplicación...</p>
+        <!-- Menú principal -->
+        <nav class="main-nav" id="main-nav">
+            <ul class="nav-list">
+                <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="pages/torneos/index.html"><i class="fas fa-trophy"></i> Torneos</a></li>
+                <li><a href="pages/equipos/index.html"><i class="fas fa-users"></i> Equipos</a></li>
+                <li><a href="pages/jugadores/index.html"><i class="fas fa-user"></i> Jugadores</a></li>
+                <li><a href="pages/partidos/index.html"><i class="fas fa-futbol"></i> Partidos</a></li>
+                <li><a href="pages/posiciones/index.html"><i class="fas fa-table"></i> Posiciones</a></li>
+            </ul>
+        </nav>
+        <!-- Acciones: tema y usuario -->
+        <div class="navbar-actions">
+            <button id="themeToggle" title="Cambiar tema">
+                <i id="theme-icon" class="fas fa-moon"></i>
+            </button>
+            <button id="user-icon-btn" style="display:none;">
+                <i class="fas fa-user-circle"></i>
+            </button>
         </div>
     </div>
+</header>
 
-    <main class="container" style="display: none;" id="main-content">
-        <section class="welcome-section">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Bienvenido a la Gestión de Torneos de Fútbol</h2>
-                </div>
-                <div class="card-content">
-                    <p>Esta aplicación te permite gestionar torneos de fútbol, equipos, jugadores y partidos de manera sencilla.</p>
-                    
-                    <div class="features-grid">
-                        <div class="feature-item">
-                            <i class="fas fa-trophy"></i>
-                            <h3>Torneos</h3>
-                            <p>Crea y gestiona torneos con diferentes formatos.</p>
-                            <a href="pages/torneos/index.html" class="btn btn-primary">Gestionar Torneos</a>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-users"></i>
-                            <h3>Equipos</h3>
-                            <p>Administra los equipos participantes en tus torneos.</p>
-                            <a href="pages/equipos/index.html" class="btn btn-primary">Gestionar Equipos</a>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-user"></i>
-                            <h3>Jugadores</h3>
-                            <p>Registra y gestiona los jugadores de cada equipo.</p>
-                            <a href="pages/jugadores/index.html" class="btn btn-primary">Gestionar Jugadores</a>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-futbol"></i>
-                            <h3>Partidos</h3>
-                            <p>Programa partidos y registra resultados.</p>
-                            <a href="pages/partidos/index.html" class="btn btn-primary">Gestionar Partidos</a>
-                        </div>
+<!-- Modal de usuario -->
+<div id="user-modal" class="user-modal">
+    <div class="user-modal-content">
+        <button id="close-user-modal" class="user-modal-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="user-modal-body">
+            <i class="fas fa-user-circle user-modal-avatar"></i>
+            <span id="modal-user-name" class="user-modal-name"></span>
+            <button id="logout-btn-modal" class="btn btn-outline btn-sm user-modal-logout">
+                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Cambio de tema
+    function setupThemeToggle() {
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = document.getElementById('theme-icon');
+        function updateThemeIcon() {
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+        themeToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+            updateThemeIcon();
+        });
+        // Aplicar tema guardado al cargar la página
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+        updateThemeIcon();
+    }
+    setupThemeToggle();
+
+    // Usuario y modal
+    document.addEventListener('DOMContentLoaded', function() {
+        const userIconBtn = document.getElementById('user-icon-btn');
+        const userModal = document.getElementById('user-modal');
+        const closeUserModal = document.getElementById('close-user-modal');
+        const modalUserName = document.getElementById('modal-user-name');
+        const logoutBtnModal = document.getElementById('logout-btn-modal');
+
+        // Mostrar icono solo si hay usuario autenticado
+        if (window.firebase && firebase.auth) {
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    userIconBtn.style.display = 'inline-block';
+                    modalUserName.textContent = user.displayName || user.email;
+                } else {
+                    userIconBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // Abrir modal al hacer clic en el icono de usuario
+        userIconBtn.addEventListener('click', function() {
+            userModal.classList.add('show');
+        });
+
+        // Cerrar modal al hacer clic en la X o fuera del modal
+        closeUserModal.addEventListener('click', function() {
+            userModal.classList.remove('show');
+        });
+        userModal.addEventListener('click', function(e) {
+            if (e.target === userModal) {
+                userModal.classList.remove('show');
+            }
+        });
+
+        // Logout
+        logoutBtnModal.addEventListener('click', function() {
+            if (window.firebase && firebase.auth) {
+                firebase.auth().signOut().then(function() {
+                    window.location.href = 'pages/autenticacion/login.html';
+                });
+            }
+        });
+    });
+</script>
+<!-- FIN NAVBAR ESTÁTICO MEJORADO -->
+
+<!-- Loading screen -->
+<div id="loading-section" style="display: block;">
+    <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Cargando aplicación...</p>
+    </div>
+</div>
+
+<main class="container" style="display: none;" id="main-content">
+    <section class="welcome-section">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Bienvenido a la Gestión de Torneos de Fútbol</h2>
+            </div>
+            <div class="card-content">
+                <p>Esta aplicación te permite gestionar torneos de fútbol, equipos, jugadores y partidos de manera sencilla.</p>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Torneos</h3>
+                        <p>Crea y gestiona torneos con diferentes formatos.</p>
+                        <a href="pages/torneos/index.html" class="btn btn-primary">Gestionar Torneos</a>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-users"></i>
+                        <h3>Equipos</h3>
+                        <p>Administra los equipos participantes en tus torneos.</p>
+                        <a href="pages/equipos/index.html" class="btn btn-primary">Gestionar Equipos</a>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-user"></i>
+                        <h3>Jugadores</h3>
+                        <p>Registra y gestiona los jugadores de cada equipo.</p>
+                        <a href="pages/jugadores/index.html" class="btn btn-primary">Gestionar Jugadores</a>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-futbol"></i>
+                        <h3>Partidos</h3>
+                        <p>Programa partidos y registra resultados.</p>
+                        <a href="pages/partidos/index.html" class="btn btn-primary">Gestionar Partidos</a>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
-
-    <footer class="main-footer">
-        <div class="container">
-            <p>Desarrollado por Andres echeverria </p>
-                <i class="fas fa-copyright"></i> 2025 Torneos de Fútbol
-            <p>&copy;Todos los derechos reservados.</p>
         </div>
-    </footer>
-    
-    <!-- Scripts de la aplicación -->
-    <script src="js/firebase-data.js"></script>
-    <script src="js/app.js"></script>
-    
-    <script>
-        // Función para configurar el cambio de tema
-        function setupThemeToggle() {
-            const themeToggle = document.getElementById('themeToggle');
-            if (!themeToggle) {
-                console.error('Botón de tema no encontrado');
-                return;
-            }
+    </section>
+</main>
 
-            const icon = themeToggle.querySelector('i');
-            if (!icon) {
-                console.error('Icono del botón de tema no encontrado');
-                return;
-            }
-            
-            // Función para actualizar el icono según el tema actual
-            function updateThemeIcon() {
-                if (document.body.classList.contains('dark-mode')) {
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                } else {
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                }
-            }
+<footer class="main-footer">
+    <div class="container">
+        <p>Desarrollado por Andres echeverria </p>
+        <i class="fas fa-copyright"></i> 2025 Torneos de Fútbol
+        <p>&copy;Todos los derechos reservados.</p>
+    </div>
+</footer>
 
-            // Evento click para cambiar tema
-            themeToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Cambiando tema...');
-                
-                document.body.classList.toggle('dark-mode');
-                
-                if (document.body.classList.contains('dark-mode')) {
-                    localStorage.setItem('theme', 'dark');
-                    console.log('Tema cambiado a oscuro');
-                } else {
-                    localStorage.setItem('theme', 'light');
-                    console.log('Tema cambiado a claro');
-                }
-                
-                updateThemeIcon();
-            });
+<!-- Scripts de la aplicación -->
+<script src="js/firebase-data.js"></script>
+<script src="js/app.js"></script>
 
-            // Aplicar tema guardado al cargar la página
-            const savedTheme = localStorage.getItem('theme');
-            console.log('Tema guardado:', savedTheme);
-            
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-            } else if (savedTheme === 'light') {
-                document.body.classList.remove('dark-mode');
-            } else {
-                // Si no hay tema guardado, usar tema claro por defecto
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
-            }
-            
-            updateThemeIcon();
-        }
-
-        // Función para inicializar la aplicación
-        function initializeApp() {
-            console.log('Inicializando aplicación...');
-            
-            // Inicializar Firebase
-            if (window.FirebaseUtils && typeof window.FirebaseUtils.initializeFirebase === 'function') {
-                window.FirebaseUtils.initializeFirebase();
-            }
-            
-            // Inicializar tema
-            setupThemeToggle();
-            
-            // Manejar el menú móvil
-            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-            const mainNav = document.getElementById('main-nav');
-            
-            if (mobileMenuToggle && mainNav) {
-                mobileMenuToggle.addEventListener('click', function() {
-                    mainNav.classList.toggle('active');
-                    
-                    // Cambiar icono del botón
-                    const icon = mobileMenuToggle.querySelector('i');
-                    if (mainNav.classList.contains('active')) {
-                        icon.classList.remove('fa-bars');
-                        icon.classList.add('fa-times');
-                    } else {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    }
-                });
-            }
-            
-            // Cerrar menú móvil al hacer clic en un enlace
-            const navLinks = document.querySelectorAll('.nav-list a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (mainNav && mainNav.classList.contains('active')) {
-                        mainNav.classList.remove('active');
-                        const icon = mobileMenuToggle.querySelector('i');
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    }
-                });
-            });
-        }
-
-        // Inicializar cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM cargado, inicializando...');
-            
-            const loadingSection = document.getElementById('loading-section');
-            const mainContent = document.getElementById('main-content');
-            
-            // Mostrar pantalla de carga
-            if (loadingSection) loadingSection.style.display = 'block';
-            if (mainContent) mainContent.style.display = 'none';
-            
-            // Inicializar la aplicación
-            initializeApp();
-                
-            // Después de 2 segundos, mostrar la página
-            setTimeout(() => {
-                if (loadingSection) loadingSection.style.display = 'none';
-                if (mainContent) mainContent.style.display = 'block';
-                console.log('Aplicación cargada completamente');
-            }, 2000);
-        });
-
-        // También inicializar si el DOM ya está cargado
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeApp);
-        } else {
-            initializeApp();
-        }
-        
-       
-    </script>
+<script>
+    // Pantalla de carga y contenido principal
+    document.addEventListener('DOMContentLoaded', function() {
+        const loadingSection = document.getElementById('loading-section');
+        const mainContent = document.getElementById('main-content');
+        if (loadingSection) loadingSection.style.display = 'block';
+        if (mainContent) mainContent.style.display = 'none';
+        setTimeout(() => {
+            if (loadingSection) loadingSection.style.display = 'none';
+            if (mainContent) mainContent.style.display = 'block';
+        }, 2000);
+    });
+</script>
 </body>
 </html>
