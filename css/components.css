@@ -504,7 +504,7 @@ tr:hover {
 /* Tarjetas de partidos */
 .cards-grid,
 .partidos-list {
-  display: flex;
+  
   flex-direction: wrap;
   
 }
