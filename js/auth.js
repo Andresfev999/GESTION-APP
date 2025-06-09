@@ -223,26 +223,14 @@ const AuthModule = {
     
     // Verificar si estamos en una página protegida
     checkProtectedPage: function() {
-        const protectedPages = [
-            '/pages/torneos/crear.html',
-            '/pages/torneos/editar.html',
-            '/pages/equipos/crear.html',
-            '/pages/equipos/editar.html',
-            '/pages/jugadores/crear.html',
-            '/pages/jugadores/editar.html',
-            '/pages/partidos/crear.html',
-            '/pages/partidos/editar.html',
-            // Agrega más rutas si tienes otras páginas protegidas
-        ];
-
         const currentPath = window.location.pathname;
 
-        // Verifica si la página actual es protegida
-        const isProtected = protectedPages.some(page =>
-            currentPath.endsWith(page) || currentPath.includes(page)
-        );
+        // Permitir acceso solo a login y registro
+        const isLogin = currentPath.includes('/autenticacion/login.html');
+        const isRegister = currentPath.includes('/autenticacion/registrar.html');
+        const isPassword = currentPath.includes('/autenticacion/recuperar.html'); // si tienes recuperación
 
-        if (isProtected && !this.isAuthenticated()) {
+        if (!(isLogin || isRegister || isPassword) && !this.isAuthenticated()) {
             // Redirige a login con returnUrl para volver después de autenticarse
             const returnUrl = encodeURIComponent(window.location.href);
             window.location.href = '/pages/autenticacion/login.html?returnUrl=' + returnUrl;
@@ -460,7 +448,7 @@ const AuthModule = {
 // Inicializar el módulo cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si Firebase está disponible antes de inicializar
-    const firebase = window.firebase; // Declare the firebase variable
+    const firebase = window.firebase;
     if (typeof firebase !== 'undefined') {
         AuthModule.init();
     } else {
@@ -470,3 +458,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Hacer disponible el AuthModule globalmente
 window.AuthModule = AuthModule;
+
+(function() {
+    const currentPath = window.location.pathname;
+    const isLogin = currentPath.includes('/autenticacion/login.html');
+    const isRegister = currentPath.includes('/autenticacion/registrar.html');
+    const isPassword = currentPath.includes('/autenticacion/recuperar.html');
+    if (!(isLogin || isRegister || isPassword)) {
+        // Esperar a que Firebase esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.firebase && firebase.auth) {
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (!user) {
+                        // Redirigir a login con returnUrl
+                        const returnUrl = encodeURIComponent(window.location.href);
+                        window.location.href = '/pages/autenticacion/login.html?returnUrl=' + returnUrl;
+                    }
+                });
+            }
+        });
+    }
+})();
