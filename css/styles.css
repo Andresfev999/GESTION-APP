@@ -63,7 +63,7 @@ body.dark-mode,
   --table-row-bg: #232323;
   --table-row-alt-bg: #181818;
 
-  --dark-navbar: #222e3c;
+  --dark-navbar:var(--bg-color);
 }
 
 /* =========================
