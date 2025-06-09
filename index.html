@@ -45,6 +45,10 @@
                 <i class="fas fa-user-circle"></i>
             </button>
         </div>
+        <!-- Botón del menú móvil -->
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Abrir menú">
+            <i class="fas fa-bars"></i>
+        </button>
     </div>
 </header>
 
@@ -138,6 +142,16 @@
                 });
             }
         });
+
+        // --- Menú hamburguesa móvil ---
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+        const mainNav = document.getElementById('main-nav');
+        if (mobileToggle && mainNav) {
+            mobileToggle.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+            });
+        }
+        // ------------------------------
     });
 </script>
 <!-- FIN NAVBAR ESTÁTICO MEJORADO -->

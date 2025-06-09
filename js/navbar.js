@@ -16,6 +16,16 @@ document.addEventListener("DOMContentLoaded", async function() {
             navbarContainer.innerHTML = navbarHTML;
             setupThemeToggle(); // Llama después de insertar el HTML
             setupUserModal(); // ¡Esto es lo que hace funcionar el botón de usuario!
+
+            // --- Código para menú móvil (hamburguesa) ---
+            const mobileToggle = document.getElementById('mobile-menu-toggle');
+            const mainNav = document.getElementById('main-nav');
+            if (mobileToggle && mainNav) {
+                mobileToggle.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                });
+            }
+            // -------------------------------------------
         } catch (e) {
             console.error("Error cargando navbar:", e);
         }
