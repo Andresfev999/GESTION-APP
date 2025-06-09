@@ -1,59 +1,37 @@
 // Funciones generales de la aplicación
 
 // Función para alternar entre modo claro y oscuro
-function toggleTheme() {
-    const body = document.body;
-    const themeToggle = document.getElementById('themeToggle');
-    const isDarkMode = body.classList.toggle('dark-mode');
-    
-    // Actualizar icono del botón
-    if (themeToggle) {
-        const icon = themeToggle.querySelector('i');
-        if (icon) {
-            if (isDarkMode) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            } else {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-            }
-        }
-    }
-    
-    // Guardar preferencia en localStorage
-    localStorage.setItem('dark-mode', isDarkMode ? 'true' : 'false');
-}
+
 
 // Inicializar tema según preferencia guardada
-function initTheme() {
-    const isDarkMode = localStorage.getItem('dark-mode') === 'true';
-    const body = document.body;
-    const themeToggle = document.getElementById('themeToggle');
-    
-    if (isDarkMode) {
-        body.classList.add('dark-mode');
-        
-        if (themeToggle) {
-            const icon = themeToggle.querySelector('i');
-            if (icon) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
-        }
-    }
-    
-    // Añadir evento al botón de alternar tema
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-    }
-}
+
 
 // Inicializar cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar tema
-    initTheme();
+    
     
     // Otros inicializadores de la aplicación pueden ir aquí
+
+    if (window.firebase && firebase.auth) {
+        firebase.auth().onAuthStateChanged(function(user) {
+            // Selecciona todos los botones de editar, eliminar y guardar
+            const editBtns = document.querySelectorAll('.btn-edit, .btn-editar');
+            const deleteBtns = document.querySelectorAll('.btn-delete, .btn-eliminar');
+            const saveBtns = document.querySelectorAll('.btn-save, .btn-guardar, .btn-primary[type="submit"]');
+
+            if (!user) {
+                // Si NO hay usuario autenticado, deshabilita los botones
+                editBtns.forEach(btn => btn.disabled = true);
+                deleteBtns.forEach(btn => btn.disabled = true);
+                saveBtns.forEach(btn => btn.disabled = true);
+            } else {
+                // Si hay usuario, habilita los botones
+                editBtns.forEach(btn => btn.disabled = false);
+                deleteBtns.forEach(btn => btn.disabled = false);
+                saveBtns.forEach(btn => btn.disabled = false);
+            }
+        });
+    }
 });
 
 // Función para mostrar notificaciones

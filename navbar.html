@@ -1,116 +1,50 @@
-<header class="main-header">
-    <div class="container">
-        <div class="logo">
+<header class="main-header themed-navbar">
+    <div class="container navbar-flex">
+        <!-- Logo y nombre -->
+        <div class="navbar-logo">
             <i class="fas fa-futbol"></i>
-            <h1>Torneos de Fútbol</h1>
+            <span class="navbar-brand">Sistema de Gestión de Torneos de Fútbol</span>
         </div>
-        
-        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        
+        <!-- Menú principal -->
         <nav class="main-nav" id="main-nav">
             <ul class="nav-list">
-                <li>
-                    <a href="/index.html">
-                        <i class="fas fa-home"></i> Inicio
-                    </a>
-                </li>
-                <li>
-                    <a href="/pages/torneos/index.html">
-                        <i class="fas fa-trophy"></i> Torneos
-                    </a>
-                </li>
-                <li>
-                    <a href="/pages/equipos/index.html">
-                        <i class="fas fa-users"></i> Equipos
-                    </a>
-                </li>
-                <li>
-                    <a href="/pages/jugadores/index.html">
-                        <i class="fas fa-user"></i> Jugadores
-                    </a>
-                </li>
-                <li>
-                    <a href="/pages/partidos/index.html">
-                        <i class="fas fa-futbol"></i> Partidos
-                    </a>
-                </li>
-                <li>
-                    <a href="/pages/posiciones/index.html">
-                        <i class="fas fa-table"></i> Posiciones
-                    </a>
-                </li>
+                <li><a href="/index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="/pages/torneos/index.html"><i class="fas fa-trophy"></i> Torneos</a></li>
+                <li><a href="/pages/equipos/index.html"><i class="fas fa-users"></i> Equipos</a></li>
+                <li><a href="/pages/jugadores/index.html"><i class="fas fa-user"></i> Jugadores</a></li>
+                <li><a href="/pages/partidos/index.html"><i class="fas fa-futbol"></i> Partidos</a></li>
+                <li><a href="/pages/posiciones/index.html"><i class="fas fa-table"></i> Posiciones</a></li>
             </ul>
         </nav>
-        
-        <div class="header-actions">
-            <button id="themeToggle" class="btn btn-icon">
-                <i class="fas fa-moon"></i>
+        <!-- Acciones: tema y usuario -->
+        <div class="navbar-actions">
+            <button id="themeToggle" title="Cambiar tema">
+                <i id="theme-icon" class="fas fa-moon"></i>
             </button>
-            <div id="user-info" style="display: none; align-items: center; gap: 0.5rem;">
-                <span id="user-name" style="font-weight: 500;"></span>
-                <button id="logout-btn" class="btn btn-outline btn-sm" style="margin-left: 0.5rem;">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-                </button>
-            </div>
+            <button id="user-icon-btn" style="display:none;">
+                <i class="fas fa-user-circle"></i>
+            </button>
+            <button id="login-btn" class="btn btn-outline btn-sm" style="display:none;">
+                <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+            </button>
         </div>
     </div>
 </header>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Menú móvil
-        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        const mainNav = document.getElementById('main-nav');
-        if (mobileMenuToggle && mainNav) {
-            mobileMenuToggle.addEventListener('click', function() {
-                mainNav.classList.toggle('active');
-                mobileMenuToggle.classList.toggle('active');
-                const icon = mobileMenuToggle.querySelector('i');
-                if (mainNav.classList.contains('active')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            });
-        }
+<!-- Modal de usuario -->
+<div id="user-modal" class="user-modal">
+    <div class="user-modal-content">
+        <button id="close-user-modal" class="user-modal-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="user-modal-body">
+            <i class="fas fa-user-circle user-modal-avatar"></i>
+            <span id="modal-user-name" class="user-modal-name"></span>
+            <button id="logout-btn-modal" class="btn btn-outline btn-sm user-modal-logout">
+                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+            </button>
+        </div>
+    </div>
+</div>
 
-        // Marcar enlace activo
-        const currentPath = window.location.pathname;
-        const navLinks = document.querySelectorAll('.nav-list a');
-        navLinks.forEach(link => {
-            const linkPath = link.getAttribute('href');
-            link.classList.remove('active');
-            if (currentPath === linkPath) {
-                link.classList.add('active');
-            } else if (linkPath !== '/' && currentPath.startsWith(linkPath.replace('/index.html', ''))) {
-                link.classList.add('active');
-            }
-        });
 
-        // Mostrar usuario autenticado y botón de logout
-        if (window.firebase && firebase.auth) {
-            firebase.auth().onAuthStateChanged(function(user) {
-                const userInfo = document.getElementById('user-info');
-                const userName = document.getElementById('user-name');
-                const logoutBtn = document.getElementById('logout-btn');
-                if (user) {
-                    userInfo.style.display = 'flex';
-                    userName.textContent = user.displayName || user.email;
-                    if (logoutBtn) {
-                        logoutBtn.onclick = function() {
-                            firebase.auth().signOut().then(function() {
-                                window.location.href = '/pages/autenticacion/login.html';
-                            });
-                        };
-                    }
-                } else {
-                    userInfo.style.display = 'none';
-                }
-            });
-        }
-    });
-</script>
