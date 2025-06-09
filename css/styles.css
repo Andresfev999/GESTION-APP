@@ -241,7 +241,7 @@ body.dark-mode .logo h1 {
 .features-grid,
 .dashboard-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
 }
@@ -670,15 +670,7 @@ tr:last-child td {
   color: var(--text-muted);
 }
 
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--border-color);
-  border-top: 4px solid var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
-}
+
 
 @keyframes spin {
   0% {
